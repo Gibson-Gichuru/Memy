@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, session, redirect, url_for
 from flask_bootstrap import Bootstrap
 from flask_moment import Moment
 
@@ -19,16 +19,12 @@ app.config['SECRET_KEY'] = 'dfwwe34.-435435pdfgl6u7were35]pty[py.ng;tyu-54735'
 @app.route('/', methods = ['GET', 'POST'])
 def home():
 
-	name = None
-
 	form = NameForm()
 
 	if form.validate_on_submit():
-
-		name = form.name.data
-
-		form.name.data = ''
-	return render_template('home.html', form = form, name = name)
+		session['name']= form.name.data
+		return redirect(url_for('home'))
+	return render_template('home.html', form = form, name = session.get('name'))
 
 @app.route('/user/<name>')
 def user(name):
