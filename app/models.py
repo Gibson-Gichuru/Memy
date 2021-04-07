@@ -7,11 +7,13 @@ class DataManipulation:
 
 		db.session.add(resource)
 
-		return db.commit()
+		return db.session.commit()
 
 	def delete(self, resource):
 
-		return db.session.delete(resource)
+		db.session.delete(resource)
+
+		return db.session.commit()
 
 class Role(db.Model, DataManipulation):
 

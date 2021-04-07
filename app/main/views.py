@@ -19,13 +19,13 @@ def home():
 
 			user.add(user)
 
-			session['Known'] = False
+			session['known'] = False
 
 		else:
 			
-			session['Known'] = True
+			session['known'] = True
 		
-		sesson['name'] = form.name.data
+		session['name'] = form.name.data
 
 		form.name.data = ''
 
@@ -33,5 +33,6 @@ def home():
 		return redirect(url_for('.home'))
 
 
-	return render_template('home.html', form = form, name =session.get['name'],
-							known = session.get('Known', False), current_time = datetime.utcnow())
+	return render_template('home.html',form=form, name=session.get('name'),
+							known=session.get('known', False),
+							current_time=datetime.utcnow())
