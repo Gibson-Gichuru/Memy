@@ -3,12 +3,13 @@
 {% block title %}Flasky - {{ name }}{% endblock%}
 {% block page_content %}
 	<div class="container">
-		<h1>Hellow {% if name %}{{ name }}{% else %}Stranger{% endif %}</h1>
-		{% if not Known %}
-			<p>Please to meet you!</p>
+		<h1>Hellow, 
+		{% if current_user.is_authenticated %}
+			{{ current_user.username }}
 		{% else %}
-			<p>Happy to see you again</p>
+			Stranger!
 		{% endif %}
+	</h1>
 	</div>
 	{{ wtf.quick_form(form) }}
 {% endblock %}
