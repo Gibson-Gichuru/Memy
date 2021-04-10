@@ -1,0 +1,15 @@
+Dear {{ user.username }}
+
+Welcome to the House Of Memes:
+
+
+To Confirm your account please click on the following link:
+
+{{ url_for('auth.confirm', _external = True) }}
+
+
+Sincerely:
+
+The House Of Meme Team.
+
+Note: replies to this email are not monitored
