@@ -9,7 +9,7 @@ class Config:
 	SQLALCHEMY_COMMITON_TEARDOWN = True
 	SQLALCHEMY_TRACK_MODIFICATIONS = True
 	FLASK_MAIL_SUBJECT_PREFIX = '[Flasky]'
-	FLASK_MAIL_SENDER = 'Flask Admin <flaskyadmin@gmail.com>'
+	FLASK_MAIL_SENDER = 'Flask Admin <memehouseke@gmail.com>'
 	FLASK_ADMIN = os.environ.get('FLASK_ADMIN')
 
 	@staticmethod

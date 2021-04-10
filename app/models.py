@@ -72,7 +72,7 @@ class User(db.Model, DataManipulation, UserMixin):
 		return check_password_hash(self.password_hash, password)
 
 
-	def generate_confirmantion_token(self, expiration = 3600):
+	def generate_confirmation_token(self, expiration = 3600):
 
 		s = Serializer(current_app.config['SECRET_KEY'], expiration)
 
