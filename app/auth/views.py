@@ -7,6 +7,7 @@ from .forms import LoginForm, RegistrationForm
 
 from . import auth
 
+
 @auth.route('/login', methods = ['GET', 'POST'])
 def login():
 
@@ -59,11 +60,12 @@ def confirm(token):
 
 	if current_user.confirm(token):
 
-		flash('You have confired your account. Thenks!')
+		flash('You have confired your account. Thanks!')
 
 	else:
 		
 		flash('The activation link is invalid or has expired')
+
 
 	return redirect(url_for('main.home'))
 

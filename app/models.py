@@ -27,7 +27,7 @@ class DataManipulation:
 
 		return db.session.commit()
 
-	def update(self, resource):
+	def update(self):
 
 		return db.session.commit()
 
@@ -95,9 +95,11 @@ class User(db.Model, DataManipulation, UserMixin):
 
 			return False
 
-		self.confirm = True
+		self.confirmed = True
 
 		db.session.add(self)
+
+		self.update()
 
 		return True
 

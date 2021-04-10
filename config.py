@@ -9,7 +9,7 @@ class Config:
 	SQLALCHEMY_COMMITON_TEARDOWN = True
 	SQLALCHEMY_TRACK_MODIFICATIONS = True
 	FLASK_MAIL_SUBJECT_PREFIX = '[Flasky]'
-	FLASK_MAIL_SENDER = 'Flask Admin <memehouseke@gmail.com>'
+	FLASK_MAIL_SENDER = 'Flask Admin {}'.format(os.environ.get('MAIL_USERNAME'))
 	FLASK_ADMIN = os.environ.get('FLASK_ADMIN')
 
 	@staticmethod
@@ -22,7 +22,7 @@ class DevelopmentConfig(Config):
 
 	MAIL_SERVER = 'smtp.googlemail.com'
 	MAIL_PORT = 587
-	MAIL_USE_TSL = True
+	MAIL_USE_TLS = True
 	MAIL_USERNAME = os.environ.get('MAIL_USERNAME')
 	MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD')
 
