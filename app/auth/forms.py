@@ -59,3 +59,31 @@ class RegistrationForm(Form):
         if User.query.filter_by(username=field.data).first():
 
             raise ValidationError("Username aready in use")
+
+
+class ForgotPasswordForm(Form):
+
+    email = StringField("email", validators=[DataRequired(), Length(1, 64), Email()])
+
+    submit = SubmitField('Send')
+
+    def validate_email(self, field):
+
+        if User.query.filter_by(email = field.data).first() is None:
+
+            raise ValidationError("Give a valid email address")
+
+
+class ResetPasswordForm(Form):
+
+    password = PasswordField(
+        "password",
+        validators=[
+            DataRequired(),
+            EqualTo("password2", message="password must match"),
+        ],
+    )
+
+    password2 = PasswordField("confirm password", validators=[DataRequired()])
+
+    submit = SubmitField("Reset Password")

@@ -104,6 +104,39 @@ class User(db.Model, DataManipulation, UserMixin):
 		return True
 
 
+	def generate_reset_token(self, expiration = 3600):
+
+		s = Serializer(current_app.config['SECRET_KEY'], expiration)
+
+		return s.dumps({'reset':self.id})
+
+
+	@staticmethod
+	def reset_password(token, newpassword):
+
+		s = Serializer(current_app.config['SECRET_KEY'])
+
+		try:
+
+			data = s.loads(token)
+
+		except:
+
+			return False
+
+		user = User.query.get(data.get('reset'))
+
+		if user is None:
+
+			return False
+
+		user.password = newpassword
+
+		db.session.add(user)
+
+		user.update(user)
+
+		return True
 	
 	
 
