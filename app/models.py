@@ -134,7 +134,7 @@ class User(db.Model, DataManipulation, UserMixin):
 
 		db.session.add(user)
 
-		user.update(user)
+		user.update()
 
 		return True
 	
