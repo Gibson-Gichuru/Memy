@@ -6,143 +6,189 @@ from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from flask_login import UserMixin
 from flask import current_app
 
-#call back function
+# call back function
 @login_manager.user_loader
 def load_user(user_id):
 
-	return User.query.get(int(user_id))
+    return User.query.get(int(user_id))
 
 
 class DataManipulation:
+    def add(self, resource):
 
-	def add(self,resource):
+        db.session.add(resource)
 
-		db.session.add(resource)
+        return db.session.commit()
 
-		return db.session.commit()
+    def delete(self, resource):
 
-	def delete(self, resource):
+        db.session.delete(resource)
 
-		db.session.delete(resource)
+        return db.session.commit()
 
-		return db.session.commit()
+    def update(self):
 
-	def update(self):
+        return db.session.commit()
 
-		return db.session.commit()
+
+class Permission:
+    FOLLOW = 0x01
+    COMMENT = 0x02
+    WRITE_ARTICLES = 0x04
+    MODERATE_COMMENTS = 0x08
+    ADMINISTER = 0x80
+
 
 class Role(db.Model, DataManipulation):
 
-	__tablename__ = 'roles'
+    __tablename__ = "roles"
 
-	id = db.Column(db.Integer, primary_key = True)
-	name = db.Column(db.String(64), unique = True)
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(64), unique=True)
 
-	users = db.relationship('User', backref = 'role')
+    default = db.Column(db.Boolean, default=False, index=True)
 
+    permissions = db.Column(db.Integer)
 
-	def __repr__(self):
+    users = db.relationship("User", backref="role", lazy="dynamic")
 
-		return '<Role {}>'.format(self.name)
+    @staticmethod
+    def insert_roles():
+
+        roles = {
+            "User": (Permission.FOLLOW | Permission.COMMENT | Permission.WRITE_ARTICLES, True),
+            "Moderator": (
+                Permission.FOLLOW
+                | Permission.COMMENT
+                | Permission.WRITE_ARTICLES
+                | Permission.MODERATE_COMMENTS,
+                False,
+            ),
+            "Administrator": (0xFF, False),
+        }
+
+        for r in roles:
+
+            role = Role.query.filter_by(name=r).first()
+
+            if role is None:
+
+                role = Role(name=r)
+
+            role.permissions = roles[r][0]
+            role.default = roles[r][1]
+
+            db.session.add(role)
+
+        db.session.commit()
+
+    def __repr__(self):
+
+        return "<Role {}>".format(self.name)
 
 
 class User(db.Model, DataManipulation, UserMixin):
 
-	__tablename__ = 'users'
+    __tablename__ = "users"
 
-	id = db.Column(db.Integer, primary_key = True)
-	email = db.Column(db.String(64), unique = True, index = True)
-	username = db.Column(db.String(64), unique = True, index = True)
-	password_hash = db.Column(db.String(130))
-	role_id = db.Column(db.Integer, db.ForeignKey('roles.id'))
-	confirmed = db.Column(db.Boolean, default = False)
-
-	@property
-	def password(self):
-		raise AttributeError("Password is not a readable attribute")
-
-	@password.setter
-	def password(self, password):
-
-		self.password_hash = generate_password_hash(password)
+    id = db.Column(db.Integer, primary_key=True)
+    email = db.Column(db.String(64), unique=True, index=True)
+    username = db.Column(db.String(64), unique=True, index=True)
+    password_hash = db.Column(db.String(130))
+    role_id = db.Column(db.Integer, db.ForeignKey("roles.id"))
+    confirmed = db.Column(db.Boolean, default=False)
 
 
-	def verify_password(self, password):
+    def __init__(self, **kwargs):
 
-		return check_password_hash(self.password_hash, password)
+        super(User, self).__init__(**kwargs)
 
+        if self.role is None:
 
-	def generate_confirmation_token(self, expiration = 3600):
+            if self.email = current_app.config['FLASKY_ADMIN']:
 
-		s = Serializer(current_app.config['SECRET_KEY'], expiration)
+                self.role = Role.query.filter_by(permissions = 0xff).first()
 
-		return s.dumps({'confirm':self.id})
+            if self.role is None:
 
+                self.role = Role.query.filter_by(default = True).first()
 
-	def confirm(self, token):
+    @property
+    def password(self):
+        raise AttributeError("Password is not a readable attribute")
 
-		s = Serializer(current_app.config['SECRET_KEY'])
+    @password.setter
+    def password(self, password):
 
-		try:
+        self.password_hash = generate_password_hash(password)
 
-			data = s.loads(token)
+    def verify_password(self, password):
 
-		except:
+        return check_password_hash(self.password_hash, password)
 
-			return False
+    def generate_confirmation_token(self, expiration=3600):
 
-		if data.get('confirm') != self.id:
+        s = Serializer(current_app.config["SECRET_KEY"], expiration)
 
-			return False
+        return s.dumps({"confirm": self.id})
 
-		self.confirmed = True
+    def confirm(self, token):
 
-		db.session.add(self)
+        s = Serializer(current_app.config["SECRET_KEY"])
 
-		self.update()
+        try:
 
-		return True
+            data = s.loads(token)
 
+        except:
 
-	def generate_reset_token(self, expiration = 3600):
+            return False
 
-		s = Serializer(current_app.config['SECRET_KEY'], expiration)
+        if data.get("confirm") != self.id:
 
-		return s.dumps({'reset':self.id})
+            return False
 
+        self.confirmed = True
 
-	@staticmethod
-	def reset_password(token, newpassword):
+        db.session.add(self)
 
-		s = Serializer(current_app.config['SECRET_KEY'])
+        self.update()
 
-		try:
+        return True
 
-			data = s.loads(token)
+    def generate_reset_token(self, expiration=3600):
 
-		except:
+        s = Serializer(current_app.config["SECRET_KEY"], expiration)
 
-			return False
+        return s.dumps({"reset": self.id})
 
-		user = User.query.get(data.get('reset'))
+    @staticmethod
+    def reset_password(token, newpassword):
 
-		if user is None:
+        s = Serializer(current_app.config["SECRET_KEY"])
 
-			return False
+        try:
 
-		user.password = newpassword
+            data = s.loads(token)
 
-		db.session.add(user)
+        except:
 
-		user.update()
+            return False
 
-		return True
-	
-	
+        user = User.query.get(data.get("reset"))
 
-	def __repr__(self):
+        if user is None:
 
-		return '<User {}>'.format(self.username)
+            return False
 
+        user.password = newpassword
 
+        db.session.add(user)
 
+        user.update()
+
+        return True
+
+    def __repr__(self):
+
+        return "<User {}>".format(self.username)
