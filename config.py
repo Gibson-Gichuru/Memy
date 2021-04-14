@@ -10,7 +10,7 @@ class Config:
 	SQLALCHEMY_TRACK_MODIFICATIONS = True
 	FLASK_MAIL_SUBJECT_PREFIX = '[Flasky]'
 	FLASK_MAIL_SENDER = 'Flask Admin {}'.format(os.environ.get('MAIL_USERNAME'))
-	FLASK_ADMIN = os.environ.get('FLASKY_ADMIN')
+	FLASK_ADMIN = os.environ.get('FLASK_ADMIN')
 
 	@staticmethod
 	def init_app(app):
