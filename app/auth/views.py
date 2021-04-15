@@ -80,6 +80,9 @@ def confirm(token):
 @auth.before_app_request
 def before_request():
 
+    if current_user.is_authenticated:
+        current_user.ping()
+
     if (
         current_user.is_authenticated
         and not current_user.confirmed
