@@ -109,7 +109,7 @@ class User(db.Model, DataManipulation, UserMixin):
     def ping(self):
 
         self.last_seen = datetime.utcnow()
-        db.session.add(self.last_seen)
+        db.session.add(self)
 
 
     def __init__(self, **kwargs):

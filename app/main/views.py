@@ -1,12 +1,14 @@
 from datetime import datetime
-from flask import render_template, session, redirect, url_for, abort
+from flask import render_template, session, redirect, url_for, abort, flash
 from . import main
-from .forms import NameForm
+from .forms import NameForm, EditProfileForm
 from ..models import User, Permission
 
-from flask_login import login_required
+from flask_login import login_required, current_user
 
 from ..decorators import admin_required, permission_required
+
+from .. import db
 
 @main.route('/', methods = ['GET', 'POST'])
 def home():
@@ -51,6 +53,33 @@ def user(username):
 		abort(404)
 
 	return render_template('user.html', user = user)
+
+
+
+@main.route('/edit-profile', methods = ['GET', 'POST'])
+@login_required
+def edit_profile():
+
+	form = EditProfileForm()
+
+	if form.validate_on_submit():
+
+		user = User.query.filter_by(username = current_user.username).first()
+
+		user.name = form.name.data
+		user.location = form.location.data
+		user.about_me = form.about_me.data
+
+		db.session.add(user)
+
+		flash('Your Profile has been updated')
+		return redirect(url_for('.user', username = current_user.username))
+
+	form.name.data = current_user.name
+	form.location.data = current_user.location
+	form.about_me.data = current_user.about_me
+
+	return render_template('edit_profile.html', form = form)
 
 @main.route("/admin")
 @login_required
