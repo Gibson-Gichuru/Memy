@@ -2,7 +2,7 @@ from datetime import datetime
 from flask import render_template, session, redirect, url_for, abort, flash
 from . import main
 from .forms import NameForm, EditProfileForm, EditProfileAdminForm
-from ..models import User, Permission
+from ..models import User, Permission, Role
 
 from flask_login import login_required, current_user
 
@@ -56,7 +56,7 @@ def user(username):
 
 
 
-@main.route('/edit-profile', methods = ['GET', 'POST'])
+@main.route('/edit-profile/', methods = ['GET', 'POST'])
 @login_required
 def edit_profile():
 
@@ -82,7 +82,7 @@ def edit_profile():
 	return render_template('edit_profile.html', form = form)
 
 
-main.route('/edit-profile/<int:id>')
+@main.route('/edit-profile/<int:id>', methods=['GET', 'POST'])
 @login_required
 @admin_required
 def edit_profile_admin(id):
