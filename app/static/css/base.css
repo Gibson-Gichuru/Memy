@@ -1,0 +1,126 @@
+header {
+
+	background-color: #921253;
+}
+
+header ul {
+
+	margin-top: 1.5em;
+	margin-bottom: 0.5em;
+}
+
+header ul a{
+
+	font-weight: bold;
+	font-size: 1.5em;
+	color: #FFF;
+}
+
+
+header ul a:hover{
+
+	text-decoration: none;
+	color: #FFF;
+}
+
+header ul.pull-right {
+
+	margin-top: 2.4em;
+	margin-right: 0.7em; 
+}
+
+header ul.logo {
+
+	margin-left: 1.5em;
+}
+
+header ul.pull-left  img{
+
+	padding-bottom: 0.5em;
+}
+
+header .img-rounded{
+
+	max-width: 60px;
+	max-height: 60px;
+}
+
+header a {
+
+	font-size: 1.3em;
+	padding: 1.2em 0;
+	font-weight: bold; 
+}
+
+section#intro-header {
+
+	background-image: url('../icons/background.jpg');
+	background-size: cover;
+}
+
+section#intro-header .wrap-headline{
+
+	position: relative;
+	padding-top: 20%;
+	padding-bottom: 20%; 
+}
+
+section#intro-header h1,
+section#intro-header h2{
+
+	color: #FFF;
+}
+
+section#intro-header hr{
+
+	width:10%;
+}
+section#intro-header h2 {
+
+	font-size: 1.5rem;
+}
+section#into-header .btn-default{
+
+	background-color: rgba(255,255,255,0.5);
+	border:none; 
+}
+
+footer#page-footer {
+
+	background-color: #000000;
+}
+
+footer#page-footer img.img-rounded{
+
+	max-width: 60px;
+	max-height: 60px;
+}
+
+footer#page-footer h3 {
+
+	color: #FFF;
+	text-decoration: underline;
+}
+
+footer#page-footer ul a{
+
+	color: #FFF;
+
+}
+
+footer#page-footer ul a:hover{
+
+	text-decoration: none;
+	color: #FFF;
+
+}
+
+footer#page-footer ul.list-inline
+{
+
+	margin-top: 3.2em;
+
+}
+
+
+

@@ -238,7 +238,6 @@ class User(db.Model, DataManipulation, UserMixin):
 
 
 
-
 class AnonymousUser(AnonymousUserMixin):
 
     def can(self, permissions):
