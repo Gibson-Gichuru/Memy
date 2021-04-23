@@ -1,7 +1,8 @@
 from datetime import datetime
-from flask import render_template, session, redirect, url_for, abort, flash
+from flask import render_template, session, redirect, url_for, abort, flash, current_app
+from flask_login import login_user
 from . import main
-from .forms import NameForm, EditProfileForm, EditProfileAdminForm
+from .forms import NameForm, EditProfileForm, EditProfileAdminForm, ContactForm
 from ..models import User, Permission, Role
 
 from flask_login import login_required, current_user
@@ -9,8 +10,33 @@ from flask_login import login_required, current_user
 from ..decorators import admin_required, permission_required
 
 from .. import db
+from ..email import send_email
 
-@main.route('/', methods = ['GET', 'POST'])
+@main.route('/')
+def index():
+
+	return redirect(url_for('auth.login'))
+
+
+@main.route('/contacts', methods =["GET","POST"])
+def contacts():
+
+	form = ContactForm()
+
+	if form.validate_on_submit():
+
+		# send an email to the addmin
+		send_email(current_app.config['FLASK_ADIM'],
+		 "Message from a {}".format(form.name.data),
+			"contacts/message", form = form )
+		return redirect(url_for('main.index'))
+	return render_template('contact.html', form = form)
+
+
+
+
+@main.route('/home')
+@login_required
 def home():
 
 	return render_template('home.html')

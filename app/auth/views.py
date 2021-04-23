@@ -3,28 +3,31 @@ from flask_login import login_user, login_required, logout_user, current_user
 from . import auth
 from ..models import User
 from ..email import send_email
-from .forms import LoginForm, RegistrationForm, ForgotPasswordForm, ResetPasswordForm
+from .forms import  RegistrationForm, ForgotPasswordForm, ResetPasswordForm, LoginForm
 
 from . import auth
 
-
-@auth.route("/login", methods=["GET", "POST"])
+@auth.route('/login', methods=['GET', 'POST'])
 def login():
 
     form = LoginForm()
 
     if form.validate_on_submit():
+
         user = User.query.filter_by(email=form.email.data).first()
 
         if user is not None and user.verify_password(form.password.data):
 
             login_user(user, form.remember_me.data)
 
-            return redirect(request.args.get("next") or url_for("main.home"))
+            return redirect(url_for('main.home'))
 
-        flash("Invalid username or password")
+    flash("Invalid username or password")
 
-    return render_template("auth/login.html", form=form)
+    return render_template('index.html', form = form)
+
+
+
 
 
 @auth.route("/register", methods=["GET", "POST"])
@@ -74,7 +77,7 @@ def confirm(token):
 
         flash("The activation link is invalid or has expired")
 
-    return redirect(url_for("main.home"))
+    return redirect(url_for("auth.login"))
 
 
 @auth.before_app_request
@@ -97,7 +100,7 @@ def unconfirmed():
 
     if current_user.is_anonymous or current_user.confirmed:
 
-        return redirect("main.home")
+        return redirect("auth.login")
 
     return render_template("auth/unconfirmed.html")
 
@@ -117,7 +120,7 @@ def resend_confirmation():
     )
     flash("A new Confirmation email has been sent to {}".format(current_user.email))
 
-    return redirect(url_for("main.home"))
+    return redirect(url_for("auth.login"))
 
 
 @auth.route("/forgot_password/", methods = ['GET', 'POST'])
@@ -135,7 +138,7 @@ def forgot_password():
 
         flash("a password reset link have been sent to you by email")
 
-        return redirect(url_for("main.home"))
+        return redirect(url_for("auth.login"))
 
     return render_template("auth/forgot_password.html", form=form)
 
@@ -153,13 +156,13 @@ def confirm_reset(token):
 
         if User.reset_password(token, form.password.data):
 
-            flash("Your password have been reset")
+            flash("Your password have been reset, you can now log in")
 
             return redirect(url_for("auth.login"))
 
         else:
 
-            return redirect(url_for("main.home"))
+            return redirect(url_for("auth.login"))
 
     return render_template("auth/reset_password.html", form=form)
 
@@ -171,4 +174,4 @@ def logout():
     logout_user()
     flash("you have logged out")
 
-    return redirect(url_for("main.home"))
+    return redirect(url_for("auth.login"))

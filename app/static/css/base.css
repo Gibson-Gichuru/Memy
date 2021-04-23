@@ -52,6 +52,16 @@ header a {
 	font-weight: bold; 
 }
 
+.hidden-element {
+
+	display: none;	
+}
+
+form#sign div.form-group{
+
+	padding-right: 1.2em;
+}
+
 section#intro-header {
 
 	background-image: url('../icons/background.jpg');
@@ -83,6 +93,13 @@ section#into-header .btn-default{
 
 	background-color: rgba(255,255,255,0.5);
 	border:none; 
+}
+
+
+section#contact {
+
+	margin-top: 4em;
+	margin-bottom: 6em;
 }
 
 footer#page-footer {
@@ -121,6 +138,7 @@ footer#page-footer ul.list-inline
 	margin-top: 3.2em;
 
 }
+
 
 
 

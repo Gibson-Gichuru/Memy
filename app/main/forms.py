@@ -1,9 +1,20 @@
 from flask_wtf import FlaskForm as Form
-from wtforms import StringField, SubmitField, PasswordField, BooleanField, TextField, SelectField
+from wtforms import StringField, SubmitField, PasswordField, BooleanField, TextField, SelectField, TextAreaField
 from wtforms.validators import DataRequired, Email, Length, Regexp
 from wtforms import ValidationError
 
 from ..models import User
+
+
+class LoginForm(Form):
+
+    email = StringField("email", validators=[DataRequired(), Length(1, 64), Email()])
+
+    password = PasswordField("password", validators=[DataRequired()])
+
+    remember_me = BooleanField("keep me logged in ")
+
+    submit = SubmitField("log in ")
 
 
 class NameForm(Form):
@@ -58,3 +69,14 @@ class EditProfileAdminForm(Form):
 		if field.data != self.user.username and User.query.filter_by(username = field.data).first():
 
 			raise ValidationError('Username already in use')
+
+
+class ContactForm(Form):
+
+	name = StringField('name', validators=[DataRequired(), Length(1,64)])
+
+	email = StringField('email', validators = [DataRequired(), Length(1,64), Email()])
+
+	message = TextAreaField('message')
+
+	submit = SubmitField('submit')

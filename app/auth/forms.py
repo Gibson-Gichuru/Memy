@@ -5,6 +5,7 @@ from wtforms import ValidationError
 from ..models import User
 
 
+
 class LoginForm(Form):
 
     email = StringField("email", validators=[DataRequired(), Length(1, 64), Email()])
@@ -13,7 +14,7 @@ class LoginForm(Form):
 
     remember_me = BooleanField("keep me logged in ")
 
-    submit = SubmitField("log in ")
+    submit = SubmitField("log in")
 
 
 class RegistrationForm(Form):
