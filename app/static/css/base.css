@@ -30,7 +30,7 @@ nav form#search .glyphicon-search {
 
 nav.navbar-default {
 
-	background-color: #2F92CA;
+	background-color: #FA5690;
 }
 
 nav.navbar-default .navbar-nav >li > a {
@@ -98,7 +98,7 @@ nav.navbar-default .navbar-toggle .icon-bar {
 	max-height: 2.3em;
 	border-radius: 0.3em;
 }
-#tweet {
+#posts {
 
 	margin: 0.5em;
 }
@@ -112,6 +112,12 @@ nav.navbar-default .navbar-toggle .icon-bar {
 .hidden-element {
 
 	display: none;	
+}
+
+#profile  br{
+
+	width: 20%;
+
 }
 
 .card img.card-img {
@@ -142,5 +148,62 @@ nav.navbar-default .navbar-toggle .icon-bar {
 
 #meme_info {
 
-	border: 3px solid #000;
+	border: 1px solid #000;
+	border-radius: 0.4em;
+
 }
+#meme_info div.card-header {
+
+	border: 1px solid #000;
+	background-color: rgba(250, 86, 144, 0.4);
+
+}
+
+.card-header h4 {
+
+	font-size: 1.5em;
+}
+
+ .card-block ul {
+ 	 
+ 	 padding-left: 0.5em; 
+ }
+
+ .card-block li > a {
+ 	color: #FFF;
+ 	font-size: 1.2em;
+ }
+
+  .card-block li > a:hover {
+
+  	text-decoration: none;
+ 	color: #FFF;
+ }
+
+ .card-block ul a:hover {
+
+ 	text-decoration: none;
+ }
+
+.card-block .card-title small {
+
+	display: inline;
+}
+
+ .card-block ul .profile-stats {
+
+ 	color: #777;
+ 	display: block;
+ 	text-transform: uppercase;
+ 	font-size: 0.65em;
+
+ }
+
+  .card-block ul .profile-value {
+
+ 	color: #000;
+ 	font-size: 1.2em;
+ 	font-weight: bold;
+ 	color: #2F92CA;
+ 	
+ }

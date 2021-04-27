@@ -223,11 +223,11 @@ class User(db.Model, DataManipulation, UserMixin):
 
         if request.is_secure:
 
-            url = 'https://www.gravator.com/avator'
+            url = 'https://www.gravatar.com/avatar'
 
         else:
             
-            url = 'http://www.gravator.com/avator'
+            url = 'http://www.gravatar.com/avatar'
 
         hash = hashlib.md5(self.email.encode('utf-8')).hexdigest()
 

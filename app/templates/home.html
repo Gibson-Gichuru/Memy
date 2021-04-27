@@ -1,9 +1,49 @@
 {% extends 'base.html' %}
-{% block title %}Me.My: Home{% endblock%}
+{% import "bootstrap/wtf.html" as wtf %}
+{% block title %}Me.My{% endblock%}
 {% block page_content %}
-	<div class="container">
-		<p>Welcome to Meme Home Page</p>
+<div class="container">
+	<div class="row">
+		<div id="profile" class="col-md-3 hidden-xs hidden-sm">
+			<div id="profile-resume" class="card">
+				<img src="{{ url_for('static', filename='icons/card.jpg')}}" class="card-img-top img-responsive">
+
+				<div class="card-block">
+					<img src="{{ current_user.gravator() }} " class="card-img">
+					<h4 class="card-title">{{ current_user.username}} &#128081;<small>{{current_user.name}}</small></h4>
+					<h4 class="card-title">
+						<span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span>
+						<a href="http://maps.google.com/?q={{ current_user.location }}"><small>{{ current_user.location }}</small></a>
+					</h4>
+					<p class="card-text">{{ current_user.about_me}}</p>
+
+					<ul class="list-inline list-unstyled">
+						<li id="card-meme">
+							<a href="#">
+								<span class="profile-stats">Memes</span>
+								<span class="profile-value">10</span>
+							</a>
+						</li>
+
+						<li id="card-following">
+							<a href="#">
+								<span class="profile-stats">Following</span>
+								<span class="profile-value">10</span>
+							</a>
+						</li>
+
+						<li id="card-followers">
+							<a href="#">
+								<span class="profile-stats">Followers</span>
+								<span class="profile-value">10</span>
+							</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div id="main" class="col-sm-12 col-md-6"></div>
+		<div id="right-content" class="col-md-3 hidden-xs hidden-sm"></div>
 	</div>
-{% endblock %}
-{% block footer %}
+</div>
 {% endblock %}
