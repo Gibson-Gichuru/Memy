@@ -10,31 +10,97 @@
 {% endblock %}
 {% block title %}H.O.M{% endblock %}
 {% block navbar %}
-	<header>
+	<nav class="navbar navbar-default navbar-fixed-top">
 		<div class="container-fluid">
-			<div class="row">
-				<ul class="list-inline list-unstyled pull-left logo">
-					<li><img class="img-rounded" src="{{ url_for('static', filename = 'icons/icon1.png') }}"></li>
-					<li><a href="{{ url_for('main.index') }}" class="brand">Me.My</a></li>
+			<div class="navbar-header">
+				<a class="navbar-brand" href="{{ url_for('main.index')}}">
+					<img src="{{ url_for('static', filename='icons/icon1.png')}}" class="img-responsive">
+				</a>
+				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+				data-target="#nav-menu" aria-expanded="false">
+					<span class="sr-only">Toggle Navigation</span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				{% if current_user.is_authenticated%}
+				<button id="Post" class="btn btn-default pull-right visible-xs-block">
+						<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
+						Posr
+				</button>
+				{% endif %}
+			</div>
+			<div class="collapse navbar-collapse" id="nav-menu">
+				<ul class="nav navbar-nav">
+
 					{% if current_user.is_authenticated%}
-						<li><a href="{{ url_for('main.home')}}">Home</a></li>
-						<li><a href="{{url_for('main.user', username = current_user.username )}}">Profile</a></li>
+					
+						<li class="">
+							<a href="{{ url_for('main.user', username = current_user.username) }}">
+								<span class="glyphicon glyphicon-home" aria-hidden="true"></span>
+								Profile
+							</a>
+						</li>
+					{% else %}
+						<li class="visible-xs-inline">
+							<a href="{{ url_for('auth.login') }}">
+								<span class="glyphicon glyphicon-user"></span>
+								SignIn
+							</a>
+						</li>
+						<li class="visible-xs-inline">
+							<a href="{{ url_for('auth.register') }}">
+								<span class="glyphicon glyphicon-pencil"></span>
+								SignUp
+							</a>
+						</li>
 					{% endif %}
 				</ul>
-				<ul class="list-inline list-unstyled pull-right">
-					
-					{% if current_user.is_authenticated%}
-						<li><a href="{{ url_for('auth.logout')}}">Logout</a></li>
-					{% else %}
-						<li><a href="#About">About</a></li>
-						<li><a href="{{ url_for('main.contacts') }}">Contacts</a></li>
-					{% endif%}
+
+				
+				{% if current_user.is_authenticated%}
+					<button id="tweet" class="btn btn-default pull-right hidden-xs">
+						<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
+						Tweet
+					</button>
+
+					<div id="nav-options" class="btn-group pull-right">
+						<button type="button" class="btn btn-default dropdown-toggle thumbnail" data-toggle="dropdown" aria-expanded="false">
+							<img src="{{ url_for('static', filename = 'icons/icon1.png')}}">
+						</button>
+
+						<ul class="dropdown-menu">
+							<li><a href="#">Profile</a></li>
+							<li><a href="#">Settings</a></li>
+							<li role="separator" class="divider"></li>
+							<li><a href="{{url_for('auth.logout')}}">logout</a></li>
+						</ul>
+					</div>
+
+				{% else %}
+
+				<ul id="user-btn" class="list-inline list-unstyled pull-right hidden-xs">
+					<a href="{{ url_for('auth.login')}}" class="btn btn-default ">Sign In</a>
+
+					<a href="{{ url_for('auth.register')}}" class="btn btn-primary">Sign Up</a>
 				</ul>
+
+
+				{% endif %}
+
+
+
+
+				<form id="search" role="search" class="hidden-xs hidden-sm">
+					<div class="input-group">
+						<input type="text" class="form-control" placeholder="search ...">
+						<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+					</div>
+				</form>
 			</div>
 		</div>
-	</header>
-
-	{% endblock %}
+	</nav>
+{% endblock %}
 
 {% block content %}
 {% block page_content %}
@@ -42,42 +108,6 @@
 {% endblock %}
 
 {% block footer%}
-
-	<footer id="page-footer">
-		<div class="container">
-			<div class="row">
-				<div class="col-sm-4 hidden-xs">
-					<ul class="list-inline list-unstyled">
-						<li><img class="img-rounded" src="{{ url_for('static', filename = 'icons/icon1.png')}}">
-						</li>
-
-						<li><h3 class="text-capitalize">Me.my</h3></li>
-					</ul>
-					
-				</div>
-				<div class="col-sm-4">
-					<h3>Social</h3>
-					<ul class="list-unstyled">
-						<li><a href="#">Facebook</a></li>
-						<li><a href="#">Twitter</a></li>
-						<li><a href="#">About</a></li>
-					</ul>
-				</div>
-
-				<div class="col-sm-4">
-					<h3>Contacts</h3>
-					<address>
-						<address>
-					<strong>Me.my, Inc</strong>
-						gichuru.developer@gmail.com <br>
-						memehouseke@gmail.com <br>
-					<abbr title="Phone">P:</abbr> +254714100166
-				</address>
-					</address>
-				</div>
-			</div>
-		</div>
-	</footer>
 
 {% endblock%}
 <script type="text/javascript" src="{{ url_for('static', filename ='js/jquery-3.6.0.min.js')}}"></script>

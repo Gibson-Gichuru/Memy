@@ -15,7 +15,7 @@ from ..email import send_email
 @main.route('/')
 def index():
 
-	return redirect(url_for('auth.login'))
+	return render_template('index.html')
 
 
 @main.route('/contacts', methods =["GET","POST"])

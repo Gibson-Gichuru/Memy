@@ -45,7 +45,7 @@ class RegistrationForm(Form):
 
     password2 = PasswordField("confirm password", validators=[DataRequired()])
 
-    submit = SubmitField("Regiser")
+    submit = SubmitField("Register")
 
     # custom validators
 

@@ -1,144 +1,146 @@
-header {
+body{
 
-	background-color: #921253;
+	padding-top: 4em;
+	background-color: #F6F8FA;
 }
 
-header ul {
-
-	margin-top: 1.5em;
-	margin-bottom: 0.5em;
+.navbar-brand img{
+	height: 100%;
 }
 
-header ul a{
+nav form#search {
 
-	font-weight: bold;
-	font-size: 1.5em;
+	float: right;
+	padding: 0.5em;
+}
+
+nav form#search .glyphicon-search {
+
+	z-index: 99;
+	position: absolute;
+	right: 0.7em;
+	top: 50%;
+	margin-top: -0.44em;
+}
+
+#user-btn{
+
+	margin-top: 0.5em;
+}
+
+nav.navbar-default {
+
+	background-color: #2F92CA;
+}
+
+nav.navbar-default .navbar-nav >li > a {
+
 	color: #FFF;
 }
 
+nav.navbar-default .navbar-nav > li > a,
+nav.navbar-default .navbar-nav >li > a:hover {
 
-header ul a:hover{
-
-	text-decoration: none;
 	color: #FFF;
+	-webkit-transition: all 150ms ease-in-out;
+	-moz-transition: all 150ms ease-in-out;
+	-o-transition: all 150ms ease-in-out;
+	transition: all 150ms ease-in-out;
+}
+nav.navbar-default .navbar-nav > .active > a {
+
+	background-color: transparent;
+	color: #FFF;
+	padding-bottom: 0.62em;
+	border-bottom: 0.453em solid #FFF;
+}
+nav.navbar-default .navbar-nav > .active a:hover,
+nav.navbar-default .navbar-nav > li > a:hover {
+
+	background-color: transparent;
+	color: #F3F3F3;
+	padding-bottom: 0.62em;
+	border-bottom: 0.45em solid #F3F3F3;
 }
 
-header ul.pull-right {
+nav.navbar-header .navbar-toggle,
+nav.navbar-default .navbar-toggle:focus {
 
-	margin-top: 2.4em;
-	margin-right: 0.7em; 
+	background-color: #57A5D2;
+}
+nav.navbar-header .navbar-toggle,
+nav.navbar-default .navbar-toggle:hover {
+
+	background-color: #3986B3;
 }
 
-header ul.logo {
+nav.navbar-default .navbar-toggle .icon-bar {
 
-	margin-left: 1.5em;
+	background-color: #FFF;
 }
 
-header ul.pull-left  img{
 
-	padding-bottom: 0.5em;
+
+
+#nav-options {
+
+	margin: 0.5em;
 }
 
-header .img-rounded{
+#nav-options button.thumbnail {
 
-	max-width: 60px;
-	max-height: 60px;
+	margin:0;
+	padding: 0;
 }
 
-header a {
+#nav-options img {
 
-	font-size: 1.3em;
-	padding: 1.2em 0;
-	font-weight: bold; 
+	max-height: 2.3em;
+	border-radius: 0.3em;
 }
+#tweet {
+
+	margin: 0.5em;
+}
+
+.navbar-brand img {
+
+	height: 100%;
+}
+
 
 .hidden-element {
 
 	display: none;	
 }
 
-form#sign div.form-group{
+.card img.card-img {
 
-	padding-right: 1.2em;
-}
-
-section#intro-header {
-
-	background-image: url('../icons/background.jpg');
-	background-size: cover;
-}
-
-section#intro-header .wrap-headline{
-
+	top: 50%;
+	margin-top: -36px;
+	width: 72px;
+	border: 3px solid #FFF;
+	border-radius: 0.4rem;
+	float: left;
 	position: relative;
-	padding-top: 20%;
-	padding-bottom: 20%; 
+	z-index: 99;
 }
 
-section#intro-header h1,
-section#intro-header h2{
+.card-block .card-title {
 
-	color: #FFF;
+	float: left;
+	margin: 0;
+	margin-left: 0.5em;
 }
 
-section#intro-header hr{
+.card-block .card-text {
 
-	width:10%;
-}
-section#intro-header h2 {
-
-	font-size: 1.5rem;
-}
-section#into-header .btn-default{
-
-	background-color: rgba(255,255,255,0.5);
-	border:none; 
+	clear: both;
+	padding-top: 0.25em;
+	margin-bottom: 1.5em;
 }
 
+#meme_info {
 
-section#contact {
-
-	margin-top: 4em;
-	margin-bottom: 6em;
+	border: 3px solid #000;
 }
-
-footer#page-footer {
-
-	background-color: #000000;
-}
-
-footer#page-footer img.img-rounded{
-
-	max-width: 60px;
-	max-height: 60px;
-}
-
-footer#page-footer h3 {
-
-	color: #FFF;
-	text-decoration: underline;
-}
-
-footer#page-footer ul a{
-
-	color: #FFF;
-
-}
-
-footer#page-footer ul a:hover{
-
-	text-decoration: none;
-	color: #FFF;
-
-}
-
-footer#page-footer ul.list-inline
-{
-
-	margin-top: 3.2em;
-
-}
-
-
-
-
