@@ -8,7 +8,7 @@
 	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename = 'css/base.css')}}">
 	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename = 'css/bootstrap.css')}}">
 {% endblock %}
-{% block title %}H.O.M{% endblock %}
+{% block title %}Me.my{% endblock %}
 {% block navbar %}
 	<nav class="navbar navbar-default navbar-fixed-top">
 		<div class="container-fluid">
@@ -134,7 +134,4 @@
 
 	{{ super() }}
 	{{ moment.include_moment() }}
-
-	
-
 {% endblock %}

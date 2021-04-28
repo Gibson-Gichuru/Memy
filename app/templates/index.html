@@ -48,7 +48,30 @@
 				</div>
 			</div>
 		</div>
-		<div id="main" class="col-sm-12 col-md-6"></div>
+		<div id="main" class="col-sm-12 col-md-6">
+			<div id="main-card" class="card">
+				<div class="card-header">
+					<h4 class="card-title">Trendy Memes</h4>
+				</div>
+				<ul id="posts" class="list-unstyled">
+					{% for post in posts %}
+						<li>
+							<a href="{{ url_for('main.user', username= post.author.username) }}">
+								<img src="{{ post.author.gravator() }}" class="post-avator img-circle">
+							</a>
+
+							<div class="meme-post">
+								<h5>{{ post.author.username }}{% if post.author.name %}&#128081; <small>{{ post.author.name}}</small>{% endif %} -: <strong>{{ moment(post.timestamp).fromNow()}} </strong></h5>
+
+								<p> {{ post.body }}</p>
+
+							</div>
+						</li>
+
+					{% endfor %}
+				</ul>
+			</div>
+		</div>
 		<div id="right-content" class="col-md-3 hidden-xs hidden-sm"></div>
 	</div>
 </div>

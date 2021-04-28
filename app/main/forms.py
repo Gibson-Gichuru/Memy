@@ -6,16 +6,6 @@ from wtforms import ValidationError
 from ..models import User
 
 
-class LoginForm(Form):
-
-    email = StringField("email", validators=[DataRequired(), Length(1, 64), Email()])
-
-    password = PasswordField("password", validators=[DataRequired()])
-
-    remember_me = BooleanField("keep me logged in ")
-
-    submit = SubmitField("log in ")
-
 
 class NameForm(Form):
 
@@ -80,3 +70,10 @@ class ContactForm(Form):
 	message = TextAreaField('message')
 
 	submit = SubmitField('submit')
+
+
+class PostForm(Form):
+
+	body = TextField("new_post", validators = [DataRequired()])
+
+	submit = SubmitField("Post")

@@ -2,8 +2,8 @@ from datetime import datetime
 from flask import render_template, session, redirect, url_for, abort, flash, current_app
 from flask_login import login_user
 from . import main
-from .forms import NameForm, EditProfileForm, EditProfileAdminForm, ContactForm
-from ..models import User, Permission, Role
+from .forms import NameForm, EditProfileForm, EditProfileAdminForm, ContactForm, PostForm
+from ..models import User, Permission, Role, Post
 
 from flask_login import login_required, current_user
 
@@ -14,8 +14,9 @@ from ..email import send_email
 
 @main.route('/')
 def index():
-
-	return render_template('index.html')
+	
+	posts = Post.query.order_by(Post.timestamp.desc()).all()
+	return render_template('index.html',posts = posts)
 
 
 @main.route('/contacts', methods =["GET","POST"])
@@ -35,12 +36,24 @@ def contacts():
 
 
 
-@main.route('/home')
+@main.route('/home', methods = ['GET', 'POST'])
 @login_required
 def home():
 
-	return render_template('home.html')
+	form = PostForm()
 
+	if current_user.can(Permission.WRITE_ARTICLES) and form .validate_on_submit():
+
+		post = Post(body = form.body.data, author = current_user._get_current_object())
+
+		db.session.add(post)
+
+		post.add(post)
+
+		return redirect(url_for('main.home'))
+
+	posts = Post.query.order_by(Post.timestamp.desc()).all()
+	return render_template('home.html', form = form, posts = posts, permission = Permission)
 @main.route('/user/<username>')
 def user(username):
 

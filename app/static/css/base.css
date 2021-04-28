@@ -207,3 +207,50 @@ nav.navbar-default .navbar-toggle .icon-bar {
  	color: #2F92CA;
  	
  }
+
+
+form#new-post {
+
+ 	border-radius: 0.4rem 0.4rem 0 0;
+ 	padding: 1em;
+ 	border-bottom:  0.1em solid rgba(250, 86, 144, 0.2);
+ 	background-color: rgba(250, 86, 144, 0.1);
+}
+
+
+
+ul#posts {
+	margin: 0;
+}
+
+ul#posts li {
+
+	padding: 1em 1em;
+}
+
+ul#posts .post-avator {
+
+	width: 13%;
+	display: inline-block;
+	vertical-align: top;
+
+}
+
+ul#posts .meme-post {
+
+	width: 80%;
+	display: inline-block;
+	margin-left: 2%;
+}
+
+ul#post .meme-post h5 {
+
+	font-weight: bold;
+	margin-bottom: 0.5rem
+}
+
+ul#post .meme-post h5 > small {
+
+	font-size: 1.2rem;
+}
+
