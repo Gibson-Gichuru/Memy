@@ -1,5 +1,5 @@
 from datetime import datetime
-from flask import render_template, session, redirect, url_for, abort, flash, current_app
+from flask import render_template, session, redirect, url_for, abort, flash, current_app, request
 from flask_login import login_user
 from . import main
 from .forms import NameForm, EditProfileForm, EditProfileAdminForm, ContactForm, PostForm
@@ -12,11 +12,16 @@ from ..decorators import admin_required, permission_required
 from .. import db
 from ..email import send_email
 
-@main.route('/')
+@main.route('/', methods = ['GET', 'POST'])
 def index():
-	
-	posts = Post.query.order_by(Post.timestamp.desc()).all()
-	return render_template('index.html',posts = posts)
+
+
+	page = request.args.get('page', 1, type = int)
+	pagination = Post.query.order_by(Post.timestamp.desc()).paginate(page, 
+		current_app.config['FLASKY_POSTS_PER_PAGE'], error_out = False)
+
+	posts = pagination.items
+	return render_template('index.html',posts = posts, pagination = pagination)
 
 
 @main.route('/contacts', methods =["GET","POST"])
@@ -42,6 +47,8 @@ def home():
 
 	form = PostForm()
 
+	page = request.args.get('page', 1, type = int)
+
 	if current_user.can(Permission.WRITE_ARTICLES) and form .validate_on_submit():
 
 		post = Post(body = form.body.data, author = current_user._get_current_object())
@@ -52,10 +59,17 @@ def home():
 
 		return redirect(url_for('main.home'))
 
-	posts = Post.query.order_by(Post.timestamp.desc()).all()
-	return render_template('home.html', form = form, posts = posts, permission = Permission)
+	pagination = Post.query.order_by(Post.timestamp.desc()).paginate(page, 
+		current_app.config['FLASKY_POSTS_PER_PAGE'], error_out = False)
+
+	posts = pagination.items
+
+	return render_template('home.html', form = form, 
+		posts = posts, permission = Permission, pagination = pagination)
 @main.route('/user/<username>')
 def user(username):
+
+	page = request.args.get('page', 1, type=int)
 
 	user = User.query.filter_by(username = username).first()
 
@@ -63,7 +77,12 @@ def user(username):
 
 		abort(404)
 
-	return render_template('user.html', user = user)
+	pagination = Post.query.order_by(Post.timestamp.desc()).paginate(page, 
+		current_app.config['FLASKY_POSTS_PER_PAGE'], error_out = False)
+
+	posts = pagination.items
+
+	return render_template('user.html', user = user, posts = posts, pagination = pagination)
 
 
 

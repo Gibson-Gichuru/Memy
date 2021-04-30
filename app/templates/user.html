@@ -1,57 +1,114 @@
-{% extends "base.html" %}
-{% block title %} H.O - Profile - {{ current_user.username }}{% endblock %}
+{% extends 'base.html' %}
+{% import "_macro.html" as macros %}
+{% block title %}Me.My: {{ current_user.username }}{% endblock%}
 {% block page_content %}
+<div class="container">
+	<div class="row">
+		<div id="profile" class="col-md-3 hidden-xs hidden-sm">
+			<div id="profile-resume" class="card">
+				<img src="{{ url_for('static', filename='icons/card.jpg')}}" class="card-img-top img-responsive">
 
-	<div class="container">
-		<div class="row">
-			<div class="col-md-1" style="margin-top: 4.0em;">
-				{% if user == current_user %}
-				<img class="img-rounded profile-thumbnail" src="{{ user.gravator() }}">
-				{% endif %}
-			</div>
-			<div class="col-md-4">
-				<div class="page-header">
+				<div class="card-block">
+					<img src="{{ user.gravator() }} " class="card-img">
+					<h4 class="card-title">{{ current_user.username}} &#128081;<small>{{current_user.name}}</small></h4>
+					<h4 class="card-title">
+						<span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span>
+						<a href="http://maps.google.com/?q={{ current_user.location }}"><small>{{ current_user.location }}</small></a>
+					</h4>
 
-					<h1>{{ user.username }}</h1>
-					{% if user.name or user.location %}
-
-						<p>
-							{% if user.name %}{{ user.name }}{% endif %}
-							{% if user.location %}
-							From <a href="http://maps.google.com/?q={{ user.location }}">
-							{{ user.location }}
-							</a>
+					<p class="card-text">
+						{% if  current_user.is_administrator() %}
+							<small><a href="mailto:{{ user.email }}">{{ user.email }}</a></small>
+						{% endif %}
+					</p>
+					<ul class="list-unstyled">
+						<ul class="list-unstyled list-inline">
+							<li>
+								<p>Member since: {{moment(user.member_since).format('L')}}</p>
+							</li>
+							<li>
+								<p>Last Seen {{ moment(user.last_seen).fromNow()}}</p>
+							</li>
+						</ul>
+						
+						
+						<ul class="list-inline list-unstyled">
+							{% if current_user.is_administrator() %}
+								<li>
+									<a class="btn btn-danger"
+										href="{{ url_for('main.edit_profile_admin', id=user.id) }}">
+										Edit Profile [Admin]
+									</a>
+								</li>
 							{% endif %}
-						</p>
-					{% endif %}
-					{% if current_user.is_administrator() %}
-						<p><a href="mailto:{{ user.email }}">{{ user.email }}</a></p>
-					{% endif %}
-					{% if user.about_me %}
+						</ul>
 						<p>{{ user.about_me }}</p>
-					{% endif %}
-						<p>
-						Member since {{ moment(user.member_since).format('L') }}.
-						Last seen {{ moment(user.last_seen).fromNow() }}.
-						</p>
 
-					{% if user == current_user %}
-						<a class="btn btn-default" href="{{ url_for('main.edit_profile') }}">
-						Edit Profile
-						</a>
-					{% endif %}
-					{% if current_user.is_administrator() %}
-						<a class="btn btn-danger"
-							href="{{ url_for('main.edit_profile_admin', id=user.id) }}">
-								Edit Profile [Admin]
-						</a>
-					{% endif %}
+					</ul>
 				</div>
-				
+			</div>
+
+			<br>
+
+			<div id="followers-card" class="card">
+				<div class="card-header">
+					<strong>Followers</strong>
+				</div>
+				<div id="follower-photo" class="card-block">
+					<ul class="list-inline list-unstyled">
+						<li>
+							<a href="#" class="thumbnail">
+								<img src="{{ url_for('static', filename='icons/icon1.png')}}" class="img-responsive">
+							</a>
+						</li>
+						<li>
+							<a href="#" class="thumbnail">
+								<img src="{{ url_for('static', filename='icons/icon1.png')}}" class="img-responsive">
+							</a>
+						</li>
+						<li>
+							<a href="#" class="thumbnail">
+								<img src="{{ url_for('static', filename='icons/icon1.png')}}" class="img-responsive">
+							</a>
+						</li>
+						<li>
+							<a href="#" class="thumbnail">
+								<img src="{{ url_for('static', filename='icons/icon1.png')}}" class="img-responsive">
+							</a>
+						</li>
+					</ul>
+				</div>
 			</div>
 		</div>
+		<div id="main" class="col-sm-12 col-md-6">
+			<div id="post-card" class="card">
+				<div id="user-card" class="card-header">
+					<img src="{{ url_for('static', filename='icons/icon1.png')}}" class="user-avator img-circle">
+					<h4 class="card-title">
+						Recent posts {{ user.username }} &#128081; <small>{{ user.name }}</small> 
+					</h4>
+				</div>
+
+				<div class="card-block">
+					<ul id="posts" class="list-unstyled">
+						{% for post in posts %}
+						<li>
+							<div class="meme-post">
+								<h5>{{ post.author.username }}{% if post.author.name %}&#128081; <small>{{ post.author.name}}</small>{% endif %} -: <strong>{{ moment(post.timestamp).fromNow()}} </strong></h5>
+
+								<p> {{ post.body }}</p>
+
+							</div>
+						</li>
+						{% endfor %}
+					</ul>
+				</div>
+			</div>
+			<div class="pagination">
+				{{ macros.pagination_widget(pagination, '.index')}}
+			</div>
+		</div>
+		<div id="right-content" class="col-md-3 hidden-xs hidden-sm"></div>
 	</div>
-	
-{% endblock %}
-{% block footer %}
+</div>
 {% endblock %}

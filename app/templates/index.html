@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% import "bootstrap/wtf.html" as wtf %}
+{% import "_macro.html" as macros %}
 {% block title %}Me.My{% endblock%}
 {% block page_content %}
 <div class="container">
@@ -56,7 +56,7 @@
 				<ul id="posts" class="list-unstyled">
 					{% for post in posts %}
 						<li>
-							<a href="{{ url_for('main.user', username= post.author.username) }}">
+							<a href="{{ url_for('main.user', username=post.author.username) }}">
 								<img src="{{ post.author.gravator() }}" class="post-avator img-circle">
 							</a>
 
@@ -70,6 +70,9 @@
 
 					{% endfor %}
 				</ul>
+			</div>
+			<div class="pagination">
+				{{ macros.pagination_widget(pagination, '.index')}}
 			</div>
 		</div>
 		<div id="right-content" class="col-md-3 hidden-xs hidden-sm"></div>

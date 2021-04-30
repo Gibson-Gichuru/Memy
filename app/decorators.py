@@ -14,7 +14,7 @@ def permission_required(permission):
 
 			if not current_user.can(permission):
 
-				about(403)
+				abort(403)
 
 			return f(*args, **kwargs)
 

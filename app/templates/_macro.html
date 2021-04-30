@@ -1,0 +1,34 @@
+{% macro pagination_widget(pagination, endpoint)%}
+	<ul class="pagination">
+
+		<!-- if the current page is the first page then disable the prev-page button else set the prev link to be a page before the current-->
+		<li {% if not pagination.has_prev %} class="disabled" {% endif %}>
+			<a href="{% if pagination.hav_prev%}{{ url_for(endpoint, page = pagination.page-1, **kwargs)}}{% else %}#{% endif %}">&laquo;</a>
+		</li>
+
+		<!-- for all the pages in the given pagination object if there exists a page and the page is the current page number 
+			set it to active-->
+		{% for p in pagination.iter_pages()%}
+			{% if p %}
+				{% if p == pagination.page %}
+					<li class="active">
+						<a href="{{ url_for(endpoint, page = p, **kwargs)}}">{{ p }}</a>
+					</li>
+				{% else %}
+					<li>
+						<a href="{{ url_for(endpoint, page = p, **kwargs )}}">{{ p }}</a>
+					</li>
+				{% endif %}
+
+			{% else %}
+				<li class="disabled">
+					<a href="#">&hellip;</a>
+				</li>
+			{% endif %}
+		{% endfor %}
+
+		<li {% if not pagination.has_next %} class="disabled"{% endif %}>
+			<a href="{% if pagination.has_next %}{{ url_for(endpoint, page = pagination.page+1, **kwargs)}}{% else %}#{% endif %}">&hellip;</a>
+		</li>
+	</ul>
+{% endmacro %}
