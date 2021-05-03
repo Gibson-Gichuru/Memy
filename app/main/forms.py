@@ -3,6 +3,8 @@ from wtforms import StringField, SubmitField, PasswordField, BooleanField, TextF
 from wtforms.validators import DataRequired, Email, Length, Regexp
 from wtforms import ValidationError
 
+from flask_pagedown.fields import PageDownField
+
 from ..models import User
 
 
@@ -74,6 +76,6 @@ class ContactForm(Form):
 
 class PostForm(Form):
 
-	body = TextField("new_post", validators = [DataRequired()])
+	body = PageDownField("new_post", validators = [DataRequired()])
 
 	submit = SubmitField("Post")

@@ -126,12 +126,10 @@
 <script type="text/javascript" src="{{ url_for('static', filename ='js/jquery-3.6.0.min.js')}}"></script>
 <script type="text/javascript" src="{{ url_for('static', filename ='js/bootstrap.js')}}"></script>
 <script type="text/javascript" src="{{ url_for('static', filename ='js/styles.js')}}"></script>
-
-
 {% endblock %}
-
 {% block scripts %}
 
 	{{ super() }}
 	{{ moment.include_moment() }}
+	{{ pagedown.include_pagedown() }}
 {% endblock %}
