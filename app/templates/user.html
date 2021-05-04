@@ -90,20 +90,10 @@
 				</div>
 
 				<div class="card-block">
-					<ul id="posts" class="list-unstyled">
-						{% for post in posts %}
-						<li>
-							<div class="meme-post">
-								<h5>{{ post.author.username }}{% if post.author.name %}&#128081; <small>{{ post.author.name}}</small>{% endif %} -: <strong>{{ moment(post.timestamp).fromNow()}} </strong></h5>
-
-								<p> {{ post.body_html }}</p>
-
-							</div>
-						</li>
-						{% endfor %}
-					</ul>
+					{% include '_posts.html' %}
 				</div>
 			</div>
+			
 			<div class="pagination">
 				{{ macros.pagination_widget(pagination, '.index')}}
 			</div>

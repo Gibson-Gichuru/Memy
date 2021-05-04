@@ -77,7 +77,7 @@ def user(username):
 
 		abort(404)
 
-	pagination = Post.query.order_by(Post.timestamp.desc()).paginate(page, 
+	pagination = user.posts.order_by(Post.timestamp.desc()).paginate(page, 
 		current_app.config['FLASKY_POSTS_PER_PAGE'], error_out = False)
 
 	posts = pagination.items
