@@ -2,10 +2,34 @@
 {% import "bootstrap/wtf.html" as wtf %}
 {% block title %}Edit-Profile: {{current_user.username}}{% endblock %}
 {%block page_content %}
-	<div class="page_header">
-		<h1>Edit Your Profile</h1>
-		<div class="container">
-			{{ wtf.quick_form(form) }}
+	<div id="Edit-Profile" class="container">
+		<div class="row">
+			<form class="form-horizontal" method="POST">
+				{{ form.csrf_token }}
+				<div class="col-sm-2">
+					
+					<div class="form-group">
+						{{ form.profile_pic( class="thumbnail")}}
+					</div>
+				</div>
+				<div class="col-sm-8">
+					<div class="form-group">
+						{{ form.name.label }}
+						{{ form.name(class="form-control")}}
+					</div>
+					<div class="form-group">
+						{{ form.location.label }}
+						{{ form.location(class="form-control")}}
+					</div>
+					<div class="form-group">
+						{{ form.about_me.label }}
+						{{ form.about_me(class="form-control")}}
+					</div>
+					<div class="form-group">
+						{{ form.submit(class="btn btn-success")}}
+					</div>
+				</div>
+			</form>
 		</div>
 	</div>
 {% endblock %}

@@ -336,3 +336,27 @@ ul#post .meme-post h5 > small {
 	border-bottom:  0.1em solid #f5f5f5;
 	
 }
+
+#Edit-Profile {
+
+	margin-top: 5em;
+}
+
+
+#Edit-Profile  .col-sm-4 .form-group{
+
+	padding-top: 3.5em;
+	padding-left:  30%;
+}
+
+#Edit-Profile ul {
+
+	padding-bottom: 1.3em;
+}
+
+#Edit-Profile .thumbnail {
+
+	height: 10em;
+	width: 10em;
+	border-radius: 1em;
+}

@@ -11,6 +11,10 @@ from datetime import datetime
 
 import hashlib
 
+from markdown import markdown
+
+import bleach
+
 # call back function
 @login_manager.user_loader
 def load_user(user_id):
@@ -100,6 +104,16 @@ class Post(db.Model, DataManipulation):
     body = db.Column(db.Text)
     timestamp = db.Column(db.DateTime, index = True, default = datetime.utcnow)
     author_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    body_html = db.Column(db.Text)
+
+    @staticmethod 
+    def on_change_body(target, value, oldvalue, initiator):
+
+        allowed_tags = ['a', 'abbr','acronym', 'b', 'blockquote', 'code',
+        'em', 'i', 'li', 'ol', 'pre', 'strong', 'ul', 'h1', 'h2', 'h3', 'p']
+
+        target.body_html = bleach.linkify(bleach.clean(markdown(value, 
+            output_format='html'), tags = allowed_tags, skip = True))
 
 
     @staticmethod
@@ -137,6 +151,7 @@ class User(db.Model, DataManipulation, UserMixin):
     about_me = db.Column(db.Text())
     member_since = db.Column(db.DateTime(), default = datetime.utcnow)
     last_seen = db.Column(db.DateTime(), default = datetime.utcnow)
+    profile_pic_id = db.Column(db.String(120), default = None)
 
 
     posts = db.relationship('Post', backref ='author', lazy = 'dynamic')
@@ -161,6 +176,16 @@ class User(db.Model, DataManipulation, UserMixin):
             if self.role is None:
 
                 self.role = Role.query.filter_by(default = True).first()
+
+
+    def set_profile_pic(profile_pic_id):
+
+        self.profile_pic_id = profile_pic_id
+
+
+    def get_profile_pic():
+
+        return "hollow"
 
     def can(self, permissions):
 
@@ -315,3 +340,4 @@ class AnonymousUser(AnonymousUserMixin):
 
 
 login_manager.anonymous_user = AnonymousUser
+db.event.listen(Post.body, 'set', Post.body_html)

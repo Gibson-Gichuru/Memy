@@ -164,3 +164,9 @@ def for_admins_only():
 def for_moderators_only():
 
 	return "for moderators only"
+
+
+@main.route('/upload', methods=['GET', 'POST'])
+def upload_file():
+
+	return render_template('upload.html')

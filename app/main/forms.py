@@ -1,11 +1,11 @@
 from flask_wtf import FlaskForm as Form
-from wtforms import StringField, SubmitField, PasswordField, BooleanField, TextField, SelectField, TextAreaField
+from wtforms import (StringField, SubmitField, PasswordField, BooleanField, TextField, SelectField, TextAreaField)
 from wtforms.validators import DataRequired, Email, Length, Regexp
 from wtforms import ValidationError
-
+from flask_wtf.file import FileField, FileAllowed
 from flask_pagedown.fields import PageDownField
 
-from ..models import User
+from ..models import User, Role
 
 
 
@@ -20,7 +20,9 @@ class EditProfileForm(Form):
 	name = StringField('Real name', validators = [Length(0,64)])
 	location = StringField('Location', validators = [Length(0,64)])
 	about_me = TextField('About Me')
+	profile_pic = FileField('profile', validators=[FileAllowed(['jpg', 'png', 'jpeg'])])
 	submit = SubmitField('Submit')
+	
 
 
 class EditProfileAdminForm(Form):
@@ -37,7 +39,7 @@ class EditProfileAdminForm(Form):
 
 	name = StringField("Real Name", validators = [Length(0,64)])
 	location = StringField("Location", validators = [Length(0,64)])
-	about = TextField('About Me')
+	about_me = TextField('About Me')
 	submit = SubmitField('Update')
 
 

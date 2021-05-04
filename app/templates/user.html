@@ -96,7 +96,7 @@
 							<div class="meme-post">
 								<h5>{{ post.author.username }}{% if post.author.name %}&#128081; <small>{{ post.author.name}}</small>{% endif %} -: <strong>{{ moment(post.timestamp).fromNow()}} </strong></h5>
 
-								<p> {{ post.body }}</p>
+								<p> {{ post.body_html }}</p>
 
 							</div>
 						</li>

@@ -12,6 +12,7 @@ class Config:
 	FLASK_MAIL_SENDER = 'Flask Admin {}'.format(os.environ.get('MAIL_USERNAME'))
 	FLASK_ADMIN = os.environ.get('FLASK_ADMIN')
 	FLASKY_POSTS_PER_PAGE = 10
+	FILE_UPLOAD_API_AUTH_KEY = os.environ.get('FILE_UPLOAD_API_AUTH_KEY')
 
 	@staticmethod
 	def init_app(app):
