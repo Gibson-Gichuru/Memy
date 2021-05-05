@@ -1,0 +1,64 @@
+{% extends 'user_interface.html' %}
+{% block title %}Me.My- Home{% endblock%}
+
+{% block card_content %}
+<div id="profile-resume" class="card">
+	<img src="{{ url_for('static', filename='icons/card.jpg')}}" class="card-img-top img-responsive">
+
+	<div class="card-block">
+		<img src="{{ current_user.gravator() }} " class="card-img">
+		<h4 class="card-title">{{ current_user.username}} &#128081;<small>{{current_user.name}}</small></h4>
+		<h4 class="card-title">
+			<span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span>
+			<a href="http://maps.google.com/?q={{ current_user.location }}"><small>{{ current_user.location }}</small></a>
+		</h4>
+		<p class="card-text">{{ current_user.about_me}}</p>
+
+		<ul class="list-inline list-unstyled">
+			<li id="card-meme">
+				<a href="#">
+					<span class="profile-stats">Memes</span>
+					<span class="profile-value">10</span>
+				</a>
+			</li>
+
+			<li id="card-following">
+				<a href="#">
+					<span class="profile-stats">Following</span>
+					<span class="profile-value">10</span>
+				</a>
+			</li>
+
+			<li id="card-followers">
+				<a href="#">
+					<span class="profile-stats">Followers</span>
+					<span class="profile-value">10</span>
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+{% endblock %}
+{% block main_page_content %}
+<div id="main-card" class="card">
+{% if current_user.can(permission.WRITE_ARTICLES) %}
+	<form id="new-post" action method="POST">
+		{{ form.csrf_token }}
+
+		<div class="input-group">
+			{{ form.body(class="form-control", placeholder="How about a meme for the day")}}
+
+			<span class="input-group-btn">
+				{{ form.submit(class="btn btn-success")}}
+			</span>
+		</div>
+
+	</form>
+
+{% endif %}
+{% include '_posts.html'%}
+</div>
+{% endblock %}
+
+{% block page_right_content %}
+{% endblock %}

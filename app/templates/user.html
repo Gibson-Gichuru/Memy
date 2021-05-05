@@ -17,25 +17,50 @@
 			{% endif %}
 		</p>
 		<ul class="list-unstyled">
-			<ul class="list-unstyled list-inline">
-				<li>
-					<p>Member since: {{moment(user.member_since).format('L')}}</p>
-				</li>
-				<li>
-					<p>Last Seen {{ moment(user.last_seen).fromNow()}}</p>
-				</li>
-			</ul>
-			<ul class="list-inline list-unstyled">
-				{% if current_user.is_administrator() %}
+			<li>
+				<ul class="list-unstyled list-inline">
 					<li>
-						<a class="btn btn-danger"
-							href="{{ url_for('main.edit_profile_admin', id=user.id) }}">
-							Edit Profile [Admin]
-						</a>
+						<p>Member since: {{moment(user.member_since).format('L')}}</p>
 					</li>
-				{% endif %}
-			</ul>
-			<p>{{ user.about_me }}</p>
+					<li>
+						<p>Last Seen {{ moment(user.last_seen).fromNow()}}</p>
+					</li>
+				</ul>
+			</li>
+
+			<li>
+				<ul class="list-unstyled list-inline">
+					<li>
+						<p>Member since: {{moment(user.member_since).format('L')}}</p>
+					</li>
+					<li>
+						<p>Last Seen {{ moment(user.last_seen).fromNow()}}</p>
+					</li>
+				</ul>
+			</li>
+
+			<li>
+				<ul class="list-inline list-unstyled">
+					{% if current_user.is_authenticated %}
+						<li>
+							<a href="{{ url_for(main.edit_profile)}}">
+								<span class="label label-primary">Edit Profile</span>
+							</a>
+						</li>
+					{% elif current_user.is_administrator() %}
+						<li>
+							<a href="{{ url_for('main.edit_profile_admin', id=user.id) }}">
+								<span class="label label-danger"> Edit-Profile [Adim]</span>
+							</a>
+						</li>
+					{% endif %}
+				</ul>
+			</li>
+			
+			<li>
+				<p> {% if user.about_me %}{{ user.about_me }}{% endif %}</p>
+			</li>
+			
 		</ul>
 	</div>
 </div>

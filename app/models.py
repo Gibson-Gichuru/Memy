@@ -107,13 +107,13 @@ class Post(db.Model, DataManipulation):
     body_html = db.Column(db.Text)
 
     @staticmethod 
-    def on_change_body(target, value, oldvalue, initiator):
+    def on_changed_body(target, value, oldvalue, initiator):
 
         allowed_tags = ['a', 'abbr','acronym', 'b', 'blockquote', 'code',
         'em', 'i', 'li', 'ol', 'pre', 'strong', 'ul', 'h1', 'h2', 'h3', 'p']
 
         target.body_html = bleach.linkify(bleach.clean(markdown(value, 
-            output_format='html'), tags = allowed_tags, skip = True))
+            output_format='html'), tags = allowed_tags, strip = True))
 
 
     @staticmethod
@@ -340,4 +340,4 @@ class AnonymousUser(AnonymousUserMixin):
 
 
 login_manager.anonymous_user = AnonymousUser
-db.event.listen(Post.body, 'set', Post.body_html)
+db.event.listen(Post.body, 'set', Post.on_changed_body)
