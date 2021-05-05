@@ -4,6 +4,15 @@ body{
 	background-color: #F6F8FA;
 }
 
+#main-container {
+
+	overflow: hidden;
+}
+div#main {
+
+	overflow: auto;
+}
+
 .navbar-brand img{
 	height: 100%;
 }
@@ -229,7 +238,7 @@ ul#posts li {
 
 ul#posts .post-avator {
 
-	width: 13%;
+	width: 8%;
 	display: inline-block;
 	vertical-align: top;
 
@@ -331,6 +340,12 @@ ul#post .meme-post h5 > small {
 	text-decoration: underline;
 }
 
+#user-card, #main-card h5 > strong {
+
+	font-size: 1rem;
+}
+
+
 #posts li {
 	padding-top: 1.2em; 
 	border-bottom:  0.1em solid #f5f5f5;
@@ -359,4 +374,30 @@ ul#post .meme-post h5 > small {
 	height: 10em;
 	width: 10em;
 	border-radius: 1em;
+}
+
+ul#posts .action-list {
+	margin-left: 13%;
+	padding-left: 3em;
+}
+
+
+ul#posts .action-list a {
+	width: 15%;
+	display: inline-block;
+	padding-right: 3em;
+}
+ul#posts .action-list a:hover {
+
+	text-decoration: none;
+	
+}
+ul#posts .action-list .retweet-count {
+	padding-left: 0.2em;
+	font-weight: bold;
+}
+
+ul#posts .post-img {
+
+	padding-bottom: 1em;
 }

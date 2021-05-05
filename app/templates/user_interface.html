@@ -1,0 +1,23 @@
+{% extends "base.html"%}
+{% import "_macro.html" as macros %}
+{% block title %}
+{% endblock %}
+
+{% block page_content %}
+	<div class="container">
+		<div class="row">
+			<div class="col-md-3 hidden-xs hidden-sm">
+				{% block card_content %}
+				{% endblock %}
+			</div>
+			<div id="main" class="col-sm-12 col-md-6">
+				{% block main_page_content %}
+				{% endblock %}
+			</div>
+			<div id="right-content" class="col-md-3 hidden-xs hidden-sm">
+				{% block page_right_content %}
+				{% endblock %}
+			</div>
+		</div>
+	</div>
+{% endblock%}

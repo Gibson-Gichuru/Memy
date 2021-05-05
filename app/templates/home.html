@@ -1,88 +1,67 @@
-{% extends 'base.html' %}
-{% import "_macro.html" as macros %}
-{% block title %}Me.My{% endblock%}
-{% block page_content %}
-<div class="container">
-	<div class="row">
-		<div id="profile" class="col-md-3 hidden-xs hidden-sm">
-			<div id="profile-resume" class="card">
-				<img src="{{ url_for('static', filename='icons/card.jpg')}}" class="card-img-top img-responsive">
+{% extends 'user_interface.html' %}
+{% block title %}Me.My- Home{% endblock%}
 
-				<div class="card-block">
-					<img src="{{ current_user.gravator() }} " class="card-img">
-					<h4 class="card-title">{{ current_user.username}} &#128081;<small>{{current_user.name}}</small></h4>
-					<h4 class="card-title">
-						<span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span>
-						<a href="http://maps.google.com/?q={{ current_user.location }}"><small>{{ current_user.location }}</small></a>
-					</h4>
-					<p class="card-text">{{ current_user.about_me}}</p>
+{% block card_content %}
+<div id="profile-resume" class="card">
+	<img src="{{ url_for('static', filename='icons/card.jpg')}}" class="card-img-top img-responsive">
 
-					<ul class="list-inline list-unstyled">
-						<li id="card-meme">
-							<a href="#">
-								<span class="profile-stats">Memes</span>
-								<span class="profile-value">10</span>
-							</a>
-						</li>
+	<div class="card-block">
+		<img src="{{ current_user.gravator() }} " class="card-img">
+		<h4 class="card-title">{{ current_user.username}} &#128081;<small>{{current_user.name}}</small></h4>
+		<h4 class="card-title">
+			<span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span>
+			<a href="http://maps.google.com/?q={{ current_user.location }}"><small>{{ current_user.location }}</small></a>
+		</h4>
+		<p class="card-text">{{ current_user.about_me}}</p>
 
-						<li id="card-following">
-							<a href="#">
-								<span class="profile-stats">Following</span>
-								<span class="profile-value">10</span>
-							</a>
-						</li>
+		<ul class="list-inline list-unstyled">
+			<li id="card-meme">
+				<a href="#">
+					<span class="profile-stats">Memes</span>
+					<span class="profile-value">10</span>
+				</a>
+			</li>
 
-						<li id="card-followers">
-							<a href="#">
-								<span class="profile-stats">Followers</span>
-								<span class="profile-value">10</span>
-							</a>
-						</li>
-					</ul>
-				</div>
-			</div>
-		</div>
-		<div id="main" class="col-sm-12 col-md-6">
-			<div id="main-card" class="card">
-				{% if current_user.can(permission.WRITE_ARTICLES) %}
-					<form id="new-post" action method="POST">
-						{{ form.csrf_token }}
+			<li id="card-following">
+				<a href="#">
+					<span class="profile-stats">Following</span>
+					<span class="profile-value">10</span>
+				</a>
+			</li>
 
-						<div class="input-group">
-							{{ form.body(class="form-control", placeholder="How about a meme for the day")}}
-
-							<span class="input-group-btn">
-								{{ form.submit(class="btn btn-success")}}
-							</span>
-						</div>
-
-					</form>
-
-				{% endif %}
-
-				<ul id="posts" class="list-unstyled">
-					{% for post in posts %}
-						<li>
-							<a href="{{ url_for('main.user', username= post.author.username) }}">
-								<img src="{{ post.author.gravator() }}" class="post-avator img-circle">
-							</a>
-
-							<div class="meme-post">
-								<h5>{{ post.author.username }}{% if post.author.name %}&#128081; <small>{{ post.author.name}}</small>{% endif %} -: <strong>{{ moment(post.timestamp).fromNow()}} </strong></h5>
-
-								<p> {{ post.body_html }}</p>
-
-							</div>
-						</li>
-
-					{% endfor %}
-				</ul>
-			</div>
-			<div class="pagination">
-				{{ macros.pagination_widget(pagination, '.index')}}
-			</div>
-		</div>
-		<div id="right-content" class="col-md-3 hidden-xs hidden-sm"></div>
+			<li id="card-followers">
+				<a href="#">
+					<span class="profile-stats">Followers</span>
+					<span class="profile-value">10</span>
+				</a>
+			</li>
+		</ul>
 	</div>
 </div>
+{% endblock %}
+{% block main_page_content %}
+<div id="main-card" class="card">
+{% if current_user.can(permission.WRITE_ARTICLES) %}
+	<form id="new-post" action method="POST">
+		{{ form.csrf_token }}
+
+		<div class="input-group">
+			{{ form.body(class="form-control", placeholder="How about a meme for the day")}}
+
+			<span class="input-group-btn">
+				{{ form.submit(class="btn btn-success")}}
+			</span>
+		</div>
+
+	</form>
+
+{% endif %}
+{% include '_posts.html'%}
+</div>
+<div class="pagination">
+	{{ macros.pagination_widget(pagination, '.index')}}
+</div>
+{% endblock %}
+
+{% block page_right_content %}
 {% endblock %}

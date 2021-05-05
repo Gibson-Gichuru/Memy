@@ -1,41 +1,42 @@
+
 {% extends 'user_interface.html' %}
-{% block title %}Me.My: {{ current_user.username }}{% endblock%}
+{% block title %}Me.My: Post{% endblock%}
 
 {% block card_content %}
 <div id="profile-resume" class="card">
 	<img src="{{ url_for('static', filename='icons/card.jpg')}}" class="card-img-top img-responsive">
 	<div class="card-block">
-		<img src="{{ user.gravator() }} " class="card-img">
-		<h4 class="card-title">{{ current_user.username}} &#128081;<small>{{current_user.name}}</small></h4>
+		<img src="{{ posts[0].author.gravator() }} " class="card-img">
+		<h4 class="card-title">{{ posts[0].author.username}} &#128081;<small>{{posts[0].author.name}}</small></h4>
 		<h4 class="card-title">
 			<span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span>
-			<a href="http://maps.google.com/?q={{ current_user.location }}"><small>{{ current_user.location }}</small></a>
+			<a href="http://maps.google.com/?q={{ posts[0].author.location }}"><small>{{ posts[0].author.location }}</small></a>
 		</h4>
 		<p class="card-text">
-			{% if  current_user.is_administrator() %}
-				<small><a href="mailto:{{ user.email }}">{{ user.email }}</a></small>
+			{% if  posts[0].author.is_administrator() %}
+				<small><a href="mailto:{{ posts[0].author.email }}">{{ posts[0].author.email }}</a></small>
 			{% endif %}
 		</p>
 		<ul class="list-unstyled">
 			<ul class="list-unstyled list-inline">
 				<li>
-					<p>Member since: {{moment(user.member_since).format('L')}}</p>
+					<p>Member since: {{moment(posts[0].author.member_since).format('L')}}</p>
 				</li>
 				<li>
-					<p>Last Seen {{ moment(user.last_seen).fromNow()}}</p>
+					<p>Last Seen {{ moment(posts[0].author.last_seen).fromNow()}}</p>
 				</li>
 			</ul>
 			<ul class="list-inline list-unstyled">
-				{% if current_user.is_administrator() %}
+				{% if posts[0].author.is_administrator() %}
 					<li>
 						<a class="btn btn-danger"
-							href="{{ url_for('main.edit_profile_admin', id=user.id) }}">
+							href="{{ url_for('main.edit_profile_admin', id=posts[0].author.id) }}">
 							Edit Profile [Admin]
 						</a>
 					</li>
 				{% endif %}
 			</ul>
-			<p>{{ user.about_me }}</p>
+			<p>{{ posts[0].author.about_me }}</p>
 		</ul>
 	</div>
 </div>
@@ -76,20 +77,9 @@
 
 {% block main_page_content %}
 <div id="post-card" class="card">
-	<div id="user-card" class="card-header">
-		<img src="{{ url_for('static', filename='icons/icon1.png')}}" class="user-avator img-circle">
-		<h4 class="card-title">
-			Recent posts {{ user.username }} &#128081; <small>{{ user.name }}</small> 
-		</h4>
-	</div>
-
 	<div class="card-block">
 		{% include '_posts.html' %}
 	</div>
-</div>
-	
-<div class="pagination">
-	{{ macros.pagination_widget(pagination, '.index')}}
 </div>
 {% endblock %}
 

@@ -1,65 +1,63 @@
-{% extends 'base.html' %}
-{% import "_macro.html" as macros %}
-{% block title %}Me.My{% endblock%}
-{% block page_content %}
-<div class="container">
-	<div class="row">
-		<div id="profile" class="col-md-3 hidden-xs hidden-sm">
-			<div id="profile-resume" class="card">
-				<img src="{{ url_for('static', filename='icons/card.jpg')}}" class="card-img-top img-responsive">
+{% extends "user_interface.html"%}
+{% block title %} Me.me {% endblock%}
 
-				<div class="card-block">
-					<img src="{{ url_for('static', filename='icons/icon1.png')}} " class="card-img">
-					<h4 class="card-title">Me.my</h4>
-					<p class="card-text">How about a meme for a day</p>
-				</div>
-			</div>
+{% block card_content %}
+<div id="profile-resume" class="card">
+	<img src="{{ url_for('static', filename='icons/card.jpg')}}" class="card-img-top img-responsive">
 
-			<br>
-
-			<div id="meme_info" class="card">
-				<div class="card-header">
-					<h4 >
-						<span class="glyphicon glyphicon-pushpin"></span>
-						Info
-					</h4>
-				<div class="card-block">
-					<ul class="list-unstyled">
-						<li>
-							<a href="#">
-								<span></span>
-								Contacts
-							</a>
-						</li>
-						<li>
-							<a href="#">
-								<span></span>
-								About
-							</a>
-						</li>
-						<li>
-							<a href="#">
-								<span></span>
-								Terms and conditions
-							</a>
-						</li>
-					</ul>
-				</div>
-				</div>
-			</div>
-		</div>
-		<div id="main" class="col-sm-12 col-md-6">
-			<div id="main-card" class="card">
-				<div class="card-header">
-					<h4 class="card-title">Trendy Memes</h4>
-				</div>
-				{% include '_posts.html'%}
-			</div>
-			<div class="pagination">
-				{{ macros.pagination_widget(pagination, '.index')}}
-			</div>
-		</div>
-		<div id="right-content" class="col-md-3 hidden-xs hidden-sm"></div>
+	<div class="card-block">
+		<img src="{{ url_for('static', filename='icons/icon1.png')}} " class="card-img">
+		<h4 class="card-title">Me.my</h4>
+		<p class="card-text">How about a meme for a day</p>
 	</div>
 </div>
+
+<br>
+
+<div id="meme_info" class="card">
+	<div class="card-header">
+		<h4 >
+			<span class="glyphicon glyphicon-pushpin"></span>
+			Info
+		</h4>
+	</div>
+	<div class="card-block">
+		<ul class="list-unstyled">
+			<li>
+				<a href="#">
+					<span></span>
+					Contacts
+				</a>
+			</li>
+			<li>
+				<a href="#">
+					<span></span>
+					About
+				</a>
+			</li>
+			<li>
+				<a href="#">
+					<span></span>
+					Terms and conditions
+				</a>
+			</li>
+		</ul>
+	</div>	
+</div>
+
+{% endblock %}
+
+{% block main_page_content %}
+<div id="main-card" class="card">
+	<div class="card-header">
+		<h4 class="card-title">Trendy Memes</h4>
+	</div>
+	{% include '_posts.html'%}
+</div>
+<div class="pagination">
+	{{ macros.pagination_widget(pagination, '.index')}}
+</div>
+{% endblock %}
+
+{% block page_right_content %}
 {% endblock %}

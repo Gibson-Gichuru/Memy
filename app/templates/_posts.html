@@ -8,8 +8,28 @@
             <div class="meme-post">
                 <h5>{{ post.author.username }}{% if post.author.name %}&#128081; <small>{{ post.author.name}}</small>{% endif %} -: <strong>{{ moment(post.timestamp).fromNow()}} </strong></h5>
 
-                <p> {{ post.body_html }}</p>
+                {% if post.body_html%}
+                    {{ post.body_html | safe}}
 
+                {% else %}
+                    {{ post.body }}
+                {% endif %}
+ 
+                <div class="post-img">
+                    <img src="{{ url_for('static', filename='icons/icon1.png')}} " class="img-responsive">
+                </div>
+
+            </div>
+            <div class="action-list">
+                <a href="#">
+                    <span class="glyphicon glyphicon-thumbs-up" arial-hidden="true"></span>
+                </a>
+                <a href="#">
+                    <span class="glyphicon glyphicon-comment" arial-hidden="true"></span>
+                </a>
+                <a href="{{ url_for('main.post', id = post.id)}}">
+                    <span class="glyphicon glyphicon-share-alt" arial-hidden="true"></span>
+                </a>
             </div>
         </li>
 
