@@ -4,15 +4,6 @@ body{
 	background-color: #F6F8FA;
 }
 
-#main-container {
-
-	overflow: hidden;
-}
-div#main {
-
-	overflow: auto;
-}
-
 .navbar-brand img{
 	height: 100%;
 }

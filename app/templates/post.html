@@ -17,7 +17,30 @@
 				<small><a href="mailto:{{ posts[0].author.email }}">{{ posts[0].author.email }}</a></small>
 			{% endif %}
 		</p>
+		<ul class="list-inline list-unstyled">
+			<li id="card-meme">
+				<a href="#">
+					<span class="profile-stats">Posts</span>
+					<span class="profile-value">{{ current_user.posts.count()}}</span>
+				</a>
+			</li>
+
+			<li id="card-following">
+				<a href="#">
+					<span class="profile-stats">Following</span>
+					<span class="profile-value">10</span>
+				</a>
+			</li>
+
+			<li id="card-followers">
+				<a href="#">
+					<span class="profile-stats">Followers</span>
+					<span class="profile-value">10</span>
+				</a>
+			</li>
+		</ul>
 		<ul class="list-unstyled">
+
 			<ul class="list-unstyled list-inline">
 				<li>
 					<p>Member since: {{moment(posts[0].author.member_since).format('L')}}</p>
