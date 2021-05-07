@@ -142,9 +142,9 @@ class Follow(db.Model):
 
     follower_id = db.Column(db.Integer, db.ForeignKey('users.id'), primary_key = True)
 
-    followed_id = db.Column(db.Integer, db.ForeignKey('user.id'), primary_key = True)
+    followed_id = db.Column(db.Integer, db.ForeignKey('users.id'), primary_key = True)
 
-    timestamp = db.Column(db.Datetime, default = datetime.utcnow)
+    timestamp = db.Column(db.DateTime(), default = datetime.utcnow)
 
 
 class User(db.Model, DataManipulation, UserMixin):
@@ -185,6 +185,7 @@ class User(db.Model, DataManipulation, UserMixin):
             f = Follow(follower=self, followed =user)
 
             db.session.add(f)
+            db.session.commit()
 
     def unfollow(self, user):
 
@@ -193,15 +194,16 @@ class User(db.Model, DataManipulation, UserMixin):
         if f:
 
             db.session.delete(f)
+            db.session.commit()
 
     def is_following(self, user):
 
-        return self.followed.filter_by(followed_id = user_id).first() is not None
+        return  self.followed.filter_by(followed_id=user.id).first() is not None
 
 
     def is_followed_by(self, user):
 
-        return self.followers.filter_by(follower_id = user.id).first() is not None
+        return  self.followers.filter_by(follower_id=user.id).first() is not None
 
     def ping(self):
 

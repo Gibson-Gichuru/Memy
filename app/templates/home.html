@@ -25,14 +25,14 @@
 			<li id="card-following">
 				<a href="#">
 					<span class="profile-stats">Following</span>
-					<span class="profile-value">10</span>
+					<span class="profile-value">{{ current_user.followed.count()}}</span>
 				</a>
 			</li>
 
 			<li id="card-followers">
 				<a href="#">
 					<span class="profile-stats">Followers</span>
-					<span class="profile-value">10</span>
+					<span class="profile-value">{{ current_user.followers.count()}}</span>
 				</a>
 			</li>
 		</ul>
@@ -40,10 +40,11 @@
 			<li>
 				<ul class="list-unstyled list-inline">
 					<li>
-						<p>Member since: {{moment(current_user.member_since).format('L')}}</p>
+						<span class="label label-success ">Member since: {{moment(current_user.member_since).format('L')}}</span>
 					</li>
 					<li>
-						<p>Last Seen {{ moment(current_user.last_seen).fromNow()}}</p>
+
+						<span class="label label-default"> Last Seen: {{ moment(current_user.last_seen).fromNow()}}</span>
 					</li>
 				</ul>
 			</li>

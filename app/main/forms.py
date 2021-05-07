@@ -81,3 +81,10 @@ class PostForm(Form):
 	body = PageDownField("new_post", validators = [DataRequired()])
 
 	submit = SubmitField("Post")
+
+
+class SearchForm(Form):
+
+	username = StringField('username', validators =[DataRequired()])
+
+	search = SubmitField('search')
