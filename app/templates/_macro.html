@@ -1,5 +1,5 @@
 {% macro pagination_widget(pagination, endpoint)%}
-	<ul class="pagination">
+	<ul id="paginate" class="pagination">
 
 		<!-- if the current page is the first page then disable the prev-page button else set the prev link to be a page before the current-->
 		<li {% if not pagination.has_prev %} class="disabled" {% endif %}>

@@ -48,16 +48,8 @@
 {% endblock %}
 
 {% block main_page_content %}
-<div id="main-card" class="card">
-	<div class="card-header">
-		<h4 class="card-title">Trendy Memes</h4>
-	</div>
-	{% include '_posts.html'%}
-</div>
-<div class="pagination">
+	{% include "_posts.html" %}
 	{{ macros.pagination_widget(pagination, '.index')}}
-</div>
 {% endblock %}
-
 {% block page_right_content %}
 {% endblock %}

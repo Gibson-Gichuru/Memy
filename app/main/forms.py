@@ -78,7 +78,7 @@ class ContactForm(Form):
 
 class PostForm(Form):
 
-	body = PageDownField("new_post", validators = [DataRequired()])
+	body = TextAreaField(validators = [DataRequired()])
 
 	submit = SubmitField("Post")
 

@@ -90,7 +90,11 @@
 {% include '_posts.html'%}
 </div>
 <div class="pagination">
-	{{ macros.pagination_widget(pagination, '.index')}}
+	{% if current_user.is_authenticated %}
+		{{ macros.pagination_widget(pagination, '.home')}}
+	{% else %}
+		{{ macros.pagination_widget(pagination, '.index')}}
+	{% endif%}
 </div>
 {% endblock %}
 

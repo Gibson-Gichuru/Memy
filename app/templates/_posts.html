@@ -1,25 +1,28 @@
-<ul id="posts" class="list-unstyled">
-    {% for post in posts %}
-        <li>
-            <a href="{{ url_for('main.user', username=post.author.username) }}">
-                <img src="{{ post.author.gravator() }}" class="post-avator img-circle">
-            </a>
-
-            <div class="meme-post">
-                <h5>{{ post.author.username }}{% if post.author.name %}&#128081; <small>{{ post.author.name}}</small>{% endif %} -: <strong>{{ moment(post.timestamp).fromNow()}} </strong></h5>
-
-                {% if post.body_html%}
-                    {{ post.body_html | safe}}
-
-                {% else %}
-                    {{ post.body }}
-                {% endif %}
- 
-                <div class="post-img">
-                    <img src="{{ url_for('static', filename='icons/icon1.png')}} " class="img-responsive">
-                </div>
-
-            </div>
+{% for post in posts %}
+    <div id="post-card" class="card">
+        <div class="card-header">
+            <ul id="post" class="list-unstyled">
+                <li>
+                    <a href="{{ url_for('main.user', username=post.author.username) }}">
+                         <img src="{{ post.author.gravator() }}" class="post-avator img-circle">
+                    </a>
+                    <div class="meme-post">
+                        <h5>{{post.author.username}}<small>{% if post.author.name%}&#128081;{{post.author.name}}{% endif%} -{{moment(post.timestamp).fromNow()}}</small></h5>
+                       {% if post.body_html %}
+                            {{post.body_html | safe}}
+                        {% else %}
+                            {{post.body}}
+                        {% endif %}
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <div id="media-content" class="card-block">
+            <!--Put the media post from the user here-->
+            <!--image act like the media holder-->
+            <img src="{{ url_for('static', filename='icons/card.jpg')}}" class="img-responsive">
+        </div>
+        <div id="post-footer" class="card-footer">
             <div class="action-list">
                 <a href="#">
                     <span class="glyphicon glyphicon-thumbs-up" arial-hidden="true"></span>
@@ -30,18 +33,7 @@
                 <a href="{{ url_for('main.post', id = post.id)}}">
                     <span class="glyphicon glyphicon-share-alt" arial-hidden="true"></span>
                 </a>
-
-                {% if current_user == post.author %}
-                <a href="{{ url_for('main.edit', id = post.id)}}">
-                    <span class="label label-primary">Edit</span>
-                </a>
-                {% elif current_user.is_administrator( )%}
-                <a href="{{ url_for('main.edit', id = post.id)}}">
-                    <span class="label label-danger">Edit[Admi]</span>
-                </a>
-                {% endif %}
             </div>
-        </li>
-
+        </div>
+    </div>
     {% endfor %}
-</ul>

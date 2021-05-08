@@ -4,6 +4,30 @@ body{
 	background-color: #F6F8FA;
 }
 
+#main-row {
+
+	height: 100vh;
+}
+
+@media(max-width: 34em){
+
+	#main-row{
+
+		width: 100vw;
+	}
+}
+
+#main-column {
+	height: 100%;
+	overflow-y: scroll;
+}
+
+::-webkit-scrollbar {
+
+	width: 0px;
+	background: transparent;
+}
+
 .navbar-brand img{
 	height: 100%;
 }
@@ -97,10 +121,6 @@ nav.navbar-default .navbar-toggle .icon-bar {
 
 	max-height: 2.3em;
 	border-radius: 0.3em;
-}
-#posts {
-
-	margin: 0.5em;
 }
 
 .navbar-brand img {
@@ -214,43 +234,81 @@ form#new-post {
  	border-radius: 0.4rem 0.4rem 0 0;
  	border-bottom:  0.1em solid rgba(250, 86, 144, 0.2);
  	background-color: rgba(250, 86, 144, 0.1);
+	padding: 1em;
 }
 
+form#new-post .input-addon {
 
-
-ul#posts {
-	margin: 0;
+	background-color: #fff;
 }
 
-ul#posts li {
+ul#post {
+
+	margin:0;
+}
+
+ul#post li {
 
 	padding: 1em 1em;
 }
 
-ul#posts .post-avator {
+ul#post .post-avator {
 
-	width: 8%;
+	width: 13%;
 	display: inline-block;
 	vertical-align: top;
-
 }
 
-ul#posts .meme-post {
+ul#post .meme-post {
 
 	width: 80%;
 	display: inline-block;
-	margin-left: 2%;
+	margin: 2%;
 }
 
 ul#post .meme-post h5 {
 
 	font-weight: bold;
-	margin-bottom: 0.5rem
+	margin-bottom: 0.5rem;
 }
 
 ul#post .meme-post h5 > small {
 
 	font-size: 1.2rem;
+}
+
+#post-card .card-header {
+	border-radius: 0.4rem 0.4rem 0 0;
+	border-bottom: 1px solid #fff;
+}
+
+#post-card {
+
+	border: 1px solid #fff;
+	border-radius: 0 0 0.4rem 0.4rem;
+	background-color: #FCF6F9;
+}
+
+
+#post-footer {
+
+	border-top: 1px solid #fff;
+	padding-bottom: 1em;
+}
+
+#post-footer .action-list  {
+
+	width: 100%;
+	display: inline-block;
+	padding-top: 1.3rem;
+	padding-left: 20%;
+}
+
+#post-footer .action-list  a{
+
+	width: 30%;
+	display: inline-block;
+	font-size: 1.4em;
 }
 
 #followers-card .card-header {
@@ -304,23 +362,6 @@ ul#post .meme-post h5 > small {
 }
 
 
-@media(max-width: 34em){
-
-	#user-card .card h4 {
-
-		font-size: 0.8rem;
-		padding-left: 1.6rem;
-		margin-top: 0;
-
-	}
-
-	#user-card {
-
-		padding: 0.4em;
-	}
-
-}
-
 #user-card h4 > small{
 
 	font-size: 1.2rem;
@@ -337,11 +378,6 @@ ul#post .meme-post h5 > small {
 }
 
 
-#posts li {
-	padding-top: 1.2em; 
-	border-bottom:  0.1em solid #f5f5f5;
-	
-}
 
 #Edit-Profile {
 
@@ -367,6 +403,8 @@ ul#post .meme-post h5 > small {
 	border-radius: 1em;
 }
 
+
+
 ul#posts .action-list {
 	margin-left: 13%;
 	padding-left: 3em;
@@ -391,4 +429,14 @@ ul#posts .action-list .retweet-count {
 ul#posts .post-img {
 
 	padding-bottom: 1em;
+}
+
+#paginate {
+
+	width: 100%;
+}
+
+#media-content {
+
+	padding: 1.4em;
 }
