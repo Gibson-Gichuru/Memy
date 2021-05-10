@@ -19,6 +19,7 @@ def index():
 		current_app.config['FLASKY_POSTS_PER_PAGE'], error_out = False)
 
 	posts = pagination.items
+
 	return render_template('index.html',posts = posts, pagination = pagination)
 
 
@@ -67,6 +68,7 @@ def home():
 @main.route('/user/<username>')
 def user(username):
 
+
 	page = request.args.get('page', 1, type=int)
 
 	user = User.query.filter_by(username = username).first()
@@ -80,7 +82,8 @@ def user(username):
 
 	posts = pagination.items
 
-	return render_template('user.html', user = user, posts = posts, pagination = pagination, Permission = Permission)
+	return render_template('user.html', user = user, posts = posts, 
+		pagination = pagination, Permission = Permission)
 
 @main.route('/edit-profile/', methods = ['GET', 'POST'])
 @login_required

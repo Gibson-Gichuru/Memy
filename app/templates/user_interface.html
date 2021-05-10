@@ -11,6 +11,12 @@
 				{% endblock %}
 			</div>
 			<div id="main-column" class="col-sm-12 col-md-6">
+				{% for message in get_flashed_messages() %}
+					<div class="alert alert-warning">
+					<button type="button" class="close" data-dismiss="alert" arial-label="close"><span aria-hidden="true">&times;</span></button>
+					{{ message }}
+					</div>
+				{% endfor %}
 				{% block main_page_content %}
 				{% endblock %}
 			</div>

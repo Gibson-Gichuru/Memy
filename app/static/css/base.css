@@ -1,7 +1,7 @@
 body{
 
 	padding-top: 4em;
-	background-color: #F6F8FA;
+	background-color: #F5F8FA;
 }
 
 #main-row {
@@ -54,7 +54,7 @@ nav form#search .glyphicon-search {
 
 nav.navbar-default {
 
-	background-color: #FA5690;
+	background-color: #2F92CA;
 }
 
 nav.navbar-default .navbar-nav >li > a {
@@ -123,6 +123,11 @@ nav.navbar-default .navbar-toggle .icon-bar {
 	border-radius: 0.3em;
 }
 
+#posts {
+
+	margin: 0.5em;
+}
+
 .navbar-brand img {
 
 	height: 100%;
@@ -166,16 +171,23 @@ nav.navbar-default .navbar-toggle .icon-bar {
 	margin-bottom: 1.5em;
 }
 
-#meme_info {
+#app-info {
+	margin-top: 2rem;
+}
 
-	border: 1px solid #000;
-	border-radius: 0.4em;
+#app-info .card-block a{
+
+	color: #e5e5e5;
 
 }
-#meme_info div.card-header {
 
-	border: 1px solid #000;
-	background-color: rgba(250, 86, 144, 0.4);
+
+#app-info .card-footer {
+	border-radius: 0 0 0.4rem 0.4rem;
+	padding: .75rem 1.25rem;
+	background-color: #f5f5f5;
+	border-top: 0.1em solid #e5e5e5;
+	color: #4e5665;
 
 }
 
@@ -232,8 +244,8 @@ nav.navbar-default .navbar-toggle .icon-bar {
 form#new-post {
 
  	border-radius: 0.4rem 0.4rem 0 0;
- 	border-bottom:  0.1em solid rgba(250, 86, 144, 0.2);
- 	background-color: rgba(250, 86, 144, 0.1);
+ 	border-bottom: 0.1em solid #CEE4F5;
+ 	background-color: #EBF4FB;
 	padding: 1em;
 }
 
@@ -286,7 +298,10 @@ ul#post .meme-post h5 > small {
 
 	border: 1px solid #fff;
 	border-radius: 0 0 0.4rem 0.4rem;
-	background-color: #FCF6F9;
+	padding: 1em 1em;
+	border-bottom: 0.1rem solid #e5e5e5;
+	background-color: #fff;
+
 }
 
 
@@ -439,4 +454,32 @@ ul#posts .post-img {
 #media-content {
 
 	padding: 1.4em;
+}
+
+div#who-follow li {
+	margin-bottom: 2em;
+}
+div#who-follow li:last-child {
+	margin-bottom: 0;
+}
+
+div#who-follow li img {
+	width: 26%;
+	display: inline-block;
+	vertical-align: top;
+	margin-right: 2%;
+}
+
+div#who-follow li .info {
+	width: 68%;
+	display: inline-block;
+}
+
+div#who-follow li .info strong {
+	display: block;
+	overflow:hidden;
+	text-overflow: ellipsis;
+}
+div#who-follow li .info .glyphicon {
+	color: #2F92CA;
 }

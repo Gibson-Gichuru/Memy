@@ -92,28 +92,18 @@
 		<strong>Followers</strong>
 	</div>
 	<div id="follower-photo" class="card-block">
-		<ul class="list-inline list-unstyled">
-			<li>
-				<a href="#" class="thumbnail">
-					<img src="{{ url_for('static', filename='icons/icon1.png')}}" class="img-responsive">
-				</a>
-			</li>
-			<li>
-				<a href="#" class="thumbnail">
-					<img src="{{ url_for('static', filename='icons/icon1.png')}}" class="img-responsive">
-				</a>
-			</li>
-			<li>
-				<a href="#" class="thumbnail">
-					<img src="{{ url_for('static', filename='icons/icon1.png')}}" class="img-responsive">
-				</a>
-			</li>
-			<li>
-				<a href="#" class="thumbnail">
-					<img src="{{ url_for('static', filename='icons/icon1.png')}}" class="img-responsive">
-				</a>
-			</li>
-		</ul>
+		{% if user.user_followers() %}
+			<ul class="list-inline list-unstyled">
+				{% for follower in user.user_followers()[:4] %}
+					<li>
+						<a href="{{ url_for('main.user', username = follower.username)}}" class="thumbnail">
+							<img src="{{ follower.gravator() }}" class="img-responsive">
+						</a>
+					</li>
+				{% endfor %}
+			</ul>
+			
+		{% endif %}
 	</div>
 </div>
 
@@ -132,4 +122,36 @@
 {% endblock %}
 
 {% block page_right_content %}
+	<div id="who-follow" class="card">
+		<div class="card-header">
+			<h4 class="card-title">Who to Follow</h3>
+		</div>
+		<div class="card-block">
+			{% if user.user_following() %}
+			<ul class="list-unstyled">
+				{% for followed in user.user_following()[:4] %}
+					{% if current_user.is_authenticated %}
+						<li>
+							<img src="{{ followed.gravator() }}">
+							<div class="info">
+								<strong>{{ followed.username }}</strong>
+								{% if current_user.is_following(followed)%}
+									<a href="{{ url_for('main.unfollow', username = followed.username)}}" class="btn btn-default">
+										<span class="glyphicon glyphicon-minus" aria-hidden="true"></span>
+										UnFollow
+									</a>
+								{% else %}
+									<a href="{{ url_for('main.follow', username = followed.username)}}" class="btn btn-default">
+										<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+										Follow
+									</a>
+								{% endif%}
+							</div>
+						</li>
+					{% endif %}
+				{% endfor %}
+			</ul>
+			{% endif %}
+		</div>
+	</div>
 {% endblock %}

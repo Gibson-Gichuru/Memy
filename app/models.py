@@ -178,6 +178,37 @@ class User(db.Model, DataManipulation, UserMixin):
 
     # follow functionality helper functions
 
+    def user_followers(self):
+
+        followers = self.followers.all()
+
+        followers_list = []
+
+        for follower in followers:
+
+            follower_object= User.query.filter_by(id = follower.follower_id).first()
+
+            followers_list.append(follower_object)
+
+
+        return followers_list
+
+
+
+    def user_following(self):
+
+        followings = self.followed.all()
+
+        following_list = []
+
+        for followed in followings:
+
+            followed_object = User.query.filter_by(id = followed.followed_id).first()
+
+            following_list.append(followed_object)
+
+        return following_list
+
     def follow(self, user):
 
         if not self.is_following(user):

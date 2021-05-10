@@ -12,37 +12,20 @@
 	</div>
 </div>
 
-<br>
-
-<div id="meme_info" class="card">
-	<div class="card-header">
-		<h4 >
-			<span class="glyphicon glyphicon-pushpin"></span>
-			Info
-		</h4>
-	</div>
+<div id="app-info" class="card">
 	<div class="card-block">
-		<ul class="list-unstyled">
-			<li>
-				<a href="#">
-					<span></span>
-					Contacts
-				</a>
-			</li>
-			<li>
-				<a href="#">
-					<span></span>
-					About
-				</a>
-			</li>
-			<li>
-				<a href="#">
-					<span></span>
-					Terms and conditions
-				</a>
-			</li>
+		@2020 Me.my Platform
+		<ul class="list-inline list-unstyled">
+			<li><a href="#">About</a></li>
+			<li><a href="#">Terms and Privacy</a></li>
+			<li><a href="#">Help</a></li>
+			<li><a href="#">Status</a></li>
+			<li><a href="#">Contact</a></li>		
 		</ul>
-	</div>	
+	</div>
+	<div class="card-footer">
+		<a href="#">Connect with the team behind Me.my Platform</a>
+	</div>
 </div>
 
 {% endblock %}
@@ -51,5 +34,18 @@
 	{% include "_posts.html" %}
 	{{ macros.pagination_widget(pagination, '.index')}}
 {% endblock %}
+
+
 {% block page_right_content %}
+	<div id="who-follow" class="card">
+		<div class="card-header">
+			<h4 class="card-title">
+				Who to follow
+			</h4>
+		</div>
+
+		<div class="card-block">
+			
+		</div>
+	</div>
 {% endblock %}
