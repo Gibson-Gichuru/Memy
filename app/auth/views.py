@@ -20,7 +20,12 @@ def login():
 
             login_user(user, form.remember_me.data)
 
-            return redirect(url_for('main.home'))
+            next = request.args.get('next')
+
+            if next is None or not next.startswith('/'):
+                
+                next = url_for('main.home')
+            return redirect(next)
 
     flash("Invalid username or password")
 

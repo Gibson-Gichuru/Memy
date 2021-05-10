@@ -130,12 +130,11 @@
 			{% if user.user_following() %}
 			<ul class="list-unstyled">
 				{% for followed in user.user_following()[:4] %}
-					{% if current_user.is_authenticated %}
 						<li>
 							<img src="{{ followed.gravator() }}">
 							<div class="info">
 								<strong>{{ followed.username }}</strong>
-								{% if current_user.is_following(followed)%}
+								{% if user == current_user and current_user.is_following(followed)%}
 									<a href="{{ url_for('main.unfollow', username = followed.username)}}" class="btn btn-default">
 										<span class="glyphicon glyphicon-minus" aria-hidden="true"></span>
 										UnFollow
@@ -148,7 +147,6 @@
 								{% endif%}
 							</div>
 						</li>
-					{% endif %}
 				{% endfor %}
 			</ul>
 			{% endif %}
