@@ -99,4 +99,32 @@
 {% endblock %}
 
 {% block page_right_content %}
+	<div id="who-follow" class="card">
+		<div class="card-header">
+			<h4>Who To Follow</h4>
+		</div>
+		<div class="card-block">
+			<ul class="list-unstyled">
+				{% for followed in users_to_follow %}
+					<li>
+						<img src="{{ followed.gravator()}}">
+						<div class="info">
+							<strong>{{ followed.username }}</strong>
+							{% if current_user.is_following(followed)%}
+								<a href="{{ url_for('main.unfollow', username = followed.username)}}" class="btn btn-default">
+										<span class="glyphicon glyphicon-minus" aria-hidden="true"></span>
+										UnFollow
+									</a>
+							{% else %}
+								<a href="{{ url_for('main.follow', username = followed.username)}}" class="btn btn-default">
+										<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+										Follow
+									</a>
+							{% endif %}
+						</div>
+					</li>
+				{% endfor %}
+			</ul>
+		</div>
+	</div>
 {% endblock %}

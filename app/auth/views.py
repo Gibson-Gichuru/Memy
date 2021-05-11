@@ -27,7 +27,8 @@ def login():
                 next = url_for('main.home')
             return redirect(next)
 
-    flash("Invalid username or password")
+    else:
+        flash("Invalid username or password")
 
     return render_template('auth/login.html', form = form)
 
