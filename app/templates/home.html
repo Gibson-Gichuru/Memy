@@ -47,25 +47,30 @@
 						<span class="label label-default"> Last Seen: {{ moment(current_user.last_seen).fromNow()}}</span>
 					</li>
 				</ul>
-			</li>
-
-			<li>
-				<ul class="list-inline list-unstyled">
-					{% if current_user.is_authenticated %}
-						<li>
-							<a href="{{ url_for('main.edit_profile')}}">
-								<span class="label label-primary">Edit Profile</span>
-							</a>
-						</li>
-					{% elif current_user.is_administrator() %}
-						<li>
-							<a href="{{ url_for('main.edit_profile_admin', id=user.id) }}">
-								<span class="label label-danger"> Edit-Profile [Adim]</span>
-							</a>
-						</li>
-					{% endif %}
-				</ul>
 			</li>		
+		</ul>
+	</div>
+
+	<div id="profile-setting" class="card">
+		<ul class="nav nav-pills nav-stacked">
+			<li role ="presentation">
+				<a href="{{url_for('main.edit_profile')}}">
+					<span class="glyphicon glyphicon-chevron-right pull-right" aria-hidden="true"></span>
+					Account
+				</a>
+			</li>
+			<li role ="presentation">
+				<a href="#">
+					<span class="glyphicon glyphicon-chevron-right pull-right" aria-hidden="true"></span>
+					Security
+				</a>
+			</li>
+			<li role ="presentation">
+				<a href="#">
+					<span class="glyphicon glyphicon-chevron-right pull-right" aria-hidden="true"></span>
+					Notifications
+				</a>
+			</li>
 		</ul>
 	</div>
 </div>

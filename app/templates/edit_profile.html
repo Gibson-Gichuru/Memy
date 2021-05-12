@@ -1,37 +1,102 @@
-{% extends "base.html" %}
-{% import "bootstrap/wtf.html" as wtf %}
-{% block title %}Edit-Profile: {{current_user.username}}{% endblock %}
-{%block page_content %}
-	<div id="Edit-Profile" class="container">
-		<div class="row">
-			<form class="form-horizontal" method="POST">
-				{{ form.csrf_token }}
-				<div class="col-sm-2">
-					
-					<div class="form-group">
-						{{ form.profile_pic( class="thumbnail")}}
-					</div>
-				</div>
-				<div class="col-sm-8">
-					<div class="form-group">
-						{{ form.name.label }}
-						{{ form.name(class="form-control")}}
-					</div>
-					<div class="form-group">
-						{{ form.location.label }}
-						{{ form.location(class="form-control")}}
-					</div>
-					<div class="form-group">
-						{{ form.about_me.label }}
-						{{ form.about_me(class="form-control")}}
-					</div>
-					<div class="form-group">
-						{{ form.submit(class="btn btn-success")}}
-					</div>
-				</div>
-			</form>
+{% extends "home.html" %}
+{% block title %}Account : {{current_user.username}}{% endblock %}
+
+{% block main_page_content %}
+	<form id="user-profile" method="POST" enctype="" class="form-horizontal">
+		{{ form.csrf_token }}
+		<div id="user-dp" class="card">
+			<div class="card-header">
+				<h5 class="card-title">
+					Display Picture
+				</h5>
+			</div>
+
+			<div class="card-block">
+				<img src="{{ current_user.gravator() }}" class="img-circle">
+				{{ form.profile_pic.label(for="upload-pic", class="btn btn-outline-primary")}}
+				{{ form.profile_pic(id="upload-pic", class="hidden")}}
+			</div>
 		</div>
-	</div>
+
+		<hr>
+
+		<div id="user-info" class="card">
+			<div class="card-header">
+				<h5 class="card-title">
+					Basic Information
+				</h5>
+			</div>
+
+			<div class="card-block">
+				<div class="form-group personal-info">
+					{{form.name.label()}}
+					{{form.name( class = "form-control")}}
+				</div>
+				<span aria-hidden="true"></span>
+				<div class="form-group personal-info">
+					{{form.location.label()}}
+					{{form.location( class = "form-control")}}
+				</div>
+
+				<div class="form-group">
+					{{form.about_me.label()}}
+					{{form.about_me( class = "form-control")}}
+				</div>
+
+			</div>
+		</div>
+
+		<hr>
+
+		<div id="account-info" class="card">
+			<div class="card-header">
+				<h5 class="card-title">
+					Account Information
+				</h5>
+			</div>
+
+			<div class="card-block">
+				<div class="form-group ">
+					{{form.email.label()}}
+					{{form.email( class = "form-control")}}
+				</div>
+				
+				<div class="form-group password-field">
+					{{form.password.label()}}
+					{{form.password( class = "form-control")}}
+				</div>
+				<span aria-hidden="true"></span>
+				<div class="form-group password-field">
+					{{form.password2.label()}}
+					{{form.password2( class = "form-control")}}
+				</div>
+
+				{% if current_user.is_administrator() %}
+					<div class="form-group password-field">
+						{{form.username.label()}}
+						{{form.username( class = "form-control")}}
+					</div>
+					<span aria-hidden="true"></span>
+					<div class="form-group password-field">
+						{{form.role.label()}}
+						{{form.role( class = "form-control")}}
+					</div>
+				{% endif %}
+
+			</div>
+		</div>
+
+		<div id="save-changes" class="card">
+			<div class="card-block">
+				<div class="form-group">
+					{{form.submit(class="btn btn-success")}}
+				</div>
+			</div>
+		</div>
+	</form>
 {% endblock %}
-{% block footer %}
+
+{% block page_right_content %}
 {% endblock %}
+
+

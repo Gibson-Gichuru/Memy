@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm as Form
 from wtforms import (StringField, SubmitField, PasswordField, BooleanField, TextField, SelectField, TextAreaField)
-from wtforms.validators import DataRequired, Email, Length, Regexp
+from wtforms.validators import DataRequired, Email, Length, Regexp, EqualTo
 from wtforms import ValidationError
 from flask_wtf.file import FileField, FileAllowed
 from flask_pagedown.fields import PageDownField
@@ -19,8 +19,18 @@ class EditProfileForm(Form):
 
 	name = StringField('Real name', validators = [Length(0,64)])
 	location = StringField('Location', validators = [Length(0,64)])
-	about_me = TextField('About Me')
-	profile_pic = FileField('profile', validators=[FileAllowed(['jpg', 'png', 'jpeg'])])
+	about_me = TextAreaField('Bio')
+	profile_pic = FileField('Upload New Photo', validators=[FileAllowed(['jpg', 'png', 'jpeg'])])
+	email = StringField("email", validators=[DataRequired(), Length(1, 64), Email()])
+	password = PasswordField(
+        "password",
+        validators=[
+            DataRequired(),
+            EqualTo("password2", message="password must match"),
+        ],
+    )
+	password2 = PasswordField("confirm password", validators=[DataRequired()])
+
 	submit = SubmitField('Submit')
 	
 
@@ -39,7 +49,7 @@ class EditProfileAdminForm(Form):
 
 	name = StringField("Real Name", validators = [Length(0,64)])
 	location = StringField("Location", validators = [Length(0,64)])
-	about_me = TextField('About Me')
+	about_me = TextAreaField('About Me')
 	submit = SubmitField('Update')
 
 
@@ -78,7 +88,7 @@ class ContactForm(Form):
 
 class PostForm(Form):
 
-	body = TextAreaField(validators = [DataRequired()])
+	body = PageDownField(validators = [DataRequired()])
 
 	submit = SubmitField("Post")
 

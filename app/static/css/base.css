@@ -483,3 +483,115 @@ div#who-follow li .info strong {
 div#who-follow li .info .glyphicon {
 	color: #2F92CA;
 }
+
+.row .card + .card {
+
+	margin-top: :2rem;
+}
+
+#profile-setting .nav-stacked li {
+
+	border-bottom: 1px solid #e5e5e5;
+	margin: 0;
+}
+
+
+#profile-setting .nav-stacked a {
+
+	border-radius: 0;
+}
+
+#profile-setting .nav-stacked li:last-child {
+
+	border-bottom: 0;
+}
+
+
+#profile-setting .nav-stacked li:last-child a {
+
+	border-radius: 0 0 0.4rem 0.4rem;
+}
+
+
+#user-dp {
+
+	padding: 1.5em;
+}
+
+#user-dp img {
+
+	width: 20%; 
+	display: inline-block;
+	padding-right: 1.2rem;
+}
+
+
+.btn-outline-primary {
+    border-color: #26B4FF;
+    background: transparent;
+    color: #26B4FF;
+    display: inline-block;
+}
+
+#user-profile h5.card-title {
+
+	font-weight: bold;
+	font-size: 1.2em;
+}
+
+#user-profile .card-block {
+
+	padding: 1.5em 0 ;
+}
+
+#user-info {
+
+	padding: 0 1.5em;
+}
+
+#user-info .personal-info {
+
+	display: inline-block;
+	width: 50%;
+
+}
+
+
+@media(max-width: 34em;) {
+	
+	#user-info .personal-info {width: 100%;}	
+}
+
+#user-info span {
+
+	display: inline-block;
+	padding: 0 5%;
+}
+
+
+#account-info {
+
+	padding: 0 1.5em;
+}
+
+#account-info .card-block {
+
+	padding: 1.5em 0 ;
+}
+
+#account-info .password-field {
+
+	display: inline-block;
+	width: 50%;
+}
+
+#account-info span {
+
+	display: inline-block;
+	padding: 0 5%;
+}
+
+#save-changes {
+
+	padding: 0 1.5em;
+}

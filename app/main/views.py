@@ -66,14 +66,19 @@ def home():
 
 	posts = pagination.items
 
-	random_follower = choice(current_user.user_following())
+	if len(current_user.user_following()) == 0:
 
-	if len(random_follower.user_following()) >= 4:
-
-		users_to_follow = sample(random_follower.user_following(),4)
+		users_to_follow = []
 
 	else:
-		users_to_follow = random_follower.user_following()
+		random_follower = choice(current_user.user_following())
+
+		if len(random_follower.user_following()) >= 4:
+
+			users_to_follow = sample(random_follower.user_following(),4)
+
+		else:
+			users_to_follow = random_follower.user_following()
 
 
 	return render_template('home.html', form = form, 
