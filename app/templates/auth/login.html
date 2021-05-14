@@ -1,52 +1,58 @@
 {% extends 'user_interface.html' %}
 {% block title%} Me.my- Login {% endblock%}
 {% block main_page_content %}
-	<section id="login" class="container">
-		<div class="col-sm-offset-2 col-sm-8 col-md-6">
-
-			<div class="card">
-				<div class="card-header">
-					<h4 class="text-capitalize">
-						<span class="glyphicon glyphicon-user"></span>
-						login
-					</h4>
+	<div class="modal" id="login-modal" tabindex="-1" role="modal">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+					<h4 class="modal-title">Login</h4>
 				</div>
-			</div>
-			<div class="card-block">
-				<form class="form-horizontal" action method="POST">
+
+				<form class="form-horizontal" action="{{ url_for('auth.login')}}" method="POST">
 					{{ form.csrf_token }}
-					<div class="form-group">
-						<div class="input-group col-sm-8 col-md-6">
-							<div class="input-group-addon">@</div>
 
-							{{ form.email(class="form-control", placeholder="email")}}
+					<div class="modal-body">
+							<div class="form-group">
+								<div class="input-group">
+									<div class="input-group-addon">@</div>
 
-						</div>
-					</div>
-					<div class="form-group">
-						<div class="input-group col-sm-8 col-md-6">
-							<div class="input-group-addon">
-								<span class="glyphicon glyphicon-asterisk"></span>
+									{{ form.email(class="form-control", placeholder="email")}}
+
+								</div>
 							</div>
-							{{ form.password(class="form-control", placeholder="password")}}
-						</div>
-					</div>
-					<div class="form-group">
-						<div class="input-group col-sm-8 col-md-6">
-							
-							{{ form.remember_me}}
-							Remember Me
 
-							<a href="{{ url_for('auth.forgot_password')}}"> Forgot your password?</a>
+							<div class="input-group">
+								<div class="input-group-addon">
+									<span class="glyphicon glyphicon-asterisk"></span>
+								</div>
+								{{ form.password(class="form-control", placeholder="password")}}
+							</div>
+
+							<div class="form-group">
+								<div class="input-group">
+									
+									{{ form.remember_me}}
+									Remember Me
+
+									<a href="{{ url_for('auth.forgot_password')}}"> Forgot your password?</a>
+								</div>
+							</div>
+						</div>
+
+						<div class="modal-footer">
+
+							<div class="form-group">
+								<div class="input-group">
+									{{ form.submit(class="btn btn-success ")}}
+								</div>
+							</div>
+							
 						</div>
 					</div>
-					<div class="form-group">
-						<div class="input-group col-sm-8 col-md-6">
-							{{ form.submit(class="btn btn-success ")}}
-						</div>
-					</div>
+
 				</form>
 			</div>
 		</div>
-	</section>
+	</div>
 {% endblock %}

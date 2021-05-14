@@ -595,3 +595,19 @@ div#who-follow li .info .glyphicon {
 
 	padding: 0 1.5em;
 }
+
+#login-modal .modal-body {
+
+	padding: 1.5em 1.8em;
+}
+
+#login-modal .modal-footer {
+
+	padding-right: 1.8em;
+	margin-bottom: 0;
+}
+
+#login-modal .modal-body .remember-me{
+
+	padding-left: 2em;
+}

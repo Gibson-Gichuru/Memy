@@ -3,6 +3,9 @@ from flask import render_template, session, redirect, url_for, abort, flash, cur
 from flask_login import login_user
 from . import main
 from .forms import NameForm, EditProfileForm, EditProfileAdminForm, ContactForm, PostForm, SearchForm
+
+from ..auth.forms import LoginForm
+
 from ..models import User, Permission, Role, Post
 
 from flask_login import login_required, current_user
@@ -17,13 +20,16 @@ from random import  choice , sample
 
 @main.route('/', methods = ['GET', 'POST'])
 def index():
+
+	form = LoginForm()
+
 	page = request.args.get('page', 1, type = int)
 	pagination = Post.query.order_by(Post.timestamp.desc()).paginate(page, 
 		current_app.config['FLASKY_POSTS_PER_PAGE'], error_out = False)
 
 	posts = pagination.items
 
-	return render_template('index.html',posts = posts, pagination = pagination)
+	return render_template('index.html',posts = posts, pagination = pagination, form = form)
 
 
 @main.route('/contacts', methods =["GET","POST"])
