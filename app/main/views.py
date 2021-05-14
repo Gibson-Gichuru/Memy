@@ -4,7 +4,7 @@ from flask_login import login_user
 from . import main
 from .forms import NameForm, EditProfileForm, EditProfileAdminForm, ContactForm, PostForm, SearchForm
 
-from ..auth.forms import LoginForm
+from ..auth.forms import LoginForm, RegistrationForm
 
 from ..models import User, Permission, Role, Post
 
@@ -23,13 +23,16 @@ def index():
 
 	form = LoginForm()
 
+	reg_form = RegistrationForm()
+
 	page = request.args.get('page', 1, type = int)
 	pagination = Post.query.order_by(Post.timestamp.desc()).paginate(page, 
 		current_app.config['FLASKY_POSTS_PER_PAGE'], error_out = False)
 
 	posts = pagination.items
 
-	return render_template('index.html',posts = posts, pagination = pagination, form = form)
+	return render_template('index.html',posts = posts, pagination = pagination, form = form,
+		reg_form = reg_form)
 
 
 @main.route('/contacts', methods =["GET","POST"])
