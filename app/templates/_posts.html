@@ -1,19 +1,34 @@
 {% for post in posts %}
     <div id="post-card" class="card">
         <div class="card-header">
-            <ul id="post" class="list-unstyled">
+            {% if current_user.is_authenticated and post.author == current_user %}
+            <div class="btn-group pull-right">
+                <button class="btn btn-default option dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                    <strong>:</strong>
+                </button>
+
+                <ul class="dropdown-menu">
+                    <li><a href="#">Edit</a></li>
+                    <li><a href="{{ url_for('main.delete_post', id = post.id)}}">Delete</a></li>
+                </ul>
+                
+            </div>
+            {% endif %}
+            <ul id="post" class="list-unstyled list-inline">
                 <li>
                     <a href="{{ url_for('main.user', username=post.author.username) }}">
                          <img src="{{ post.author.gravator() }}" class="post-avator img-circle">
                     </a>
                     <div class="meme-post">
                         <h5>{{post.author.username}}<small>{% if post.author.name%}&#128081;{{post.author.name}}{% endif%} -{{moment(post.timestamp).fromNow()}}</small></h5>
+
                        {% if post.body_html %}
                             {{post.body_html | safe}}
                         {% else %}
                             {{post.body}}
                         {% endif %}
                     </div>
+
                 </li>
             </ul>
         </div>
@@ -30,9 +45,11 @@
                 <a href="#">
                     <span class="glyphicon glyphicon-comment" arial-hidden="true"></span>
                 </a>
-                <a href="{{ url_for('main.post', id = post.id)}}">
+                <a href="{% if current_user.is_authenticated %}{{ url_for('main.post', id = post.id)}}{% else%} # {% endif %}">
                     <span class="glyphicon glyphicon-share-alt" arial-hidden="true"></span>
                 </a>
+
+                
             </div>
         </div>
     </div>

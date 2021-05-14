@@ -208,6 +208,20 @@ def edit(id):
 
 	return render_template('edit_post.html', form = form)
 
+@main.route('/delete/<int:id>')
+def delete_post(id):
+
+	post = Post.query.get_or_404(id)
+
+	if current_user !=post.author and not current_user.can(Permission.ADMINISTER):
+
+		abort(403)
+
+	post.delete(post)
+
+
+	return redirect(url_for('main.home'))
+
 
 @main.route('/follow/<username>')
 @login_required

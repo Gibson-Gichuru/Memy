@@ -304,6 +304,13 @@ ul#post .meme-post h5 > small {
 
 }
 
+#post-card .option {
+
+	border-color: transparent;
+	background-color: transparent;
+	font-weight: bold;
+}
+
 
 #post-footer {
 
