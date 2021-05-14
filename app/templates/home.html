@@ -78,19 +78,39 @@
 {% block main_page_content %}
 <div id="main-card" class="card">
 {% if current_user.can(permission.WRITE_ARTICLES) %}
-	<form id="new-post" action method="POST">
-		{{ form.csrf_token }}
+	<div class="modal fade" id="post-modal" tabindex="-1" role="dialog">
+		<div class="modal-dialog" role = "document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					<h4 class="modal-title">
+						Make a Post
+					</h4>
+				</div>
 
-		<div class="input-group">
-			{{ form.body(class="form-control", placeholder="How about a meme for the day")}}
+				<form method="POST">
+					{{ form.csrf_token }}
+					<div class="modal-body">
+						<div class="form-group">
+							{{ form.body(class = "form-control", placeholder="What's in your mind",row="3", maxlength="150" )}}
+						</div>
+					</div>
 
-			<span class="input-group-btn">
-				{{ form.submit(class="btn btn-success")}}
-			</span>
+					<div class="modal-footer">
+						<span class="char-counter pull-left" data-max="150">150</span>
+
+						<div class="form-group pull-right">
+							{{ form.submit(class="btn btn-primary")}}
+						</div>
+						
+					</div>
+
+				</form>
+			</div>
 		</div>
-
-	</form>
-
+	</div>
 {% endif %}
 {% include '_posts.html'%}
 </div>
