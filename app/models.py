@@ -106,6 +106,13 @@ class Post(db.Model, DataManipulation):
     author_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     body_html = db.Column(db.Text)
 
+
+    # relationships
+
+    comment = db.relationship('Comment', backref="post", lazy ='dynamic')
+
+    like = db.relationship('Like', backref='likes', lazy = 'dynamic')
+
     @staticmethod 
     def on_changed_body(target, value, oldvalue, initiator):
 
@@ -176,38 +183,29 @@ class User(db.Model, DataManipulation, UserMixin):
         cascade = 'all, delete-orphan')
 
 
-    # follow functionality helper functions
+    comment = db.relationship('Comment', backref='author', lazy = 'dynamic')
 
+    like = db.relationship('Like', backref='liked', lazy = 'dynamic')
+
+
+    # return all the posts whose author's are the followed users by the current user instances
+    @property 
+    def followed_posts(self):
+
+        return Post.query.join(Follow, Follow.followed_id == Post.author_id).filter(Follow.follower_id == self.id)
+
+
+    # follow functionality helper functions
+    @property
     def user_followers(self):
 
-        followers = self.followers.all()
+        return User.query.join(Follow, Follow.follower_id == User.id).filter(Follow.followed_id == self.id)
 
-        followers_list = []
-
-        for follower in followers:
-
-            follower_object= User.query.filter_by(id = follower.follower_id).first()
-
-            followers_list.append(follower_object)
-
-
-        return followers_list
-
-
-
+    @property
     def user_following(self):
 
-        followings = self.followed.all()
+        return User.query.join(Follow, Follow.followed_id == User.id).filter(Follow.follower_id == self.id)
 
-        following_list = []
-
-        for followed in followings:
-
-            followed_object = User.query.filter_by(id = followed.followed_id).first()
-
-            following_list.append(followed_object)
-
-        return following_list
 
     def follow(self, user):
 
@@ -255,6 +253,12 @@ class User(db.Model, DataManipulation, UserMixin):
             if self.role is None:
 
                 self.role = Role.query.filter_by(default = True).first()
+
+
+        # we want the current user to view posts from the users they are following together with their own post so
+        # the current user have to follow themselves
+
+        self.follow(self)
 
 
     def set_profile_pic(profile_pic_id):
@@ -351,6 +355,22 @@ class User(db.Model, DataManipulation, UserMixin):
 
         return True
 
+
+
+    # add the self following feature to all the pre-registered users on the database
+    @staticmethod
+    def add_self_follows():
+
+        for user in User.query.all():
+
+            if not user.is_following(user):
+
+                user.follow(user)
+
+                db.session.add(user)
+                db.session.commit()
+
+
     def __repr__(self):
 
         return "<User {}>".format(self.username)
@@ -405,6 +425,25 @@ class User(db.Model, DataManipulation, UserMixin):
         
 
 
+class Comment(db.Model):
+
+    __tablename__ = "comments"
+
+    id = db.Column(db.Integer, primary_key = True)
+    body = db.Column(db.Text)
+    body_html = db.Column(db.Text)
+    timestamp = db.Column(db.DateTime, index = True, default = datetime.utcnow)
+    disabled = db.Column(db.Boolean)
+    author_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    post_id = db.Column(db.Integer, db.ForeignKey('posts.id'))
+
+    @staticmethod 
+    def on_changed_body(target, value, oldvalue, initiator):
+
+        allowed_tags = ['a', 'abbr','acronym','b','code','em','i','strong']
+
+        target.body_html = bleach.linkify(bleach.clean(markdown(value, 
+            output_format='html'), tags = allowed_tags, strip = True))
 
 
 class AnonymousUser(AnonymousUserMixin):
@@ -418,5 +457,20 @@ class AnonymousUser(AnonymousUserMixin):
         return False
 
 
+class Like(db.Model):
+
+    __tablename__ = "likes"
+
+    id = db.Column(db.Integer, primary_key = True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    post_id = db.Column(db.Integer, db.ForeignKey('posts.id'))
+    timestamp = db.Column(db.DateTime, default = datetime.utcnow)
+
+
+
+
 login_manager.anonymous_user = AnonymousUser
+
+###############DATABASE EVENT LISTENERS###############################
 db.event.listen(Post.body, 'set', Post.on_changed_body)
+db.event.listen(Comment.body, 'set', Comment.on_changed_body)

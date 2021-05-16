@@ -34,14 +34,14 @@
 			<li id="card-following">
 				<a href="{{ url_for('main.following', username = user.username)}}">
 					<span class="profile-stats">Following</span>
-					<span class="profile-value">{{ user.followed.count() }}</span>
+					<span class="profile-value">{{ user.followed.count() -1 }}</span>
 				</a>
 			</li>
 
 			<li id="card-followers">
 				<a href="{{ url_for('main.followers', username = user.username)}}">
 					<span class="profile-stats">Followers</span>
-					<span class="profile-value">{{ user.followers.count() }}</span>
+					<span class="profile-value">{{ user.followers.count() -1}}</span>
 				</a>
 			</li>
 		</ul>
@@ -92,14 +92,16 @@
 		<strong>Followers</strong>
 	</div>
 	<div id="follower-photo" class="card-block">
-		{% if user.user_followers() %}
+		{% if user.user_followers.count()%}
 			<ul class="list-inline list-unstyled">
-				{% for follower in user.user_followers()[:4] %}
-					<li>
-						<a href="{{ url_for('main.user', username = follower.username)}}" class="thumbnail">
-							<img src="{{ follower.gravator() }}" class="img-responsive">
-						</a>
-					</li>
+				{% for follower in user.user_followers.all()[:4] %}
+					{% if follower != current_user %}
+						<li>
+							<a href="{{ url_for('main.user', username = follower.username)}}" class="thumbnail">
+								<img src="{{ follower.gravator() }}" class="img-responsive">
+							</a>
+						</li>
+					{% endif %}
 				{% endfor %}
 			</ul>
 			
@@ -127,9 +129,10 @@
 			<h4 class="card-title">Who to Follow</h4>
 		</div>
 		<div class="card-block">
-			{% if user.user_following() %}
+			{% if user.user_following.all() %}
 			<ul class="list-unstyled">
-				{% for followed in user.user_following()[:4] %}
+				{% for followed in user.user_following.all()[:4] %}
+					{% if followed != current_user %}
 						<li>
 							<img src="{{ followed.gravator() }}">
 							<div class="info">
@@ -147,6 +150,7 @@
 								{% endif%}
 							</div>
 						</li>
+					{% endif %}
 				{% endfor %}
 			</ul>
 			{% endif %}

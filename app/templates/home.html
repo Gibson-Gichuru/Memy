@@ -25,14 +25,14 @@
 			<li id="card-following">
 				<a href="#">
 					<span class="profile-stats">Following</span>
-					<span class="profile-value">{{ current_user.followed.count()}}</span>
+					<span class="profile-value">{{ current_user.followed.count() -1}}</span>
 				</a>
 			</li>
 
 			<li id="card-followers">
 				<a href="#">
 					<span class="profile-stats">Followers</span>
-					<span class="profile-value">{{ current_user.followers.count()}}</span>
+					<span class="profile-value">{{ current_user.followers.count() -1}}</span>
 				</a>
 			</li>
 		</ul>
@@ -54,7 +54,7 @@
 	<div id="profile-setting" class="card">
 		<ul class="nav nav-pills nav-stacked">
 			<li role ="presentation">
-				<a href="{{url_for('main.edit_profile')}}">
+				<a href="{% if current_user.is_administrator()%} {{url_for('main.edit_profile_admin', id=current_user.id)}}{% else %}{{url_for('main.edit_profile')}}{% endif %}">
 					<span class="glyphicon glyphicon-chevron-right pull-right" aria-hidden="true"></span>
 					Account
 				</a>
@@ -62,7 +62,7 @@
 			<li role ="presentation">
 				<a href="#">
 					<span class="glyphicon glyphicon-chevron-right pull-right" aria-hidden="true"></span>
-					Security
+					Community
 				</a>
 			</li>
 			<li role ="presentation">
@@ -131,23 +131,25 @@
 		<div class="card-block">
 			<ul class="list-unstyled">
 				{% for followed in users_to_follow %}
-					<li>
-						<img src="{{ followed.gravator()}}">
-						<div class="info">
-							<strong>{{ followed.username }}</strong>
-							{% if current_user.is_following(followed)%}
-								<a href="{{ url_for('main.unfollow', username = followed.username)}}" class="btn btn-default">
-										<span class="glyphicon glyphicon-minus" aria-hidden="true"></span>
-										UnFollow
-									</a>
-							{% else %}
-								<a href="{{ url_for('main.follow', username = followed.username)}}" class="btn btn-default">
-										<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-										Follow
-									</a>
-							{% endif %}
-						</div>
-					</li>
+					{% if followed != current_user %}
+						<li>
+							<img src="{{ followed.gravator()}}">
+							<div class="info">
+								<strong>{{ followed.username }}</strong>
+								{% if current_user.is_following(followed)%}
+									<a href="{{ url_for('main.unfollow', username = followed.username)}}" class="btn btn-default">
+											<span class="glyphicon glyphicon-minus" aria-hidden="true"></span>
+											UnFollow
+										</a>
+								{% else %}
+									<a href="{{ url_for('main.follow', username = followed.username)}}" class="btn btn-default">
+											<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+											Follow
+										</a>
+								{% endif %}
+							</div>
+						</li>
+					{% endif %}
 				{% endfor %}
 			</ul>
 		</div>

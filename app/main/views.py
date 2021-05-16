@@ -70,24 +70,27 @@ def home():
 
 		return redirect(url_for('main.home'))
 
-	pagination = Post.query.order_by(Post.timestamp.desc()).paginate(page, 
+
+	# show current user posts made by users they are following
+
+	pagination = current_user.followed_posts.order_by(Post.timestamp.desc()).paginate(page,
 		current_app.config['FLASKY_POSTS_PER_PAGE'], error_out = False)
 
 	posts = pagination.items
 
-	if len(current_user.user_following()) == 0:
+	if current_user.user_following.count() == 0:
 
 		users_to_follow = []
 
 	else:
-		random_follower = choice(current_user.user_following())
+		random_follower = choice(current_user.user_following.all())
 
-		if len(random_follower.user_following()) >= 4:
+		if random_follower.user_following.count() >= 4:
 
-			users_to_follow = sample(random_follower.user_following(),4)
+			users_to_follow = sample(random_follower.user_following.all(),4)
 
 		else:
-			users_to_follow = random_follower.user_following()
+			users_to_follow = random_follower.user_following.all()
 
 
 	return render_template('home.html', form = form, 
