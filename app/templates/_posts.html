@@ -38,19 +38,53 @@
             <img src="{{ url_for('static', filename='icons/card.jpg')}}" class="img-responsive">
         </div>
         <div id="post-footer" class="card-footer">
-            <div class="action-list">
-                <a href="#">
-                    <span class="glyphicon glyphicon-thumbs-up" arial-hidden="true"></span>
-                </a>
-                <a href="#">
-                    <span class="glyphicon glyphicon-comment" arial-hidden="true"></span>
-                </a>
-                <a href="{% if current_user.is_authenticated %}{{ url_for('main.post', id = post.id)}}{% else%} # {% endif %}">
-                    <span class="glyphicon glyphicon-share-alt" arial-hidden="true"></span>
-                </a>
+            {% if current_user.is_authenticated %}
+                    <div class="action-list">
+                        <a href="#">
+                            <span class="glyphicon glyphicon-thumbs-up" arial-hidden="true"></span>
+                        </a>
 
+                        <a class="action-collapse" href="#comment-section" type="button" data-toggle="collapse" aria-expanded="true">
+                            <span class="glyphicon glyphicon-comment" arial-hidden="true"></span>
+                        </a>
+                        <a href="{% if current_user.is_authenticated %}{{ url_for('main.post', id = post.id)}}{% else%} # {% endif %}">
+                            <span class="glyphicon glyphicon-share-alt" arial-hidden="true"></span>
+                        </a>
+                        
+                    </div>
                 
-            </div>
+
+                <div id="comment-section" class="bg-light collapse" data-parent="#post-card">
+
+                        <div class="latest-comment">
+                                <div class="comments">
+                                    {% if post.comment.first() %}
+                                        <img src="{{ post.comments.first().author.gravator() }}" class="img-circle">
+                                        {{ post.comments.first().body()}}
+                                    {% endif %}
+                                </div>
+                        </div>
+
+                        <form class="form-inline" method="POST" action="{{ url_for('main.comment', id = post.id) }}">
+                            {{ comment_form.csrf_token }}
+
+                            <div class="comment-body">
+
+                                <img src="{{ current_user.gravator() }}" class="img-circle commentor-avator hidden-xs">
+
+                                <div class="comment-post">
+                                    {{ comment_form.body(class="form-control shadow-none", placeholder="Write your comment")}}
+                            
+                                    {{ comment_form.submit(class="btn btn-success shadow-none")}}
+                                </div>
+                                
+                            </div>
+                        </form>
+                        
+                </div>
+
+            {% endif %}
         </div>
     </div>
     {% endfor %}
+

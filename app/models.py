@@ -123,6 +123,12 @@ class Post(db.Model, DataManipulation):
             output_format='html'), tags = allowed_tags, strip = True))
 
 
+    @property
+    def comments(self):
+
+        return self.comment.order_by(Comment.timestamp)
+
+
     @staticmethod
     def generate_fake(count = 100):
 

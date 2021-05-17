@@ -3,6 +3,7 @@ __pycache__/
 migrations/
 data-dev.sqlite
 data-test.sqlite
+data-dev.sqlite-journal
 bootstrap.js
 jquery-3.6.0.min.js
 bootstrap.css

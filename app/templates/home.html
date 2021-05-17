@@ -114,13 +114,13 @@
 {% endif %}
 {% include '_posts.html'%}
 </div>
-<div class="pagination">
-	{% if current_user.is_authenticated %}
-		{{ macros.pagination_widget(pagination, '.home')}}
-	{% else %}
-		{{ macros.pagination_widget(pagination, '.index')}}
-	{% endif%}
-</div>
+
+{% if current_user.is_authenticated %}
+	{{ macros.pagination_widget(pagination, '.home')}}
+{% else %}
+	{{ macros.pagination_widget(pagination, '.index')}}
+{% endif%}
+
 {% endblock %}
 
 {% block page_right_content %}

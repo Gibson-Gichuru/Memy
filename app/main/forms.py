@@ -44,6 +44,8 @@ class EditProfileAdminForm(Form):
 
 	confirmed = BooleanField('Confirmed')
 
+	profile_pic = FileField('Upload New Photo', validators=[FileAllowed(['jpg', 'png', 'jpeg'])])
+
 	role = SelectField('Role', coerce = int)
 
 	name = StringField("Real Name", validators = [Length(0,64)])
@@ -97,3 +99,11 @@ class SearchForm(Form):
 	username = StringField('username', validators =[DataRequired()])
 
 	search = SubmitField('search')
+
+
+
+class CommentForm(Form):
+
+	body = StringField("Comment", validators=[DataRequired()])
+
+	submit = SubmitField('post')

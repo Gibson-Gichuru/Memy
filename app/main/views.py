@@ -2,11 +2,11 @@ from datetime import datetime
 from flask import render_template, session, redirect, url_for, abort, flash, current_app, request
 from flask_login import login_user
 from . import main
-from .forms import NameForm, EditProfileForm, EditProfileAdminForm, ContactForm, PostForm, SearchForm
+from .forms import NameForm, EditProfileForm, EditProfileAdminForm, ContactForm, PostForm, SearchForm, CommentForm
 
 from ..auth.forms import LoginForm, RegistrationForm
 
-from ..models import User, Permission, Role, Post
+from ..models import User, Permission, Role, Post, Comment
 
 from flask_login import login_required, current_user
 
@@ -58,6 +58,8 @@ def home():
 
 	form = PostForm()
 
+	comment_form = CommentForm()
+
 	page = request.args.get('page', 1, type = int)
 
 	if current_user.can(Permission.WRITE_ARTICLES) and form .validate_on_submit():
@@ -95,7 +97,7 @@ def home():
 
 	return render_template('home.html', form = form, 
 		posts = posts, permission = Permission, 
-		pagination = pagination, users_to_follow = users_to_follow)
+		pagination = pagination, users_to_follow = users_to_follow, comment_form = comment_form)
 
 @main.route('/user/<username>')
 def user(username):
@@ -210,6 +212,29 @@ def edit(id):
 	form.body.data = post.body 
 
 	return render_template('edit_post.html', form = form)
+
+
+@main.route('/comment/<int:id>')
+@login_required
+def comment(id):
+
+	post = Post.query.get_or_404(id)
+
+	form = CommentForm()
+
+	if form.validate_on_submit():
+
+		comment = Comment(body = form.body.data, post = post, 
+			author = current_user._get_current_object())
+
+		db.session.add(comment)
+		db.session.commit()
+
+		flash("your view in the post have been published")
+
+		return redirect(url_for('main.home'))
+
+	return redirect(url_for('main.home'))
 
 @main.route('/delete/<int:id>')
 def delete_post(id):

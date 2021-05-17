@@ -2,7 +2,7 @@
 {% block title %}Account : {{current_user.username}}{% endblock %}
 
 {% block main_page_content %}
-	<form id="user-profile" method="POST" enctype="" class="form-horizontal">
+	<form id="user-profile" method="POST" enctype="multipart/form-data" class="form-horizontal">
 		{{ form.csrf_token }}
 		<div id="user-dp" class="card">
 			<div class="card-header">

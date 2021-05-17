@@ -618,3 +618,48 @@ div#who-follow li .info .glyphicon {
 
 	padding-left: 2em;
 }
+
+#comment-section {
+
+	margin: 1.2em 0;
+	padding:  1.3em 1.5em;
+}
+
+#comment-section .latest-comment {
+
+	width: 100;
+}
+
+#comment-section .comment-body {
+
+	padding-top: 1.3em;
+	width: 100;
+}
+
+#comment-section .comment-body .commentor-avator {
+
+	width: 10%;
+	display: inline-block;
+	padding-right: 1.3em;
+}
+
+#comment-section .comment-body .comment-post {
+
+	width: 70%;
+	display: inline-block;
+}
+
+#comment-section .comment-body .comment-post .form-control {
+
+	width: 70%;
+}
+
+#comment-section .comment-body .comment-post .btn-success {
+
+	width: 20%;
+}
+
+
+
+
+
