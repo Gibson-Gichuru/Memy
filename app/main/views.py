@@ -214,7 +214,7 @@ def edit(id):
 	return render_template('edit_post.html', form = form)
 
 
-@main.route('/comment/<int:id>')
+@main.route('/comment/<int:id>', methods = ['GET', 'POST'])
 @login_required
 def comment(id):
 

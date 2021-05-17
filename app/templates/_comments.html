@@ -1,0 +1,111 @@
+
+{% for post in posts %}
+    <div id="post-card" class="card">
+        <div class="card-header">
+            {% if current_user.is_authenticated and post.author == current_user %}
+            <div class="btn-group pull-right">
+                <button class="btn btn-default option dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                    <strong>:</strong>
+                </button>
+
+                <ul class="dropdown-menu">
+                    <li><a href="#">Edit</a></li>
+                    <li><a href="{{ url_for('main.delete_post', id = post.id)}}">Delete</a></li>
+                </ul>
+                
+            </div>
+            {% endif %}
+
+            <a href="{{ url_for('main.user', username=post.author.username) }}" id="display-pic">
+                 <img src="{{ post.author.gravator() }}" class="post-avator img-circle">
+            </a>
+            <ul id="post" class="list-unstyled">
+                <li>
+                    
+                    <div class="meme-post">
+                        <h5>{{post.author.username}}<small>{% if post.author.name%}&#128081;{{post.author.name}}{% endif%} -{{moment(post.timestamp).fromNow()}}</small></h5>
+                       
+                    </div>
+                </li>
+
+                <li>
+                	{% if post.body_html %}
+                       		<p class="card-text">{{post.body_html | safe}}</p>
+                            
+                        {% else %}
+                        	<p class="card-text">
+                        		{{post.body}}
+                        	</p>
+                            
+                        {% endif %}
+                </li>
+
+            </ul>
+        </div>
+        <div id="media-content" class="card-block">
+            <!--Put the media post from the user here-->
+            <!--image act like the media holder-->
+            <img src="{{ url_for('static', filename='icons/card.jpg')}}" class="img-responsive">
+        </div>
+        <div id="post-footer" class="card-footer">
+            {% if current_user.is_authenticated %}
+                    <div class="action-list">
+                        <a href="#">
+                            <span class="glyphicon glyphicon-thumbs-up" arial-hidden="true"></span>
+                            Like
+                        </a>
+
+                        <a class="action-collapse" href="#comment-section" type="button" data-toggle="collapse" aria-expanded="true">
+                            <span class="glyphicon glyphicon-comment" arial-hidden="true"></span>
+                            Comment
+                        </a>
+                        <a href="{% if current_user.is_authenticated %}{{ url_for('main.post', id = post.id)}}{% else%} # {% endif %}">
+                            <span class="glyphicon glyphicon-share-alt" arial-hidden="true"></span>
+                            Share
+                        </a>
+                        
+                    </div>
+
+                    <div id="comment-section" class="collapse" data-parent="#post-card">
+				        <div class="latest-comment">
+				                <ul id="comment-post" class="list-unstyled ">
+					                <li>
+					                    <a href="{{ url_for('main.user', username=post.comments.first().author.username) }}">
+					                         <img src="{{ post.comments.first().author.gravator() }}" class="comment-avator img-circle">
+					                    </a>
+					                    <div class="post card">
+
+					                    	<div class="card-header">
+					                    		<h5 class="card-title">{{post.comments.first().author.username}}<small>-{{moment(post.comments.first().timestamp).fromNow()}}</small></h5>
+					                    	</div>
+
+					                    	<div class="card-block">
+					                    		{% if post.comment.first().body_html %}
+					                            {{post.comment.first().body_html | safe}}
+						                        {% else %}
+						                            {{post.comment.first().body}}
+						                        {% endif %}	
+					                    	</div>
+					                    </div>
+
+					                </li>
+					            </ul>
+				        </div>
+				        <form class="form-inline" method="POST" action="{{ url_for('main.comment', id = post.id) }}">
+				            {{ comment_form.csrf_token }}
+				            <div class="comment-body">
+				                <img src="{{ current_user.gravator() }}" class="img-circle commentor-avator hidden-xs">
+
+				                <div class="comment-post">
+				                    {{ comment_form.body(class="form-control shadow-none", placeholder="Write your comment")}}
+				            
+				                    {{ comment_form.submit(class="btn btn-success shadow-none")}}
+				                </div>
+				            </div>
+				        </form> 
+				</div>
+
+            {% endif %}
+        </div>
+    </div>
+{% endfor %}

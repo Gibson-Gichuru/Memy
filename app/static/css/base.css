@@ -9,13 +9,7 @@ body{
 	height: 100vh;
 }
 
-@media(max-width: 34em){
 
-	#main-row{
-
-		width: 100vw;
-	}
-}
 
 #main-column {
 	height: 100%;
@@ -125,7 +119,7 @@ nav.navbar-default .navbar-toggle .icon-bar {
 
 #posts {
 
-	margin: 0.5em;
+	margin: 0;
 }
 
 .navbar-brand img {
@@ -268,7 +262,7 @@ ul#post .post-avator {
 
 	width: 13%;
 	display: inline-block;
-	vertical-align: top;
+	vertical-align: baseline;
 }
 
 ul#post .meme-post {
@@ -289,6 +283,7 @@ ul#post .meme-post h5 > small {
 	font-size: 1.2rem;
 }
 
+
 #post-card .card-header {
 	border-radius: 0.4rem 0.4rem 0 0;
 	border-bottom: 1px solid #fff;
@@ -298,7 +293,7 @@ ul#post .meme-post h5 > small {
 
 	border: 1px solid #fff;
 	border-radius: 0 0 0.4rem 0.4rem;
-	padding: 1em 1em;
+	padding: 0;
 	border-bottom: 0.1rem solid #e5e5e5;
 	background-color: #fff;
 
@@ -315,7 +310,7 @@ ul#post .meme-post h5 > small {
 #post-footer {
 
 	border-top: 1px solid #fff;
-	padding-bottom: 1em;
+	padding-bottom: 0;
 }
 
 #post-footer .action-list  {
@@ -323,7 +318,7 @@ ul#post .meme-post h5 > small {
 	width: 100%;
 	display: inline-block;
 	padding-top: 1.3rem;
-	padding-left: 20%;
+	padding-left: 1em;
 }
 
 #post-footer .action-list  a{
@@ -425,8 +420,8 @@ ul#post .meme-post h5 > small {
 	border-radius: 1em;
 }
 
-
-
+/*
+#########################################
 ul#posts .action-list {
 	margin-left: 13%;
 	padding-left: 3em;
@@ -438,21 +433,14 @@ ul#posts .action-list a {
 	display: inline-block;
 	padding-right: 3em;
 }
-ul#posts .action-list a:hover {
+ul#posts .action-list a::hover {
 
 	text-decoration: none;
 	
 }
-ul#posts .action-list .retweet-count {
-	padding-left: 0.2em;
-	font-weight: bold;
-}
 
-ul#posts .post-img {
-
-	padding-bottom: 1em;
-}
-
+###########################################3
+*/
 #paginate {
 
 	width: 100%;
@@ -460,7 +448,7 @@ ul#posts .post-img {
 
 #media-content {
 
-	padding: 1.4em;
+	padding: 0;
 }
 
 div#who-follow li {
@@ -563,12 +551,6 @@ div#who-follow li .info .glyphicon {
 
 }
 
-
-@media(max-width: 34em;) {
-	
-	#user-info .personal-info {width: 100%;}	
-}
-
 #user-info span {
 
 	display: inline-block;
@@ -660,6 +642,81 @@ div#who-follow li .info .glyphicon {
 }
 
 
+ul#comment-post .comment-avator {
+
+	width: 10%;
+	display: inline-block; 
+}
+
+ul#comment-post .post {
+
+	width: 60%;
+	display: inline-block;
+}
 
 
+#comment-section .card {
 
+	border: 1px solid #e5e5e5;
+	margin-top: 1.5em;
+
+}
+
+/* Media Queries*/
+
+@media(max-width: 34em){
+
+	#main-column {
+
+		padding: 0;
+		margin:0;
+	}
+
+	#post-card .card-header ul >li {
+
+		margin:0;
+		padding: 0;
+	}
+
+	ul#post .meme-post {
+
+	width: 80%;
+	display: inline-block;
+	margin: 0;
+	}
+
+
+	#user-info .personal-info {width: 100%;}
+
+	#post-footer {
+
+		padding: 0;
+	}
+
+	#post-footer .action-list {
+
+		padding: 0;
+	}
+
+	#comment-section {
+
+		padding: 0;
+	}
+
+	#comment-section .comment-body .comment-post {
+
+	width: 70%;
+	display: inline-block;
+	}
+
+	#comment-section .comment-body .comment-post .form-control {
+
+		width: 70%;
+	}
+
+	#comment-section .comment-body .comment-post .btn-success {
+
+		width: 20%;
+	}
+
+}
