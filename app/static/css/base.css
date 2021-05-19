@@ -119,7 +119,7 @@ nav.navbar-default .navbar-toggle .icon-bar {
 
 #posts {
 
-	margin: 0;
+	margin: 0.5em;
 }
 
 .navbar-brand img {
@@ -187,52 +187,52 @@ nav.navbar-default .navbar-toggle .icon-bar {
 
 .card-header h4 {
 
-	font-size: 1.5em;
+font-size: 1.5em;
 }
 
- .card-block ul {
- 	 
- 	 padding-left: 0.5em; 
- }
+.card-block ul {
+	 
+	 padding-left: 0.5em; 
+}
 
- .card-block li > a {
- 	color: #FFF;
- 	font-size: 1.2em;
- }
+.card-block li > a {
+	color: #FFF;
+	font-size: 1.2em;
+}
 
-  .card-block li > a:hover {
+.card-block li > a:hover {
 
-  	text-decoration: none;
- 	color: #FFF;
- }
+	text-decoration: none;
+	color: #FFF;
+}
 
- .card-block ul a:hover {
+.card-block ul a:hover {
 
- 	text-decoration: none;
- }
+	text-decoration: none;
+}
 
 .card-block .card-title small {
 
 	display: inline;
 }
 
- .card-block ul .profile-stats {
+.card-block ul .profile-stats {
 
- 	color: #777;
- 	display: block;
- 	text-transform: uppercase;
- 	font-size: 0.65em;
+	color: #777;
+	display: block;
+	text-transform: uppercase;
+	font-size: 0.65em;
 
- }
+}
 
-  .card-block ul .profile-value {
+.card-block ul .profile-value {
 
- 	color: #000;
- 	font-size: 1.2em;
- 	font-weight: bold;
- 	color: #2F92CA;
- 	
- }
+	color: #000;
+	font-size: 1.2em;
+	font-weight: bold;
+	color: #2F92CA;
+	
+}
 
 
 form#new-post {
@@ -258,52 +258,71 @@ ul#post li {
 	padding: 1em 1em;
 }
 
-ul#post .post-avator {
+#post-card .post-avator {
 
 	width: 13%;
 	display: inline-block;
-	vertical-align: baseline;
+	vertical-align: top;
 }
-
-ul#post .meme-post {
+/*
+#post-card .meme-post {
 
 	width: 80%;
 	display: inline-block;
 	margin: 2%;
+	vertical-align: top;
 }
-
-ul#post .meme-post h5 {
+*/
+#post-card  .post-author {
 
 	font-weight: bold;
 	margin-bottom: 0.5rem;
+	display: inline-block;
+	vertical-align: baseline;
+	margin-top: 2em;
 }
 
-ul#post .meme-post h5 > small {
+#post .card-text {
+
+	margin-top: 1em;
+}
+#post-card  h5 > small {
 
 	font-size: 1.2rem;
 }
 
-
-#post-card .card-header {
-	border-radius: 0.4rem 0.4rem 0 0;
-	border-bottom: 1px solid #fff;
-}
-
 #post-card {
 
-	border: 1px solid #fff;
+	
 	border-radius: 0 0 0.4rem 0.4rem;
 	padding: 0;
-	border-bottom: 0.1rem solid #e5e5e5;
-	background-color: #fff;
+	background-color: #F5F8FA;
 
 }
+
+div#media-content {
+
+	background-color: #fff;
+}
+
+#post-card .post-card-header {
+	border-radius: 0.4rem 0.4rem 0 0;
+	background-color: #fff;
+	padding: 1.5em;
+}
+
 
 #post-card .option {
 
 	border-color: transparent;
 	background-color: transparent;
 	font-weight: bold;
+}
+
+#post-card .card-text {
+
+	margin: 0;
+	padding-top: 1.2rem;
 }
 
 
@@ -319,13 +338,24 @@ ul#post .meme-post h5 > small {
 	display: inline-block;
 	padding-top: 1.3rem;
 	padding-left: 1em;
+	background-color: #fff;
 }
 
 #post-footer .action-list  a{
 
 	width: 30%;
 	display: inline-block;
-	font-size: 1.4em;
+	font-size: 1.4rem;
+}
+
+#post-footer .action-list a:hover{
+
+	text-decoration: none;
+}
+
+#post-footer .action-list a:active{
+
+	text-decoration: none;
 }
 
 #followers-card .card-header {
@@ -604,63 +634,67 @@ div#who-follow li .info .glyphicon {
 #comment-section {
 
 	margin: 1.2em 0;
-	padding:  1.3em 1.5em;
+	padding:  0;
 }
 
-#comment-section .latest-comment {
+#comment-section .comment-avator {
 
-	width: 100;
+	width: 10%;
+	display: inline-block; 
+	
+}
+
+#comment-section h5 {
+
+	margin: 0;
+	display: inline-block;
+}
+
+#comment-section .card-block {
+
+	text-indent: 2rem;
+}
+
+#comment-section .card {
+
+	
+    width: 80%;
+    border-radius: 1.8rem 0.4rem 0 0;
+    margin-left: 1.3em;
+    background-color: #fff;
+
+}
+
+#comment-section .card-block {
+
+	padding-top: 1.2rem;
 }
 
 #comment-section .comment-body {
 
 	padding-top: 1.3em;
-	width: 100;
-}
-
-#comment-section .comment-body .commentor-avator {
-
-	width: 10%;
-	display: inline-block;
-	padding-right: 1.3em;
+	
 }
 
 #comment-section .comment-body .comment-post {
 
-	width: 70%;
-	display: inline-block;
+	width: 100%;
+	
 }
 
 #comment-section .comment-body .comment-post .form-control {
 
-	width: 70%;
+	width: 80%;
 }
 
 #comment-section .comment-body .comment-post .btn-success {
 
-	width: 20%;
+	width: 5em;
+	margin-left: 1.2em;
 }
 
 
-ul#comment-post .comment-avator {
 
-	width: 10%;
-	display: inline-block; 
-}
-
-ul#comment-post .post {
-
-	width: 60%;
-	display: inline-block;
-}
-
-
-#comment-section .card {
-
-	border: 1px solid #e5e5e5;
-	margin-top: 1.5em;
-
-}
 
 /* Media Queries*/
 
@@ -678,14 +712,10 @@ ul#comment-post .post {
 		padding: 0;
 	}
 
-	ul#post .meme-post {
+	#post-card .post-author {
 
-	width: 80%;
-	display: inline-block;
-	margin: 0;
+		margin-top: 1.4em;
 	}
-
-
 	#user-info .personal-info {width: 100%;}
 
 	#post-footer {
@@ -693,10 +723,14 @@ ul#comment-post .post {
 		padding: 0;
 	}
 
-	#post-footer .action-list {
+	#post-footer .action-list  a{
 
-		padding: 0;
+		font-size: 0.8em;
+
+		
 	}
+
+
 
 	#comment-section {
 
@@ -705,8 +739,8 @@ ul#comment-post .post {
 
 	#comment-section .comment-body .comment-post {
 
-	width: 70%;
-	display: inline-block;
+	width: 100%;
+	padding-left: 1.2em;
 	}
 
 	#comment-section .comment-body .comment-post .form-control {
@@ -717,6 +751,7 @@ ul#comment-post .post {
 	#comment-section .comment-body .comment-post .btn-success {
 
 		width: 20%;
+		margin-left: 1.2em;
 	}
 
 }

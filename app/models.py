@@ -126,7 +126,7 @@ class Post(db.Model, DataManipulation):
     @property
     def comments(self):
 
-        return self.comment.order_by(Comment.timestamp)
+        return self.comment.order_by(Comment.timestamp.desc())
 
 
     @staticmethod

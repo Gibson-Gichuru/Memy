@@ -1,7 +1,7 @@
 
 {% for post in posts %}
     <div id="post-card" class="card">
-        <div class="card-header">
+        <div class="post-card-header card-header">
             {% if current_user.is_authenticated and post.author == current_user %}
             <div class="btn-group pull-right">
                 <button class="btn btn-default option dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
@@ -19,28 +19,18 @@
             <a href="{{ url_for('main.user', username=post.author.username) }}" id="display-pic">
                  <img src="{{ post.author.gravator() }}" class="post-avator img-circle">
             </a>
-            <ul id="post" class="list-unstyled">
-                <li>
+
+            <h5 class="post-author">{{post.author.username}}<small>{% if post.author.name%}&#128081;{{post.author.name}}{% endif%} -{{moment(post.timestamp).fromNow()}}</small></h5>
+
+            {% if post.body_html %}
+           		<p class="card-text">{{post.body_html | safe}}</p>
                     
-                    <div class="meme-post">
-                        <h5>{{post.author.username}}<small>{% if post.author.name%}&#128081;{{post.author.name}}{% endif%} -{{moment(post.timestamp).fromNow()}}</small></h5>
-                       
-                    </div>
-                </li>
-
-                <li>
-                	{% if post.body_html %}
-                       		<p class="card-text">{{post.body_html | safe}}</p>
-                            
-                        {% else %}
-                        	<p class="card-text">
-                        		{{post.body}}
-                        	</p>
-                            
-                        {% endif %}
-                </li>
-
-            </ul>
+            {% else %}
+            	<p class="card-text">
+            		{{post.body}}
+            	</p>
+                
+            {% endif %}
         </div>
         <div id="media-content" class="card-block">
             <!--Put the media post from the user here-->
@@ -50,56 +40,48 @@
         <div id="post-footer" class="card-footer">
             {% if current_user.is_authenticated %}
                     <div class="action-list">
-                        <a href="#">
+                        <a href="#" class="text-center">
                             <span class="glyphicon glyphicon-thumbs-up" arial-hidden="true"></span>
                             Like
                         </a>
 
-                        <a class="action-collapse" href="#comment-section" type="button" data-toggle="collapse" aria-expanded="true">
+                        <a class="action-collapse text-center" href="#comment-section" type="button" data-toggle="collapse" aria-expanded="true">
                             <span class="glyphicon glyphicon-comment" arial-hidden="true"></span>
                             Comment
                         </a>
-                        <a href="{% if current_user.is_authenticated %}{{ url_for('main.post', id = post.id)}}{% else%} # {% endif %}">
+                        <a href="{% if current_user.is_authenticated %}{{ url_for('main.post', id = post.id)}}{% else%} # {% endif %}" class="text-center">
                             <span class="glyphicon glyphicon-share-alt" arial-hidden="true"></span>
                             Share
                         </a>
                         
                     </div>
 
-                    <div id="comment-section" class="collapse" data-parent="#post-card">
-				        <div class="latest-comment">
-				                <ul id="comment-post" class="list-unstyled ">
-					                <li>
-					                    <a href="{{ url_for('main.user', username=post.comments.first().author.username) }}">
-					                         <img src="{{ post.comments.first().author.gravator() }}" class="comment-avator img-circle">
-					                    </a>
-					                    <div class="post card">
+                    <div id="comment-section" class="collapse" data-parent="#post-footer">
+                    	{% if post.comments.first() %}
+		                    <div class="card">
+		                    	<div class="card-header">
+		                    		<a href="{{ url_for('main.user', username=post.comments.first().author.username) }}">
+				                        <img src="{{ post.comments.first().author.gravator() }}" class="comment-avator img-circle">
+				                    </a>
+		                    		<h5 class="card-title ">{{post.comments.first().author.username}}<small>-{{moment(post.comments.first().timestamp).fromNow()}}</small></h5>
+		                    	</div>
 
-					                    	<div class="card-header">
-					                    		<h5 class="card-title">{{post.comments.first().author.username}}<small>-{{moment(post.comments.first().timestamp).fromNow()}}</small></h5>
-					                    	</div>
-
-					                    	<div class="card-block">
-					                    		{% if post.comment.first().body_html %}
-					                            {{post.comment.first().body_html | safe}}
-						                        {% else %}
-						                            {{post.comment.first().body}}
-						                        {% endif %}	
-					                    	</div>
-					                    </div>
-
-					                </li>
-					            </ul>
-				        </div>
+		                    	<div class="card-block">
+		                    		{% if post.comments.first().body_html %}
+		                              {{post.comments.first().body_html | safe}}
+			                        {% else %}
+			                            {{post.comments.first().body}}
+			                        {% endif %}	
+		                    	</div>
+		                    </div>
+				        {% endif %}
 				        <form class="form-inline" method="POST" action="{{ url_for('main.comment', id = post.id) }}">
 				            {{ comment_form.csrf_token }}
 				            <div class="comment-body">
-				                <img src="{{ current_user.gravator() }}" class="img-circle commentor-avator hidden-xs">
-
 				                <div class="comment-post">
-				                    {{ comment_form.body(class="form-control shadow-none", placeholder="Write your comment")}}
+				                    {{ comment_form.body(class="form-control col-xs-10", placeholder="Write your comment")}}
 				            
-				                    {{ comment_form.submit(class="btn btn-success shadow-none")}}
+				                    {{ comment_form.submit(class="btn btn-success col-xs-2")}}
 				                </div>
 				            </div>
 				        </form> 
