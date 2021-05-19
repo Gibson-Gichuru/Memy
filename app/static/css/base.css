@@ -264,6 +264,12 @@ ul#post li {
 	display: inline-block;
 	vertical-align: top;
 }
+
+ul#post-list li {
+	padding: 1em;
+}
+
+
 /*
 #post-card .meme-post {
 
@@ -325,6 +331,16 @@ div#media-content {
 	padding-top: 1.2rem;
 }
 
+#post-card .write-comment {
+
+	margin: 1.8em;
+}
+
+
+#post-card .latest-comments a {
+
+	width: 10%;
+}
 
 #post-footer {
 

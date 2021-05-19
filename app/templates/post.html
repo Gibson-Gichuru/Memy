@@ -71,28 +71,21 @@
 		<strong>Followers</strong>
 	</div>
 	<div id="follower-photo" class="card-block">
-		<ul class="list-inline list-unstyled">
-			<li>
-				<a href="#" class="thumbnail">
-					<img src="{{ url_for('static', filename='icons/icon1.png')}}" class="img-responsive">
-				</a>
-			</li>
-			<li>
-				<a href="#" class="thumbnail">
-					<img src="{{ url_for('static', filename='icons/icon1.png')}}" class="img-responsive">
-				</a>
-			</li>
-			<li>
-				<a href="#" class="thumbnail">
-					<img src="{{ url_for('static', filename='icons/icon1.png')}}" class="img-responsive">
-				</a>
-			</li>
-			<li>
-				<a href="#" class="thumbnail">
-					<img src="{{ url_for('static', filename='icons/icon1.png')}}" class="img-responsive">
-				</a>
-			</li>
+		{% if posts[0].author.user_followers.count()%}
+		<ul class="list-unstyled">
+			{% for follower in posts[0].author.user_followers.all()[:4] %}
+			<ul class="list-inline list-unstyled">
+				{% if follower != posts[0].author %}
+					<li>
+						<a href="{{ url_for('main.user', username = follower.username)}}" class="thumbnail">
+							<img src="{{ follower.gravator() }}" class="img-responsive">
+						</a>
+					</li>
+				{% endif %}
+			</ul>
+			{% endfor %}
 		</ul>
+		{% endif %}
 	</div>
 </div>
 
@@ -101,7 +94,86 @@
 {% block main_page_content %}
 <div id="post-card" class="card">
 	<div class="card-block">
-		{% include '_posts.html' %}
+		{% for post in posts %}
+		    <div id="post-card" class="card">
+		        <div class="card-header">
+		            {% if current_user.is_authenticated and post.author == current_user %}
+		            <div class="btn-group pull-right">
+		                <button class="btn btn-default option dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+		                    <strong>:</strong>
+		                </button>
+
+		                <ul class="dropdown-menu">
+		                    <li><a href="#">Edit</a></li>
+		                    <li><a href="{{ url_for('main.delete_post', id = post.id)}}">Delete</a></li>
+		                </ul>
+		                
+		            </div>
+		            {% endif %}
+		            <ul id="post" class="list-unstyled list-inline">
+		                <li>
+		                    <a href="{{ url_for('main.user', username=post.author.username) }}">
+		                         <img src="{{ post.author.gravator() }}" class="post-avator img-circle">
+		                    </a>
+		                    <div class="meme-post">
+		                        <h5>{{post.author.username}}<small>{% if post.author.name%}&#128081;{{post.author.name}}{% endif%} -{{moment(post.timestamp).fromNow()}}</small></h5>
+
+		                       {% if post.body_html %}
+		                            {{post.body_html | safe}}
+		                        {% else %}
+		                            {{post.body}}
+		                        {% endif %}
+		                    </div>
+
+		                </li>
+		            </ul>
+		        </div>
+		        <div id="media-content" class="card-block">
+		            <!--Put the media post from the user here-->
+		            <!--image act like the media holder-->
+		            <img src="{{ url_for('static', filename='icons/card.jpg')}}" class="img-responsive">
+		        </div>
+
+		        <div class="card-footer">
+		        	<div class="card-title">
+		        		<h4>Comments</h4>
+		        	</div>
+
+		        	<div class="write-comment">
+        				<form class="form-horizontal" action="{{ url_for('main.comment', id = post.id)}}" method="POST">
+        					<div class="form-group">
+        						{{ comment_form.body(class="form-control", placeholder="Write your comment")}}
+        					</div>
+        					<div class="form-group">
+        						{{comment_form.submit(class="btn btn-success")}}
+        					</div>
+        				</form>
+
+        				<div class="latest-comments">
+        					{% if post.comments.all()%}
+        						<ul class="list-unstyled">
+        							{% for comment in post.comments.all() %}
+        								<li>
+        									<a href="{url_for('main.user', username = comment.author.username)}">
+        										<img src="{{comment.author.gravator()}}" class="img-circle">
+        									</a>
+        									<p class="card-text">
+        										{% if comment.body_html %}
+        											{{ comment.body_html | safe}}
+        										{% else %}
+        											{{ comment.body }}
+        										{% endif %}
+        									</p>
+        									<small>{{ moment(comment.timestamp).fromNow() }}</small>
+        								</li>
+        							{% endfor %}
+        						</ul>
+        					{% endif %}
+        				</div>
+        			</div>
+        		</div>
+		    </div>
+		{% endfor %}
 	</div>
 </div>
 {% endblock %}

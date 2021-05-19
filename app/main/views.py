@@ -189,7 +189,9 @@ def post(id):
 
 	post = Post.query.get_or_404(id)
 
-	return render_template('post.html', posts = [post])
+	comment_form = CommentForm()
+
+	return render_template('post.html', posts = [post], comment_form = comment_form)
 
 
 @main.route('/edit/<int:id>', methods = ['GET', 'POST'])
