@@ -96,38 +96,37 @@
 	<div class="card-block">
 		{% for post in posts %}
 		    <div id="post-card" class="card">
-		        <div class="card-header">
-		            {% if current_user.is_authenticated and post.author == current_user %}
-		            <div class="btn-group pull-right">
-		                <button class="btn btn-default option dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-		                    <strong>:</strong>
-		                </button>
+		        <div class="post-card-header card-header">
+                    {% if current_user.is_authenticated and post.author == current_user %}
+                    <div class="btn-group pull-right">
+                        <button class="btn btn-default option dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                            <strong>:</strong>
+                        </button>
 
-		                <ul class="dropdown-menu">
-		                    <li><a href="#">Edit</a></li>
-		                    <li><a href="{{ url_for('main.delete_post', id = post.id)}}">Delete</a></li>
-		                </ul>
-		                
-		            </div>
-		            {% endif %}
-		            <ul id="post" class="list-unstyled list-inline">
-		                <li>
-		                    <a href="{{ url_for('main.user', username=post.author.username) }}">
-		                         <img src="{{ post.author.gravator() }}" class="post-avator img-circle">
-		                    </a>
-		                    <div class="meme-post">
-		                        <h5>{{post.author.username}}<small>{% if post.author.name%}&#128081;{{post.author.name}}{% endif%} -{{moment(post.timestamp).fromNow()}}</small></h5>
+                        <ul class="dropdown-menu">
+                            <li><a href="#">Edit</a></li>
+                            <li><a href="{{ url_for('main.delete_post', id = post.id)}}">Delete</a></li>
+                        </ul>
+                        
+                    </div>
+                    {% endif %}
 
-		                       {% if post.body_html %}
-		                            {{post.body_html | safe}}
-		                        {% else %}
-		                            {{post.body}}
-		                        {% endif %}
-		                    </div>
+                    <a href="{{ url_for('main.user', username=post.author.username) }}" id="display-pic">
+                         <img src="{{ post.author.gravator() }}" class="post-avator img-circle">
+                    </a>
 
-		                </li>
-		            </ul>
-		        </div>
+                    <h5 class="post-author">{{post.author.username}}<small>{% if post.author.name%}&#128081;{{post.author.name}}{% endif%} -{{moment(post.timestamp).fromNow()}}</small></h5>
+
+                    {% if post.body_html %}
+                        <p class="card-text">{{post.body_html | safe}}</p>
+                            
+                    {% else %}
+                        <p class="card-text">
+                            {{post.body}}
+                        </p>
+                        
+                    {% endif %}
+                </div>
 		        <div id="media-content" class="card-block">
 		            <!--Put the media post from the user here-->
 		            <!--image act like the media holder-->
@@ -153,18 +152,23 @@
         					{% if post.comments.all()%}
         						<ul class="list-unstyled">
         							{% for comment in post.comments.all() %}
-        								<li>
-        									<a href="{url_for('main.user', username = comment.author.username)}">
-        										<img src="{{comment.author.gravator()}}" class="img-circle">
-        									</a>
-        									<p class="card-text">
-        										{% if comment.body_html %}
-        											{{ comment.body_html | safe}}
-        										{% else %}
-        											{{ comment.body }}
-        										{% endif %}
-        									</p>
-        									<small>{{ moment(comment.timestamp).fromNow() }}</small>
+        								<li>       							
+        									<div class="media">
+        										<a href="{url_for('main.user', username = comment.author.username)}">
+	        										<img class="mr-3 img-circle" src="{{comment.author.gravator()}}">
+	        									</a>
+												  
+											  <div class="media-body">
+											    <h5 class="mt-0 mb-1">{{comment.author.username}}<small>{% if comment.author.name%}&#128081;{{comment.author.name}}{% endif%} -{{moment(comment.timestamp).fromNow()}}</small></h5>
+
+											    {% if comment.body_html %}
+											    	{{ comment.body_html | safe}}
+
+											    {% else %}
+											    	{{ comment.body }}
+											    {% endif%}
+											  </div>
+											</div>
         								</li>
         							{% endfor %}
         						</ul>

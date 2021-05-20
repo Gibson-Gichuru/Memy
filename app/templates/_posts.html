@@ -1,61 +1,66 @@
-{% for post in posts %}
-    <div id="post-card" class="card">
-        <div class="card-header">
-            {% if current_user.is_authenticated and post.author == current_user %}
-            <div class="btn-group pull-right">
-                <button class="btn btn-default option dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                    <strong>:</strong>
-                </button>
+<ul id="post-list" class="list-unstyled">
+    {% for post in posts %}
+        <li>
+            <div id="post-card" class="card">
+                <div class="post-card-header card-header">
+                    {% if current_user.is_authenticated and post.author == current_user %}
+                    <div class="btn-group pull-right">
+                        <button class="btn btn-default option dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                            <strong>:</strong>
+                        </button>
 
-                <ul class="dropdown-menu">
-                    <li><a href="#">Edit</a></li>
-                    <li><a href="{{ url_for('main.delete_post', id = post.id)}}">Delete</a></li>
-                </ul>
-                
-            </div>
-            {% endif %}
-            <ul id="post" class="list-unstyled list-inline">
-                <li>
-                    <a href="{{ url_for('main.user', username=post.author.username) }}">
+                        <ul class="dropdown-menu">
+                            <li><a href="#">Edit</a></li>
+                            <li><a href="{{ url_for('main.delete_post', id = post.id)}}">Delete</a></li>
+                        </ul>
+                        
+                    </div>
+                    {% endif %}
+
+                    <a href="{{ url_for('main.user', username=post.author.username) }}" id="display-pic">
                          <img src="{{ post.author.gravator() }}" class="post-avator img-circle">
                     </a>
-                    <div class="meme-post">
-                        <h5>{{post.author.username}}<small>{% if post.author.name%}&#128081;{{post.author.name}}{% endif%} -{{moment(post.timestamp).fromNow()}}</small></h5>
 
-                       {% if post.body_html %}
-                            {{post.body_html | safe}}
-                        {% else %}
+                    <h5 class="post-author">{{post.author.username}}<small>{% if post.author.name%}&#128081;{{post.author.name}}{% endif%} -{{moment(post.timestamp).fromNow()}}</small></h5>
+
+                    {% if post.body_html %}
+                        <p class="card-text">{{post.body_html | safe}}</p>
+                            
+                    {% else %}
+                        <p class="card-text">
                             {{post.body}}
-                        {% endif %}
-                    </div>
+                        </p>
+                        
+                    {% endif %}
+                </div>
+                <div id="media-content" class="card-block">
+                    <!--Put the media post from the user here-->
+                    <!--image act like the media holder-->
+                    <img src="{{ url_for('static', filename='icons/card.jpg')}}" class="img-responsive">
+                </div>
+                <div id="post-footer" class="card-footer">
+                    {% if current_user.is_authenticated %}
+                            <div class="action-list">
+                                <a href="#" class="text-center">
+                                    <span class="glyphicon glyphicon-thumbs-up" arial-hidden="true"></span>
+                                    Like
+                                </a>
 
-                </li>
-            </ul>
-        </div>
-        <div id="media-content" class="card-block">
-            <!--Put the media post from the user here-->
-            <!--image act like the media holder-->
-            <img src="{{ url_for('static', filename='icons/card.jpg')}}" class="img-responsive">
-        </div>
-        <div id="post-footer" class="card-footer">
-           
-            <div class="action-list">
-                <a href="#">
-                    <span class="glyphicon glyphicon-thumbs-up" arial-hidden="true"></span>
-                    Like
-                </a>
-
-                <a class="action-collapse" href="#comment-section" type="button" data-toggle="collapse" aria-expanded="true">
-                    <span class="glyphicon glyphicon-comment" arial-hidden="true"></span>
-                    Comment
-                </a>
-                <a href="{% if current_user.is_authenticated %}{{ url_for('main.post', id = post.id)}}{% else%} # {% endif %}">
-                    <span class="glyphicon glyphicon-share-alt" arial-hidden="true"></span>
-                    Share
-                </a>
-                
+                                <a class="text-center" href="#" role="button" data-toggle="collapse" aria-expanded="false" arial-controls="comment-section">
+                                    <span class="glyphicon glyphicon-comment" arial-hidden="true"></span>
+                                    Comment
+                                </a>
+                                <a href="{% if current_user.is_authenticated %}{{ url_for('main.post', id = post.id)}}{% else%} # {% endif %}" class="text-center">
+                                    <span class="glyphicon glyphicon-share-alt" arial-hidden="true"></span>
+                                    Share
+                                </a>
+                                
+                            </div>
+                    {% endif %}
+                </div>
             </div>
-        </div>
-    </div>
+        </li>
     {% endfor %}
+</ul>
+
 

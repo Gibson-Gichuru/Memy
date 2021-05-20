@@ -16,6 +16,8 @@ body{
 	overflow-y: scroll;
 }
 
+
+
 ::-webkit-scrollbar {
 
 	width: 0px;
@@ -337,9 +339,30 @@ div#media-content {
 }
 
 
-#post-card .latest-comments a {
+
+#post-card .latest-comments .media {
+
+	width: 100%
+
+}
+
+
+#post-card .latest-comments li {
+
+	margin-bottom: 1.2em;
+}
+
+#post-card .latest-comments img {
 
 	width: 10%;
+	display: inline-block;
+}
+
+#post-card .latest-comments .media-body{
+
+	width: 70%;
+	display: inline-block;
+	margin-left: 1.2em;
 }
 
 #post-footer {
@@ -665,10 +688,6 @@ div#who-follow li .info .glyphicon {
 	display: inline-block;
 }
 
-#post-footer .collapse .card-block {
-
-	text-indent: 2rem;
-}
 
 #post-footer .collapse .card {
 
