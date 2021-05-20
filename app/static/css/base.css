@@ -647,31 +647,30 @@ div#who-follow li .info .glyphicon {
 	padding-left: 2em;
 }
 
-#comment-section {
+#post-footer .collapse {
 
 	margin: 1.2em 0;
-	padding:  0;
 }
 
-#comment-section .comment-avator {
+#post-footer .collapse .comment-avator {
 
 	width: 10%;
 	display: inline-block; 
 	
 }
 
-#comment-section h5 {
+#post-footer .collapse h5 {
 
 	margin: 0;
 	display: inline-block;
 }
 
-#comment-section .card-block {
+#post-footer .collapse .card-block {
 
 	text-indent: 2rem;
 }
 
-#comment-section .card {
+#post-footer .collapse .card {
 
 	
     width: 80%;
@@ -681,29 +680,29 @@ div#who-follow li .info .glyphicon {
 
 }
 
-#comment-section .card-block {
+#post-footer .collapse .card-block {
 
 	padding-top: 1.2rem;
 }
 
-#comment-section .comment-body {
+#post-footer .collapse .comment-body {
 
 	padding-top: 1.3em;
 	
 }
 
-#comment-section .comment-body .comment-post {
+#post-footer .collapse .comment-body .comment-post {
 
 	width: 100%;
 	
 }
 
-#comment-section .comment-body .comment-post .form-control {
+#post-footer .collapse .comment-body .comment-post .form-control {
 
 	width: 80%;
 }
 
-#comment-section .comment-body .comment-post .btn-success {
+#post-footer .collapse .comment-body .comment-post .btn-success {
 
 	width: 5em;
 	margin-left: 1.2em;
@@ -748,23 +747,23 @@ div#who-follow li .info .glyphicon {
 
 
 
-	#comment-section {
+	#post-footer .collapse {
 
 		padding: 0;
 	}
 
-	#comment-section .comment-body .comment-post {
+	#post-footer .collapse .comment-body .comment-post {
 
 	width: 100%;
 	padding-left: 1.2em;
 	}
 
-	#comment-section .comment-body .comment-post .form-control {
+	#post-footer .collapse .comment-body .comment-post .form-control {
 
 		width: 70%;
 	}
 
-	#comment-section .comment-body .comment-post .btn-success {
+	#post-footer .collapse .comment-body .comment-post .btn-success {
 
 		width: 20%;
 		margin-left: 1.2em;

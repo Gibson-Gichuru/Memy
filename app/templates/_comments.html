@@ -46,7 +46,7 @@
                                     Like
                                 </a>
 
-                                <a class="action-collapse text-center" href="#comment-section" type="button" data-toggle="collapse" aria-expanded="true">
+                                <a class="text-center" href="#{{post.id}}" role="button" data-toggle="collapse" aria-expanded="false" arial-controls="comment-section">
                                     <span class="glyphicon glyphicon-comment" arial-hidden="true"></span>
                                     Comment
                                 </a>
@@ -57,7 +57,7 @@
                                 
                             </div>
 
-                            <div id="comment-section" class="collapse" data-parent="#post-card">
+                            <div id="{{post.id}}" class="collapse" arial-expanded="false">
                                 {% if post.comments.first() %}
                                     <div class="card">
                                         <div class="card-header">
