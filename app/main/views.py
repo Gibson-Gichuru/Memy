@@ -191,7 +191,7 @@ def post(id):
 
 	comment_form = CommentForm()
 
-	return render_template('post.html', posts = [post], comment_form = comment_form)
+	return render_template('post.html', posts = [post], comment_form = comment_form, Permission = Permission)
 
 
 @main.route('/edit/<int:id>', methods = ['GET', 'POST'])
@@ -237,6 +237,32 @@ def comment(id):
 		return redirect(url_for('main.home'))
 
 	return redirect(url_for('main.home'))
+
+
+@main.route('/moderate/enable/<int:id>')
+@login_required
+@permission_required(Permission.MODERATE_COMMENTS)
+def comment_enabled(id):
+
+	comment = Comment.query.get_or_404(id)
+	comment.disabled = False
+	db.session.add(comment)
+	db.session.commit()
+
+	return redirect(url_for('main.post', id = comment.post_id))
+
+
+@main.route('/moderate/disable/<int:id>')
+@login_required
+@permission_required(Permission.MODERATE_COMMENTS)
+def comment_disabled(id):
+
+	comment = Comment.query.get_or_404(id)
+	comment.disabled = True
+	db.session.add(comment)
+	db.session.commit()
+
+	return redirect(url_for('main.post', id = comment.post_id))
 
 @main.route('/delete/<int:id>')
 def delete_post(id):

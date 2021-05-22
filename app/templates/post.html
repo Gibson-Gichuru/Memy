@@ -152,24 +152,37 @@
         					{% if post.comments.all()%}
         						<ul class="list-unstyled">
         							{% for comment in post.comments.all() %}
-        								<li>       							
-        									<div class="media">
-        										<a href="{url_for('main.user', username = comment.author.username)}">
-	        										<img class="mr-3 img-circle" src="{{comment.author.gravator()}}">
-	        									</a>
-												  
-											  <div class="media-body">
-											    <h5 class="mt-0 mb-1">{{comment.author.username}}<small>{% if comment.author.name%}&#128081;{{comment.author.name}}{% endif%} -{{moment(comment.timestamp).fromNow()}}</small></h5>
 
-											    {% if comment.body_html %}
-											    	{{ comment.body_html | safe}}
+        								{% if comment.disabled and not current_user.can(Permission.MODERATE_COMMENTS) %}
+        								<p><i>This Comment have been diabled by the Memy Content Moderation team</i></p>
+        								{% else %}
+	        								<li>       							
+	        									<div class="media">
+	        										<a href="{url_for('main.user', username = comment.author.username)}">
+		        										<img class="mr-3 img-circle" src="{{comment.author.gravator()}}">
+		        									</a>
+													  
+												  <div class="media-body">
+												    <h5 class="mt-0 mb-1">{{comment.author.username}}<small>{% if comment.author.name%}&#128081;{{comment.author.name}}{% endif%} -{{moment(comment.timestamp).fromNow()}}</small>
 
-											    {% else %}
-											    	{{ comment.body }}
-											    {% endif%}
-											  </div>
-											</div>
-        								</li>
+												    	{%if current_user.can(Permission.MODERATE_COMMENTS)%}
+													    	{% if comment.disabled %}
+													    		<a href="{{url_for('main.comment_enabled', id = comment.id)}}" class="btn btn-default btn-xs">Enable</a>
+													    	{%else%}
+													    		<a href="{{ url_for('main.comment_disabled', id = comment.id)}}" class="btn btn-danger btn-xs">Disable</a>
+													    	{% endif %}
+												    	{% endif %}
+												    </h5>
+
+												    {% if comment.body_html %}
+												    	{{ comment.body_html | safe}}
+												    {% else %}
+												    	{{ comment.body }}
+												    {% endif%}
+												  </div>
+												</div>
+	        								</li>
+        								{% endif%}
         							{% endfor %}
         						</ul>
         					{% endif %}
