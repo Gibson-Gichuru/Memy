@@ -54,7 +54,7 @@
 	<div id="profile-setting" class="card">
 		<ul class="nav nav-pills nav-stacked">
 			<li role ="presentation">
-				<a href="{% if current_user.is_administrator()%} {{url_for('main.edit_profile_admin', id=current_user.id)}}{% else %}{{url_for('main.edit_profile')}}{% endif %}">
+				<a href="{{url_for('main.edit_profile')}}">
 					<span class="glyphicon glyphicon-chevron-right pull-right" aria-hidden="true"></span>
 					Account
 				</a>

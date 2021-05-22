@@ -7,8 +7,6 @@ from flask_pagedown.fields import PageDownField
 
 from ..models import User, Role
 
-
-
 class NameForm(Form):
 
 	name = StringField('Whatis your name', validators = [DataRequired()])
@@ -51,12 +49,21 @@ class EditProfileAdminForm(Form):
 	name = StringField("Real Name", validators = [Length(0,64)])
 	location = StringField("Location", validators = [Length(0,64)])
 	about_me = TextAreaField('About Me')
+
+	password = PasswordField(
+        "password",
+        validators=[
+            EqualTo("password2", message="password must match"),
+        ],
+    )
+	password2 = PasswordField("confirm password")
+	
 	submit = SubmitField('Update')
 
 
 	def __init__(self, user, *args, **kwargs):
 
-		super(EditProfileAdminForm).__init__(*args, **kwargs)
+		super().__init__(*args, **kwargs)
 
 		self.role.choices = [(role.id, role.name) for role in Role.query.order_by(Role.name).all()]
 

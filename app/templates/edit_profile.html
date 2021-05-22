@@ -13,7 +13,7 @@
 
 			<div class="card-block">
 				<img src="{{ current_user.gravator() }}" class="img-circle">
-				{{ form.profile_pic.label(for="upload-pic", class="btn btn-outline-primary")}}
+				{{ form.profile_pic.label(class="btn btn-outline-primary")}}
 				{{ form.profile_pic(id="upload-pic", class="hidden")}}
 			</div>
 		</div>
@@ -71,17 +71,9 @@
 					{{form.password2( class = "form-control")}}
 				</div>
 
-				{% if current_user.is_administrator() %}
-					<div class="form-group password-field">
-						{{form.username.label()}}
-						{{form.username( class = "form-control")}}
-					</div>
-					<span aria-hidden="true"></span>
-					<div class="form-group password-field">
-						{{form.role.label()}}
-						{{form.role( class = "form-control")}}
-					</div>
-				{% endif %}
+				{% block admin_control %}
+	
+				{% endblock %}
 
 			</div>
 		</div>

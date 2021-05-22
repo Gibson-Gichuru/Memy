@@ -1,0 +1,14 @@
+{% extends "edit_profile.html"%}
+{% block admin_control %}
+
+	<div class="form-group password-field">
+		{{form.username.label()}}
+		{{form.username( class = "form-control")}}
+	</div>
+	<span aria-hidden="true"></span>
+	<div class="form-group password-field">
+		{{form.role.label()}}
+		{{form.role( class = "form-control")}}
+	</div>
+
+{% endblock%}
