@@ -14,6 +14,19 @@ class Config:
 	FLASKY_POSTS_PER_PAGE = 5
 	FLASKY_FOLLOWERS_PER_PAGE = 10
 	FILE_UPLOAD_API_AUTH_KEY = os.environ.get('FILE_UPLOAD_API_AUTH_KEY')
+	FIREBASE_CONFIG = dict(
+
+		apiKey="AIzaSyDjODHfV_kxeoXgalnfaCyiyd38_EuBBds",
+	    authDomain= "house-of-memes.firebaseapp.com",
+	    projectId="house-of-memes",
+	    storageBucket="house-of-memes.appspot.com",
+	    databaseURL="https://house-of-memes-default-rtdb.firebaseio.com/",
+	    messagingSenderId="737530410440",
+	    appId= "1:737530410440:web:21441705198ae5fd46bcfd",
+	    measurementId="G-0SXPFWWD1G",
+	    serviceAccount =os.environ.get("FIREBASE_SERVICE_ACCOUNT")
+
+		)
 
 	@staticmethod
 	def init_app(app):

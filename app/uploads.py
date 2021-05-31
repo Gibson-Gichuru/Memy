@@ -13,3 +13,5 @@ def upload_profile_pic(profile_pic):
 	file_upload_thred = Thread(target = send_async_files, args = [profile_pic])
 
 	return file_upload_thred
+
+

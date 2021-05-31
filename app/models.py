@@ -213,6 +213,11 @@ class User(db.Model, DataManipulation, UserMixin):
         return User.query.join(Follow, Follow.followed_id == User.id).filter(Follow.follower_id == self.id)
 
 
+    @property
+    def firebase_custom_token(self):
+
+        return hashlib.md5(self.email.encode('utf-8')).hexdigest()
+    
     def follow(self, user):
 
         if not self.is_following(user):
