@@ -7,6 +7,8 @@ from .forms import  RegistrationForm, ForgotPasswordForm, ResetPasswordForm, Log
 
 from . import auth
 
+from ..utils import firebase_login
+
 @auth.route('/login', methods=['GET', 'POST'])
 def login():
 
@@ -19,6 +21,7 @@ def login():
         if user is not None and user.verify_password(form.password.data):
 
             login_user(user, form.remember_me.data)
+            firebase_login(user.firebase_custom_token)
 
             next = request.args.get('next')
 
