@@ -2,6 +2,8 @@
 
 from flask import render_template, jsonify, request
 
+from .app.main import main
+
 @main.app_error_handler(404)
 def page_not_found(e):
 
@@ -29,11 +31,3 @@ def internal_server_error(e):
 		return response
 
 	return render_template('errors/500.html'), 500
-
-
-def forbidden(message):
-
-	response = jsonify({"Error":'forbidden', "Message":message})
-	response.status_code = 403
-
-	return response
