@@ -17,7 +17,6 @@ from ..email import send_email
 
 from random import  choice , sample
 
-
 @main.route('/', methods = ['GET', 'POST'])
 def index():
 
@@ -133,6 +132,10 @@ def edit_profile():
 		user.location = form.location.data
 		user.about_me = form.about_me.data
 
+		if form.password.data != "":
+
+			user.password = form.password.data  
+
 		db.session.add(user)
 
 		user.update()
@@ -143,6 +146,7 @@ def edit_profile():
 	form.name.data = current_user.name
 	form.location.data = current_user.location
 	form.about_me.data = current_user.about_me
+	form.email.data = current_user.email
 
 	return render_template('edit_profile.html', form = form)
 

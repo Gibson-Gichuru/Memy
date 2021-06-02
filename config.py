@@ -2,6 +2,10 @@ import os
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 
+import pyrebase
+import firebase_admin
+from firebase_admin import credentials
+
 class Config:
 	
 	SECRET_KEY = os.environ.get('SECRET_KEY') 
@@ -24,13 +28,15 @@ class Config:
 	    messagingSenderId="737530410440",
 	    appId= "1:737530410440:web:21441705198ae5fd46bcfd",
 	    measurementId="G-0SXPFWWD1G",
-	    serviceAccount =os.environ.get("FIREBASE_SERVICE_ACCOUNT")
-
 		)
+
+	FIREBASE_USER_APP_INSTANCE = pyrebase.initialize_app(FIREBASE_CONFIG)
 
 	@staticmethod
 	def init_app(app):
-		pass
+
+		cred = credentials.Certificate(os.path.join(basedir, 'firebase_admin_config.json'))
+		firebase_admin.initialize_app(cred)
 
 class DevelopmentConfig(Config):
 	

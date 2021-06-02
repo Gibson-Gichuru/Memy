@@ -19,7 +19,7 @@ class EditProfileForm(Form):
 	location = StringField('Location', validators = [Length(0,64)])
 	about_me = TextAreaField('Bio')
 	profile_pic = FileField('Upload New Photo', validators=[FileAllowed(['jpg', 'png', 'jpeg'])])
-	email = StringField("email", validators=[Length(1, 64), Email()])
+	email = StringField("email", validators=[Length(0, 64), Email()])
 	password = PasswordField(
         "password",
         validators=[

@@ -2,7 +2,7 @@
 {% block title %}Account : {{current_user.username}}{% endblock %}
 
 {% block main_page_content %}
-	<form id="user-profile" method="POST" enctype="multipart/form-data" class="form-horizontal">
+	<form id="user-profile" method="POST" enctype="multipart/form-data" class="form-horizontal" action="{{ url_for('main.edit_profile')}}">
 		{{ form.csrf_token }}
 		<div id="user-dp" class="card">
 			<div class="card-header">
@@ -13,7 +13,7 @@
 
 			<div class="card-block">
 				<img src="{{ current_user.gravator() }}" class="img-circle">
-				{{ form.profile_pic.label(class="btn btn-outline-primary")}}
+				{{ form.profile_pic.label(class="btn btn-outline-primary", for="upload-pic")}}
 				{{ form.profile_pic(id="upload-pic", class="hidden")}}
 			</div>
 		</div>
