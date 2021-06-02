@@ -134,7 +134,12 @@ def edit_profile():
 
 		if form.password.data != "":
 
-			user.password = form.password.data  
+			user.password = form.password.data
+
+		if form.email.data != user.email:
+
+			user.email = form.email.data
+			user.confirmed = False
 
 		db.session.add(user)
 
