@@ -4,6 +4,8 @@ from .errors import forbidden_errror, unauthorised
 
 from . import api
 
+from flask import jsonify
+
 auth = HTTPBasicAuth()
 
 @auth.verify_password
@@ -48,6 +50,17 @@ def before_request():
 	if not g.current_user.is_anonymous and not g.current_user.confirmed:
 
 		return forbidden_errror("Unconfiremed Account")
+
+
+@api.route('/token')
+def get_token():
+
+
+	if g.current_user.is_anonymous or g.token_used:
+
+		return unauthorised('Invalid credentials')
+
+	return jsonify({"token":g.current_user.generate_auth_token(expiration = 3600),"expiration":3600})
 
 
 
