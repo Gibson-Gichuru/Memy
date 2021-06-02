@@ -45,20 +45,13 @@ def async_login_to_firebase(login_token, app):
 
 	with app.app_context():
 
-		firebase_app = firebase_app_initiate()
+		try:
+			firebase_app = firebase_app_initiate()
 
-		user_auth = firebase_app.auth()
+			user_auth = firebase_app.auth()
 
-		return user_auth.sign_in_with_custom_token(login_token.decode('utf-8'))
+			return user_auth.sign_in_with_custom_token(login_token.decode('utf-8'))
 
+		except:
 
-
-
-
-
-
-
-
-
-
-
+			pass

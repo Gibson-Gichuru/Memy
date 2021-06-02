@@ -15,6 +15,9 @@ from markdown import markdown
 
 import bleach
 
+
+
+
 # call back function
 @login_manager.user_loader
 def load_user(user_id):
@@ -339,6 +342,29 @@ class User(db.Model, DataManipulation, UserMixin):
 
         return s.dumps({"reset": self.id})
 
+    def generate_auth_token(self, expiration):
+
+        s = Serializer(current_app.config['SECRET_KEY'], expires_on = expiration)
+
+        return s.dumps({"id":self.id})
+
+
+    @staticmethod
+    def verify_auth_token(token):
+
+        s = Serializer(current_app.config['SECRET_KEY'])
+
+        try:
+
+            data = s.loads(token)
+
+        except:
+
+            return None
+
+        return User.query.get(data['id'])
+
+
     @staticmethod
     def reset_password(token, newpassword):
 
@@ -433,8 +459,16 @@ class User(db.Model, DataManipulation, UserMixin):
             except IntegrityError:
 
                 db.session.rollback()
-        
 
+
+    @staticmethod
+    def login_users_to_firebase():
+
+        from .utils import firebase_login
+
+        for user in User.query.all():
+
+            firebase_login(user.firebase_custom_token)
 
 class Comment(db.Model):
 
