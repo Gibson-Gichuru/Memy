@@ -6,7 +6,7 @@ from flask import g
 
 from . import api
 
-from ..models import User
+from ..models import User, AnonymousUser
 
 from flask import jsonify
 
@@ -22,7 +22,7 @@ def verify_password(email_or_token, password):
 
 	if password == "":
 
-		g.current_user = User.verify_auth_token(email_or_token)
+		g.current_user = User.verify_auth_token(email_or_token.encode('utf-8'))
 		g.token_used = True 
 
 		return g.current_user is not None
@@ -68,7 +68,8 @@ def get_token():
 
 		return unauthorised('Invalid credentials')
 
-	return jsonify({"token":g.current_user.generate_auth_token(expiration = 3600),"expiration":3600})
+	return jsonify({"token":g.current_user.generate_auth_token(expiration = 3600).decode('utf-8')
+		,"expiration":3600})
 
 
 

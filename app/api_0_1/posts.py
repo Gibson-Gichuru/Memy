@@ -1,6 +1,6 @@
 from flask import jsonify, request, current_app, url_for
 
-from ..models import Post, Permission
+from ..models import Post, Permission, User
 
 from .authentication import auth
 from .decorators import permission_required
@@ -40,6 +40,79 @@ def get_posts():
 			'next':next,
 			'count': pagination.total
 		})
+
+
+@api.route('/user/posts/<int:id>')
+@auth.login_required
+def get_user_posts(id):
+
+	page = request.args.get('page', 1, type=int)
+
+	user = User.query.get_or_404(id)
+
+	pagination = user.posts.paginate(page, 
+		per_page=current_app.config['FLASKY_POSTS_PER_PAGE'],
+		error_out = False)
+
+	posts = pagination.items 
+
+	prev = None 
+
+	if pagination.has_prev:
+
+		prev = url_for('api.get_user_posts', page = page-1, id = user.id, _external = True)
+
+	next = None 
+
+	if pagination.has_next:
+
+		next = url_for('api.get_user_posts', page = page+1, id = user.id, _external = True)
+
+	return jsonify({
+
+			'posts':[post.to_json() for post in posts],
+			'prev': prev,
+			'next':next,
+			'count':pagination.total
+		})
+
+@api.route('/user/followed/posts/<int:id>')
+@auth.login_required
+def get_user_followed_posts(id):
+
+	page = request.args.get('page', 1, type=int)
+
+	user = User.query.get_or_404(id)
+
+	pagination = user.followed_posts.paginate(page, 
+		per_page=current_app.config['FLASKY_POSTS_PER_PAGE'],
+		error_out = False)
+
+
+	posts = pagination.items
+
+	prev = None 
+
+	if pagination.has_prev:
+
+		prev = url_for('api.get_user_followed_posts', page = page -1, id = user.id, _external=True)
+
+	next = None
+
+	if pagination.has_next:
+
+		next = url_for('api.get_user_followed_posts', page = page+1, id = user.id, _external=True)
+
+
+	return jsonify({
+
+			'post':[post.to_json() for post in posts],
+			'prev':prev,
+			'next':next,
+			'count':pagination.total
+		})
+
+
 
 
 @api.route('/post/<int:id>')

@@ -166,7 +166,7 @@ class Post(db.Model, DataManipulation):
             "body": self.body,
             "body_html":self.body_html,
             "timestamp":self.timestamp,
-            "author":self.author_id,
+            "author":url_for('api.get_user', id = self.author_id, _external = True),
             "comments": url_for('api.get_post_comments', id = self.id, _external = True),
             "comment_count": self.comment.count()
         }
@@ -378,7 +378,7 @@ class User(db.Model, DataManipulation, UserMixin):
 
     def generate_auth_token(self, expiration):
 
-        s = Serializer(current_app.config['SECRET_KEY'], expires_on = expiration)
+        s = Serializer(current_app.config['SECRET_KEY'], expires_in = expiration)
 
         return s.dumps({"id":self.id})
 
@@ -504,11 +504,13 @@ class User(db.Model, DataManipulation, UserMixin):
             "last_seen":self.last_seen,
             "posts": url_for('api.get_user_posts', id = self.id, _external = True),
             "followed_posts": url_for('api.get_user_followed_posts', id = self.id, _external = True),
+            "followers": url_for('api.get_user_followers', id = self.id, _external = True),
+            "following": url_for('api.get_user_following', id = self.id, _external = True),
             "post_count": self.posts.count(),
-            "firebase_auth_token": generate_firebase_login_token(self.firebase_custom_token)
+
         }
 
-        return to_json
+        return json_user
 
 class Comment(db.Model):
 
@@ -536,7 +538,7 @@ class Comment(db.Model):
 
             'body': self.body,
             'timestamp': self.timestamp,
-            'author': url_for('api.get_user', id = author_id, _external = True)
+            'author': url_for('api.get_user', id = self.author_id, _external = True)
         }
 
     @staticmethod
