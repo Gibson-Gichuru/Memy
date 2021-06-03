@@ -534,8 +534,8 @@ class Comment(db.Model):
 
         comment_json = {
 
-            'body': self.body
-            'timestamp': self.timestamp
+            'body': self.body,
+            'timestamp': self.timestamp,
             'author': url_for('api.get_user', id = author_id, _external = True)
         }
 

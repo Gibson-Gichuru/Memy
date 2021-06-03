@@ -4,7 +4,7 @@ from ..models import Post, Permission
 
 from .authentication import auth
 from .decorators import permission_required
-from .import api
+from . import api
 from .. import db
 
 
@@ -21,28 +21,28 @@ def get_posts():
 
 	posts = pagination.items
 
-	pre = None
+	prev = None
 
-	if pagination.has_pre :
+	if pagination.has_prev :
 
-		pre = url_for('api.get_posts', page = page-1, _external = True)
+		prev = url_for('api.get_posts', page=page-1, _external=True)
 
 	next = None
 
 	if pagination.has_next:
 
-		next = url_for('api.get_post', page = page+1, _external = True)
+		next = url_for('api.get_posts', page=page+1, _external=True)
 
 	return jsonify({
 
-			'posts': [posts.to_json() for post in posts],
-			'pre':pre,
+			'posts': [post.to_json() for post in posts],
+			'prev':prev,
 			'next':next,
-			'count': pagination.count()
+			'count': pagination.total
 		})
 
 
-@api.route('/posts/<int:id>')
+@api.route('/post/<int:id>')
 @auth.login_required
 def get_post(id):
 
