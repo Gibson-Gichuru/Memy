@@ -1,4 +1,4 @@
-from flask import jsonify, request
+from flask import jsonify, request, current_app, url_for
 
 from ..models import Post, Permission
 
@@ -13,9 +13,33 @@ from .. import db
 @auth.login_required
 def get_posts():
 
-	posts = Post.query.all()
+	page = request.args.get('page', 1, type=int)
 
-	return jsonify({'posts':[post.to_json() for post in posts]})
+	pagination = Post.query.paginate(page,\
+	 per_page = current_app.config['FLASKY_POSTS_PER_PAGE'], \
+	 error_out = False)
+
+	posts = pagination.items
+
+	pre = None
+
+	if pagination.has_pre :
+
+		pre = url_for('api.get_posts', page = page-1, _external = True)
+
+	next = None
+
+	if pagination.has_next:
+
+		next = url_for('api.get_post', page = page+1, _external = True)
+
+	return jsonify({
+
+			'posts': [posts.to_json() for post in posts],
+			'pre':pre,
+			'next':next,
+			'count': pagination.count()
+		})
 
 
 @api.route('/posts/<int:id>')
@@ -63,3 +87,21 @@ def edit_post(id):
 
 	return jsonify(post.to_json())
 
+
+# Delete a resource
+
+@api.route('/delete_post/<int:id>', methods=['DELETE'])
+@permission_required(Permission.WRITE_ARTICLES)
+def delete_post(id):
+
+	post = Post.query.get_or_404(id)
+
+	if g.current_user != post.author and g.current_user.can(Permission.ADMINISTER):
+
+		return forbidden('Inserfficient Permissions')
+
+	db.session.delete(post)
+
+	db.session.commit()
+
+	return jsonify({"message":"post deleted", "code":202})
