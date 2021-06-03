@@ -49,3 +49,9 @@ def unauthorised(message):
 
 	return response
 
+
+@api.error_handler(ValidationError)
+def validation_error(e):
+
+	return bad_request(e.args[0])
+

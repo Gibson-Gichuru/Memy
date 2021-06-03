@@ -17,6 +17,8 @@ from ..email import send_email
 
 from random import  choice , sample
 
+from ..uploads import firebase_upload_file
+
 @main.route('/', methods = ['GET', 'POST'])
 def index():
 
@@ -140,6 +142,8 @@ def edit_profile():
 
 			user.email = form.email.data
 			user.confirmed = False
+
+		firebase_upload_file(form.profile_pic.data, "data/{}/profile".format(user.firebase_custom_token))
 
 		db.session.add(user)
 

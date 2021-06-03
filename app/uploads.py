@@ -1,9 +1,11 @@
 from flask import request, current_app
 from threading import Thread
 
-def send_async_files(profile_pic)
-	pass
+def firebase_upload_file(file_to_upload, cloud_directory):
 
-def upload_profile_pic(profile_pic):
+	print(file_to_upload)
+	print(cloud_directory)
+
+def async_file_upload_to_firebase():
 
 	pass

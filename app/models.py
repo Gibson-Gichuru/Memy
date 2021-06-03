@@ -4,7 +4,7 @@ from . import login_manager
 from werkzeug.security import generate_password_hash, check_password_hash
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from flask_login import UserMixin, AnonymousUserMixin
-from flask import current_app, request
+from flask import current_app, request, url_for
 
 from datetime import datetime
 
@@ -14,6 +14,12 @@ import hashlib
 from markdown import markdown
 
 import bleach
+
+
+from .utils import generate_firebase_login_token
+
+
+from app.exceptions import ValidationError
 
 
 
@@ -150,6 +156,34 @@ class Post(db.Model, DataManipulation):
 
             db.session.add(post)
             db.session.commit()
+
+
+    def to_json(self):
+
+        json_post = {
+
+            "url": url_for("api.get_post", id = self.id, _external = True),
+            "body": self.body,
+            "body_html":self.body_html,
+            "timestamp":self.timestamp,
+            "author":self.author_id,
+            "comments": url_for('api.get_post_comments', id = self.id, _external = True),
+            "comment_count": self.comment.count()
+        }
+
+        return json_post
+
+
+    @staticmethod
+    def from_json(json_post):
+
+        body = json_post.get('body')
+
+        if body is None or body == '':
+
+            raise ValidationError('post does not have a body')
+
+        return Post(body)
 
 
 class Follow(db.Model):
@@ -461,14 +495,20 @@ class User(db.Model, DataManipulation, UserMixin):
                 db.session.rollback()
 
 
-    @staticmethod
-    def login_users_to_firebase():
+    def to_json(self):
 
-        from .utils import firebase_login
+        json_user = {
 
-        for user in User.query.all():
+            "url": url_for('api.get_post', id = self.id, _external = True),
+            "username":self.username,
+            "last_seen":self.last_seen,
+            "posts": url_for('api.get_user_posts', id = self.id, _external = True),
+            "followed_posts": url_for('api.get_user_followed_posts', id = self.id, _external = True),
+            "post_count": self.posts.count(),
+            "firebase_auth_token": generate_firebase_login_token(self.firebase_custom_token)
+        }
 
-            firebase_login(user.firebase_custom_token)
+        return to_json
 
 class Comment(db.Model):
 

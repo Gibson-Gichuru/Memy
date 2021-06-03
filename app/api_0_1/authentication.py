@@ -55,6 +55,10 @@ def before_request():
 @api.route('/token')
 def get_token():
 
+	"""Ensure that the client cannot use an old token to request for a new
+	authentication token,
+	Only email password authentication combo can be used to request for an
+	autheentication password"""
 
 	if g.current_user.is_anonymous or g.token_used:
 

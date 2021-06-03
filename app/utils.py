@@ -38,6 +38,3 @@ def async_login_to_firebase(login_token, app):
 			pass
 
 
-def upload_file(filename):
-
-	print(filename)
