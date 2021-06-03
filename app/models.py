@@ -530,6 +530,26 @@ class Comment(db.Model):
         target.body_html = bleach.linkify(bleach.clean(markdown(value, 
             output_format='html'), tags = allowed_tags, strip = True))
 
+    def to_json(self):
+
+        comment_json = {
+
+            'body': self.body
+            'timestamp': self.timestamp
+            'author': url_for('api.get_user', id = author_id, _external = True)
+        }
+
+    @staticmethod
+    def from_json(comment_json):
+
+        body = comment_json.get('body')
+
+        if body is None or body == '':
+
+            raise ValidationError("Comment body cannot be empty")
+
+        return Comment(body)
+
 
 class AnonymousUser(AnonymousUserMixin):
 
