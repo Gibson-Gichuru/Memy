@@ -4,6 +4,10 @@ from flask import render_template, jsonify, request
 
 from ..main import main
 
+from .import api
+
+from ..exceptions import ValidationError
+
 @main.app_errorhandler(404)
 def page_not_found(e):
 
@@ -50,7 +54,7 @@ def unauthorised(message):
 	return response
 
 
-@api.error_handler(ValidationError)
+@api.errorhandler(ValidationError)
 def validation_error(e):
 
 	return bad_request(e.args[0])
