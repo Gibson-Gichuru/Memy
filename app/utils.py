@@ -63,17 +63,17 @@ def get_user_uid(idToken, app):
 
 	with app.app_context():
 
-		#try:
+		try:
 
-		user_auth = current_app.config["FIREBASE_USER_APP_INSTANCE"].auth()
+			user_auth = current_app.config["FIREBASE_USER_APP_INSTANCE"].auth()
 
-		user_uid = user_auth.get_account_info(idToken)['users'][0]['localId']
+			user_uid = user_auth.get_account_info(idToken)['users'][0]['localId']
 
-		return user_uid
+			return user_uid
 
-		#except:
+		except:
 
-			#return None
+			return None
 
 
 

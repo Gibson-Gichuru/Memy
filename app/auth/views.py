@@ -25,6 +25,7 @@ def login():
             user_login_to_firebase = firebase_login(user.firebase_custom_token)
 
             g.firebase_user_id = user_uid(user_login_to_firebase['idToken'])
+            
             next = request.args.get('next')
 
             if next is None or not next.startswith('/'):
