@@ -1,4 +1,4 @@
-from flask import render_template, redirect, request, url_for, flash
+from flask import render_template, redirect, request, url_for, flash, g
 from flask_login import login_user, login_required, logout_user, current_user
 from . import auth
 from ..models import User
@@ -7,7 +7,7 @@ from .forms import  RegistrationForm, ForgotPasswordForm, ResetPasswordForm, Log
 
 from . import auth
 
-from ..utils import firebase_login
+from ..utils import firebase_login, user_uid
 
 @auth.route('/login', methods=['GET', 'POST'])
 def login():
@@ -21,8 +21,10 @@ def login():
         if user is not None and user.verify_password(form.password.data):
 
             login_user(user, form.remember_me.data)
-            firebase_login(user.firebase_custom_token)
 
+            user_login_to_firebase = firebase_login(user.firebase_custom_token)
+
+            g.firebase_user_id = user_uid(user_login_to_firebase['idToken'])
             next = request.args.get('next')
 
             if next is None or not next.startswith('/'):
@@ -34,9 +36,6 @@ def login():
             flash("Invalid username or password")
 
     return redirect(url_for('main.index'))
-
-
-
 
 
 @auth.route("/register", methods=["GET", "POST"])

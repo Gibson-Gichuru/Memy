@@ -114,6 +114,7 @@ class Post(db.Model, DataManipulation):
     timestamp = db.Column(db.DateTime, index = True, default = datetime.utcnow)
     author_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     body_html = db.Column(db.Text)
+    cloud_file_name = db.Column(db.String(56), default = None)
 
 
     # relationships

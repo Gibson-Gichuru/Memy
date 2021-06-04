@@ -32,6 +32,7 @@ class Config:
 
 	FIREBASE_USER_APP_INSTANCE = pyrebase.initialize_app(FIREBASE_CONFIG)
 
+
 	@staticmethod
 	def init_app(app):
 
