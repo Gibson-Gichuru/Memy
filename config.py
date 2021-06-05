@@ -17,7 +17,6 @@ class Config:
 	FLASK_ADMIN = os.environ.get('FLASK_ADMIN')
 	FLASKY_POSTS_PER_PAGE = 5
 	FLASKY_FOLLOWERS_PER_PAGE = 10
-	FILE_UPLOAD_API_AUTH_KEY = os.environ.get('FILE_UPLOAD_API_AUTH_KEY')
 	FIREBASE_CONFIG = dict(
 
 		apiKey="AIzaSyDjODHfV_kxeoXgalnfaCyiyd38_EuBBds",
@@ -31,7 +30,8 @@ class Config:
 		)
 
 	FIREBASE_USER_APP_INSTANCE = pyrebase.initialize_app(FIREBASE_CONFIG)
-
+	MAX_CONTENT_LENGTH = 1024 * 1024 * 5
+	UPLOAD_PATH = os.path.join(basedir, "uploads")
 
 	@staticmethod
 	def init_app(app):

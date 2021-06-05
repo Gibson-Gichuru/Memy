@@ -217,6 +217,7 @@ class User(db.Model, DataManipulation, UserMixin):
     last_seen = db.Column(db.DateTime(), default = datetime.utcnow)
     profile_pic_id = db.Column(db.String(120), default = None)
     firebase_user_uid = db.Column(db.String(120), default = None)
+    user_uid_token = db.Column(db.String(200), default = None)
 
     # relationships
     posts = db.relationship('Post', backref ='author', lazy = 'dynamic')
@@ -350,6 +351,17 @@ class User(db.Model, DataManipulation, UserMixin):
     def firebase_uid(self, uid):
 
         self.firebase_user_uid = uid
+
+
+    @property
+    def idToken(self):
+
+        return self.user_uid_token
+
+    @idToken.setter
+    def idToken(self, uid):
+
+        self.user_uid_token = uid
 
     def verify_password(self, password):
 
@@ -540,6 +552,21 @@ class User(db.Model, DataManipulation, UserMixin):
             db.session.add(user)
 
             user.update()
+
+
+    @staticmethod
+    def set_user_uid_token():
+
+        for user in User.query.all():
+
+            user_login_to_firebase = firebase_login(user.firebase_custom_token)
+
+            user.idToken = user_login_to_firebase['idToken']
+
+            db.session.add(user)
+
+            user.update()
+
 
 
 

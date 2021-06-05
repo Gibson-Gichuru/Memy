@@ -85,6 +85,8 @@ def confirm(token):
         user_login_to_firebase = firebase_login(current_user.firebase_custom_token)
 
         current_user.firebase_uid = user_uid(user_login_to_firebase['idToken'])
+        
+        current_user.idToken = user_login_to_firebase['idToken']
 
         db.session.add(current_user)
 
