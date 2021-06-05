@@ -9,6 +9,8 @@ from . import auth
 
 from ..utils import firebase_login, user_uid
 
+import pdb
+
 @auth.route('/login', methods=['GET', 'POST'])
 def login():
 
@@ -23,8 +25,6 @@ def login():
             login_user(user, form.remember_me.data)
 
             user_login_to_firebase = firebase_login(user.firebase_custom_token)
-
-            g.firebase_user_id = user_uid(user_login_to_firebase['idToken'])
             
             next = request.args.get('next')
 
@@ -81,6 +81,14 @@ def confirm(token):
         return redirect(url_for("main.home"))
 
     if current_user.confirm(token):
+
+        user_login_to_firebase = firebase_login(current_user.firebase_custom_token)
+
+        current_user.firebase_uid = user_uid(user_login_to_firebase['idToken'])
+
+        db.session.add(current_user)
+
+        current_user.update()
 
         flash("You have confired your account. Thanks!")
 

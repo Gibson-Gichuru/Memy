@@ -1,5 +1,5 @@
 from datetime import datetime
-from flask import render_template, session, redirect, url_for, abort, flash, current_app, request
+from flask import render_template, session, redirect, url_for, abort, flash, current_app, request, g
 from flask_login import login_user
 from . import main
 from .forms import NameForm, EditProfileForm, EditProfileAdminForm, ContactForm, PostForm, SearchForm, CommentForm
@@ -143,7 +143,7 @@ def edit_profile():
 			user.email = form.email.data
 			user.confirmed = False
 
-		firebase_upload_file(form.profile_pic.data, "data/{}/profile".format(user.firebase_custom_token))
+		firebase_upload_file(form.profile_pic.data, "data/{}/profile".format(user.firebase_uid))
 
 		db.session.add(user)
 

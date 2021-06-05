@@ -21,6 +21,8 @@ from .utils import generate_firebase_login_token
 
 from app.exceptions import ValidationError
 
+from .utils import firebase_login, user_uid
+
 
 
 
@@ -214,6 +216,7 @@ class User(db.Model, DataManipulation, UserMixin):
     member_since = db.Column(db.DateTime(), default = datetime.utcnow)
     last_seen = db.Column(db.DateTime(), default = datetime.utcnow)
     profile_pic_id = db.Column(db.String(120), default = None)
+    firebase_user_uid = db.Column(db.String(120), default = None)
 
     # relationships
     posts = db.relationship('Post', backref ='author', lazy = 'dynamic')
@@ -336,6 +339,17 @@ class User(db.Model, DataManipulation, UserMixin):
     def password(self, password):
 
         self.password_hash = generate_password_hash(password)
+
+
+    @property
+    def firebase_uid(self):
+
+        return self.firebase_user_uid
+
+    @firebase_uid.setter
+    def firebase_uid(self, uid):
+
+        self.firebase_user_uid = uid
 
     def verify_password(self, password):
 
@@ -512,6 +526,22 @@ class User(db.Model, DataManipulation, UserMixin):
         }
 
         return json_user
+
+
+    @staticmethod
+    def login_users_to_firebase():
+
+        for user in User.query.all():
+
+            user_login = firebase_login(user.firebase_custom_token)
+
+            user.firebase_uid = user_uid(user_login['idToken'])
+
+            db.session.add(user)
+
+            user.update()
+
+
 
 class Comment(db.Model):
 
