@@ -24,7 +24,8 @@ def firebase_upload_file(file_to_upload, cloud_directory, idToken):
 
 	file_to_upload.save(os.path.join(current_app.config["UPLOAD_PATH"], file_to_upload.filename)) 
 
-	full_path="{}/{}".format(cloud_directory, file_to_upload.filename)
+	full_path = cloud_directory + "{}".format(file_to_upload.filename)
+
 
 	upload_file = os.path.join(current_app.config["UPLOAD_PATH"], file_to_upload.filename)
 

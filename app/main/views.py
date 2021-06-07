@@ -18,6 +18,7 @@ from ..email import send_email
 from random import  choice , sample
 
 from ..uploads import firebase_upload_file, rename_file
+from ..utils import firebase_login
 
 
 @main.route('/', methods = ['GET', 'POST'])
@@ -144,10 +145,13 @@ def edit_profile():
 			user.email = form.email.data
 			user.confirmed = False
 
+
+		login_to_to_firebase = firebase_login(user.firebase_custom_token)
+
 		cloud_file_name = rename_file(form.profile_pic.data)
 
 		firebase_upload_file(cloud_file_name[0],
-		 "data/{}/profile".format(user.firebase_uid), user.idToken)
+		 "/data/{}/profile/".format(user.firebase_uid), login_to_to_firebase['idToken'])
 
 		user.profile_pic_id = cloud_file_name[1]
 
