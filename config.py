@@ -61,6 +61,8 @@ class TestingConfig(Config):
 	SQLALCHEMY_DATABASE_URI = os.environ.get('TEST_DATABASE_URL') or \
 	'sqlite:///' + os.path.join(basedir, 'data-test.sqlite')
 
+	WTF_CSRF_ENABLED = False
+
 class ProductionConfig(Config):
 
 	SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or \
