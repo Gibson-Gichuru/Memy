@@ -36,8 +36,10 @@ class Config:
 	@staticmethod
 	def init_app(app):
 
-		cred = credentials.Certificate(os.path.join(basedir, 'firebase_admin_config.json'))
-		firebase_admin.initialize_app(cred)
+		pass
+
+		#cred = credentials.Certificate(os.path.join(basedir, 'firebase_admin_config.json'))
+		#firebase_admin.initialize_app(cred)
 
 class DevelopmentConfig(Config):
 	
