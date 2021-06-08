@@ -12,7 +12,8 @@
 			</div>
 
 			<div class="card-block">
-				<img src="{{ current_user.gravator() }}" class="img-circle">
+				<img src="{% if current_user.profile_pic_id %}{{current_user.get_profile_pic(current_user.profile_pic_id, current_user.firebase_uid, current_user.idToken)}}{% else %}{{ current_user.gravator()}}{% endif %}" class="img-circle">
+				
 				{{ form.profile_pic.label(class="btn btn-outline-primary", for="upload-pic")}}
 				{{ form.profile_pic(id="upload-pic", class="hidden")}}
 			</div>

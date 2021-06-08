@@ -146,14 +146,16 @@ def edit_profile():
 			user.confirmed = False
 
 
-		login_to_to_firebase = firebase_login(user.firebase_custom_token)
+		if form.profile_pic.data is not None:
 
-		cloud_file_name = rename_file(form.profile_pic.data)
+			login_to_to_firebase = firebase_login(user.firebase_custom_token)
 
-		firebase_upload_file(cloud_file_name[0],
-		 "/data/{}/profile/".format(user.firebase_uid), login_to_to_firebase['idToken'])
+			cloud_file_name = rename_file(form.profile_pic.data)
 
-		user.profile_pic_id = cloud_file_name[1]
+			firebase_upload_file(cloud_file_name,
+			 "/data/{}/profile/".format(user.firebase_uid), login_to_to_firebase['idToken'])
+
+			user.profile_pic_id = cloud_file_name.filename
 
 		db.session.add(user)
 

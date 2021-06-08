@@ -18,7 +18,7 @@
                     {% endif %}
 
                     <a href="{{ url_for('main.user', username=post.author.username) }}" id="display-pic">
-                         <img src="{{ post.author.gravator() }}" class="post-avator img-circle">
+                        <img src="{% if post.author.profile_pic_id %}{{post.author.get_profile_pic(post.author.profile_pic_id, post.author.firebase_uid, post.author.idToken)}}{% else %}{{ post.author.gravator()}}{% endif %}" class="post-avator img-circle">
                     </a>
 
                     <h5 class="post-author">{{post.author.username}}<small>{% if post.author.name%}&#128081;{{post.author.name}}{% endif%} -{{moment(post.timestamp).fromNow()}}</small></h5>

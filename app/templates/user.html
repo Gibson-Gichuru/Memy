@@ -5,7 +5,8 @@
 <div id="profile-resume" class="card">
 	<img src="{{ url_for('static', filename='icons/card.jpg')}}" class="card-img-top img-responsive">
 	<div class="card-block">
-		<img src="{{ user.gravator() }} " class="card-img">
+		<img src="{% if current_user.profile_pic_id %}{{current_user.get_profile_pic(current_user.profile_pic_id, current_user.firebase_uid, current_user.idToken)}}{% else %}{{ current_user.gravator()}}{% endif %}" class="card-img">
+		
 		<h4 class="card-title">{{ user.username}} &#128081;<small>{{user.name}}</small></h4>
 		<h4 class="card-title">
 			<span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span>
@@ -134,7 +135,7 @@
 				{% for followed in user.user_following.all()[:4] %}
 					{% if followed != current_user %}
 						<li>
-							<img src="{{ followed.gravator() }}">
+							<img src="{% if followed.profile_pic_id %}{{followed.get_profile_pic(followed.profile_pic_id, followed.firebase_uid, followed.idToken)}}{% else %}{{ followed.gravator()}}{% endif %}" class="img-responsive">
 							<div class="info">
 								<strong>{{ followed.username }}</strong>
 								{% if user == current_user and current_user.is_following(followed)%}

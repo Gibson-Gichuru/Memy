@@ -319,9 +319,14 @@ class User(db.Model, DataManipulation, UserMixin):
         self.profile_pic_id = profile_pic_id
 
 
-    def get_profile_pic():
+    @staticmethod
+    def get_profile_pic(file_id, user_id,user_token):
 
-        return "hollow"
+        storage = current_app.config['FIREBASE_USER_APP_INSTANCE'].storage()
+
+        profile_path = "/data/{}/profile/{}".format(user_id, file_id)
+
+        return storage.child(profile_path).get_url(user_token)
 
     def can(self, permissions):
 
@@ -488,6 +493,8 @@ class User(db.Model, DataManipulation, UserMixin):
 
         return '{url}/{hash}?s={size}&d={default}&r={rating}'.format(
             url = url, hash = hash ,size = size, default = default, rating = rating)
+
+
 
 
     @staticmethod

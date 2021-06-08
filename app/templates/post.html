@@ -6,7 +6,9 @@
 <div id="profile-resume" class="card">
 	<img src="{{ url_for('static', filename='icons/card.jpg')}}" class="card-img-top img-responsive">
 	<div class="card-block">
-		<img src="{{ posts[0].author.gravator() }} " class="card-img">
+
+		<img src="{% if posts[0].author.profile_pic_id %}{{posts[0].author.get_profile_pic(posts[0].author.profile_pic_id, posts[0].author.firebase_uid, posts[0].author.idToken)}}{% else %}{{ posts[0].author.gravator()}}{% endif %}" class="card-img">
+
 		<h4 class="card-title">{{ posts[0].author.username}} &#128081;<small>{{posts[0].author.name}}</small></h4>
 		<h4 class="card-title">
 			<span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span>
@@ -78,7 +80,9 @@
 				{% if follower != posts[0].author %}
 					<li>
 						<a href="{{ url_for('main.user', username = follower.username)}}" class="thumbnail">
-							<img src="{{ follower.gravator() }}" class="img-responsive">
+
+							<img src="{% if follower.profile_pic_id %}{{follower.get_profile_pic(follower.profile_pic_id, follower.firebase_uid, follower.idToken)}}{% else %}{{ follower.gravator()}}{% endif %}" class="img-responsive">
+
 						</a>
 					</li>
 				{% endif %}
@@ -112,7 +116,8 @@
                     {% endif %}
 
                     <a href="{{ url_for('main.user', username=post.author.username) }}" id="display-pic">
-                         <img src="{{ post.author.gravator() }}" class="post-avator img-circle">
+
+                    	  <img src="{% if post.author.profile_pic_id %}{{post.author.get_profile_pic(post.author.profile_pic_id, post.author.firebase_uid, post.author.idToken)}}{% else %}{{ post.author.gravator()}}{% endif %}" class="post-avator img-circle">
                     </a>
 
                     <h5 class="post-author">{{post.author.username}}<small>{% if post.author.name%}&#128081;{{post.author.name}}{% endif%} -{{moment(post.timestamp).fromNow()}}</small></h5>
@@ -159,7 +164,8 @@
 	        								<li>       							
 	        									<div class="media">
 	        										<a href="{url_for('main.user', username = comment.author.username)}">
-		        										<img class="mr-3 img-circle" src="{{comment.author.gravator()}}">
+	        											  <img src="{% if comment.author.profile_pic_id %}{{comment.author.get_profile_pic(comment.author.profile_pic_id, comment.author.firebase_uid, comment.author.idToken)}}{% else %}{{ comment.author.gravator()}}{% endif %}" class="mr-3 img-circle" >
+
 		        									</a>
 													  
 												  <div class="media-body">

@@ -15,7 +15,7 @@ def rename_file(user_file):
 
 	user_file.filename = '{}{}'.format(safe_name,extention)
 
-	return [user_file,safe_name]
+	return user_file
 
 def firebase_upload_file(file_to_upload, cloud_directory, idToken):
 
