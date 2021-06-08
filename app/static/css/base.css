@@ -582,18 +582,35 @@ div#who-follow li .info .glyphicon {
 	padding: 1.5em;
 }
 
+#user-dp .cover-image{
+
+	width: 100%;
+}
+
+
 #user-dp img {
 
 	width: 20%; 
 	display: inline-block;
 	padding-right: 1.2rem;
+
 }
+
+
 
 
 .btn-outline-primary {
     border-color: #26B4FF;
     background: transparent;
     color: #26B4FF;
+    display: inline-block;
+}
+
+.btn-outline-success {
+
+	border-color: #52d3ae;
+    background: transparent;
+    color: #52d3ae;
     display: inline-block;
 }
 

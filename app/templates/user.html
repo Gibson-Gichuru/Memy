@@ -3,9 +3,9 @@
 
 {% block card_content %}
 <div id="profile-resume" class="card">
-	<img src="{{ url_for('static', filename='icons/card.jpg')}}" class="card-img-top img-responsive">
+	<img src="{% if user.cover_photo_id %}{{user.get_profile_pic(current_user.cover_photo_id, user.firebase_uid, user.idToken)}}{% else %}{{ url_for('static', filename='icons/card.jpg')}}{% endif %}" class="card-img-top img-responsive">
 	<div class="card-block">
-		<img src="{% if current_user.profile_pic_id %}{{current_user.get_profile_pic(current_user.profile_pic_id, current_user.firebase_uid, current_user.idToken)}}{% else %}{{ current_user.gravator()}}{% endif %}" class="card-img">
+		<img src="{% if user.profile_pic_id %}{{user.get_profile_pic(user.profile_pic_id, user.firebase_uid,user.idToken)}}{% else %}{{ user.gravator()}}{% endif %}" class="card-img">
 		
 		<h4 class="card-title">{{ user.username}} &#128081;<small>{{user.name}}</small></h4>
 		<h4 class="card-title">

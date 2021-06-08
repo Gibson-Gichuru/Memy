@@ -157,6 +157,20 @@ def edit_profile():
 
 			user.profile_pic_id = cloud_file_name.filename
 
+		if form.cover_pic.data is not None:
+
+			login_to_to_firebase = firebase_login(user.firebase_custom_token)
+
+			cloud_file_name = rename_file(form.cover_pic.data)
+
+			firebase_upload_file(cloud_file_name,
+			 "/data/{}/profile/".format(user.firebase_uid), login_to_to_firebase['idToken'])
+
+			user.cover_photo_id = cloud_file_name.filename
+
+
+
+
 		db.session.add(user)
 
 		user.update()

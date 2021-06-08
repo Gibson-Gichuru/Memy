@@ -18,7 +18,8 @@ class EditProfileForm(Form):
 	name = StringField('Real name', validators = [Length(0,64)])
 	location = StringField('Location', validators = [Length(0,64)])
 	about_me = TextAreaField('Bio')
-	profile_pic = FileField('Upload New Photo', validators=[FileAllowed(['jpg', 'png', 'jpeg'])])
+	profile_pic = FileField('Upload New Display Photo', validators=[FileAllowed(['jpg', 'png', 'jpeg'])])
+	cover_pic = FileField('Upload New Cover Photo', validators=[FileAllowed(['jpg', 'png', 'jpeg'])])
 	email = StringField("email", validators=[Length(0, 64), Email()])
 	password = PasswordField(
         "password",
@@ -42,7 +43,9 @@ class EditProfileAdminForm(Form):
 
 	confirmed = BooleanField('Confirmed')
 
-	profile_pic = FileField('Upload New Photo', validators=[FileAllowed(['jpg', 'png', 'jpeg'])])
+	profile_pic = FileField('Upload New Display Photo', validators=[FileAllowed(['jpg', 'png', 'jpeg'])])
+
+	cover_pic = FileField('Upload New Cover Photo', validators=[FileAllowed(['jpg', 'png', 'jpeg'])])
 
 	role = SelectField('Role', coerce = int)
 

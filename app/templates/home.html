@@ -3,7 +3,7 @@
 
 {% block card_content %}
 <div id="profile-resume" class="card">
-	<img src="{{ url_for('static', filename='icons/card.jpg')}}" class="card-img-top img-responsive">
+	<img src="{% if current_user.cover_photo_id %}{{current_user.get_profile_pic(current_user.cover_photo_id, current_user.firebase_uid, current_user.idToken)}}{% else %}{{ url_for('static', filename='icons/card.jpg')}}{% endif %}" class="card-img-top img-responsive">
 
 	<div class="card-block">
 		<img src="{% if current_user.profile_pic_id %}{{current_user.get_profile_pic(current_user.profile_pic_id, current_user.firebase_uid, current_user.idToken)}}{% else %}{{ current_user.gravator()}}{% endif %}" class="card-img">

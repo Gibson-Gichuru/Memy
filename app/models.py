@@ -216,6 +216,7 @@ class User(db.Model, DataManipulation, UserMixin):
     member_since = db.Column(db.DateTime(), default = datetime.utcnow)
     last_seen = db.Column(db.DateTime(), default = datetime.utcnow)
     profile_pic_id = db.Column(db.String(120), default = None)
+    cover_photo_id = db.Column(db.String(120), default = None)
     firebase_user_uid = db.Column(db.String(120), default = None)
     user_uid_token = db.Column(db.String(200), default = None)
 
