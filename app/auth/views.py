@@ -67,8 +67,6 @@ def register():
 
         return redirect(url_for("auth.login"))
 
-    flash("You can now login")
-
     return redirect(url_for("main.index"))
 
 

@@ -36,8 +36,6 @@ class Config:
 	@staticmethod
 	def init_app(app):
 
-		pass
-
 		cred = credentials.Certificate(os.path.join(basedir, 'firebase_admin_config.json'))
 		firebase_admin.initialize_app(cred)
 
@@ -62,6 +60,11 @@ class TestingConfig(Config):
 	'sqlite:///' + os.path.join(basedir, 'data-test.sqlite')
 
 	WTF_CSRF_ENABLED = False
+
+	@staticmethod 
+	def init_app(app):
+
+		pass
 
 class ProductionConfig(Config):
 

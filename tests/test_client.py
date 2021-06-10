@@ -49,13 +49,14 @@ class FlaskClientTestCase(unittest.TestCase):
 		response = self.client.post(url_for('auth.login'),
 			data = {
 
-				'email':'gibson@example.com'
+				'email':'gibson@example.com',
 				'password':'cat'
 
-			}, follows_redirects = True)
+			}, follow_redirects = True)
 
+		data = response.get_data(as_text=True)
 
-		self.assertTrue('You have not confirmed your account yet.', in data)
+		self.assertTrue('You have not confirmed your account yet.' in data)
 
 		#send a confirmation token
 

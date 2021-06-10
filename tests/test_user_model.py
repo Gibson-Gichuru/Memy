@@ -37,7 +37,7 @@ class UserModelTestCase(unittest.TestCase):
 
 		Role.insert_roles()
 
-		u = User(email = 'gibson@gmail.com', password = 'cat')
+		u = User(email = 'gibson@example.com', password = 'cat')
 
 		self.assertTrue(u.can(Permission.WRITE_ARTICLES))
 		self.assertFalse(u.can(Permission.MODERATE_COMMENTS))
