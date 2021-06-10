@@ -15,7 +15,7 @@
 		<div class="container">
 			<div class="navbar-header">
 				<a class="navbar-brand" href="{% if current_user.is_authenticated%}{{ url_for('main.home')}}{% else %}{{ url_for('main.index')}}{% endif %}">
-					<img src="{{ url_for('static', filename='icons/icon1.png')}}" class="img-responsive">
+					Me.my
 				</a>
 				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
 				data-target="#nav-menu" aria-expanded="false">
@@ -129,7 +129,6 @@
 
 {% block content %}
 {% block page_content %}
-
 {% endblock %}
 
 {% block modals %}

@@ -7,10 +7,12 @@
 	<div class="card-block">
 		<img src="{% if user.profile_pic_id %}{{user.get_profile_pic(user.profile_pic_id, user.firebase_uid,user.idToken)}}{% else %}{{ user.gravator()}}{% endif %}" class="card-img">
 		
-		<h4 class="card-title">{{ user.username}} &#128081;<small>{{user.name}}</small></h4>
-		<h4 class="card-title">
+		<h4 class="card-title">{{ user.username}} <small>&#128081; {{user.name}}</small>
 			<span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span>
 			<a href="http://maps.google.com/?q={{ current_user.location }}"><small>{{ user.location }}</small></a>
+		</h4>
+		<h4 class="card-title">
+			
 		</h4>
 
 		<p class="card-text">{{ user.about_me}}</p>
@@ -96,10 +98,11 @@
 		{% if user.user_followers.count()%}
 			<ul class="list-inline list-unstyled">
 				{% for follower in user.user_followers.all()[:4] %}
-					{% if follower != current_user %}
+					{% if follower != user %}
 						<li>
 							<a href="{{ url_for('main.user', username = follower.username)}}" class="thumbnail">
-								<img src="{{ follower.gravator() }}" class="img-responsive">
+
+								<img src="{% if follower.profile_pic_id %}{{follower.get_profile_pic(follower.profile_pic_id, follower.firebase_uid, follower.idToken)}}{% else %}{{ follower.gravator()}}{% endif %}" class="img-responsive">
 							</a>
 						</li>
 					{% endif %}
@@ -124,7 +127,8 @@
 
 {% endblock %}
 
-{% block page_right_content %}
+
+{% block who_follow%}
 	<div id="who-follow" class="card">
 		<div class="card-header">
 			<h4 class="card-title">Who to Follow</h4>
@@ -157,4 +161,4 @@
 			{% endif %}
 		</div>
 	</div>
-{% endblock %}
+{% endblock%}

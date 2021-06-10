@@ -31,8 +31,33 @@
 			</div>
 			<div id="right-content" class="col-md-3 hidden-xs hidden-sm">
 				{% block page_right_content %}
+
+					{% block who_follow %}
+					{% endblock %}
+
+					{% block app_info %}
+
+						<div id="app-info" class="card">
+							<div class="card-block">
+								© 2021 Me.myApp
+								<ul class="list-unstyled list-inline">
+									<li><a href="#">About</a></li>
+									<li><a href="#">Terms and Privacy</a></li>
+									<li><a href="#">Help</a></li>
+									<li><a href="#">Status</a></li>
+									<li><a href="#">Contact</a></li>
+								</ul>
+							</div>
+							<div class="card-footer">
+								
+							</div>
+						</div>
+						
+					{% endblock%}
 				{% endblock %}
 			</div>
 		</div>
 	</div>
 {% endblock%}
+
+

@@ -37,17 +37,26 @@
 
 
 {% block page_right_content %}
-	<div id="who-follow" class="card">
-		<div class="card-header">
-			<h4 class="card-title">
-				Who to follow
-			</h4>
-		</div>
 
-		<div class="card-block">
-			
+	{% block who_follow%}
+		<div id="who-follow" class="card">
+			<div class="card-header">
+				<h4 class="card-title">
+					Who to follow
+				</h4>
+			</div>
+
+			<div class="card-block">
+				
+			</div>
 		</div>
-	</div>
+	{% endblock %}
+
+	{% block app_info%}
+
+		
+	{% endblock%}
+	
 {% endblock %}
 
 {% block modals %}
