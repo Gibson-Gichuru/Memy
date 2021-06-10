@@ -36,8 +36,11 @@
                 </div>
                 <div id="media-content" class="card-block">
                     <!--Put the media post from the user here-->
-                    <!--image act like the media holder-->
-                    <img src="{{ url_for('static', filename='icons/card.jpg')}}" class="img-responsive">
+                    <!--image act like the media holder
+
+                        <img src="{{ url_for('static', filename='icons/card.jpg')}}" class="img-responsive">
+                    -->
+                    
                 </div>
                 <div id="post-footer" class="card-footer">
                     {% if current_user.is_authenticated %}

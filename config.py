@@ -42,6 +42,7 @@ class Config:
 class DevelopmentConfig(Config):
 	
 	DEBUG = True
+	USE_RELOADER=False
 
 	MAIL_SERVER = 'smtp.googlemail.com'
 	MAIL_PORT = 587

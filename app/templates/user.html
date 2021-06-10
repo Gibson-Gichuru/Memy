@@ -3,7 +3,7 @@
 
 {% block card_content %}
 <div id="profile-resume" class="card">
-	<img src="{% if user.cover_photo_id %}{{user.get_profile_pic(current_user.cover_photo_id, user.firebase_uid, user.idToken)}}{% else %}{{ url_for('static', filename='icons/card.jpg')}}{% endif %}" class="card-img-top img-responsive">
+	<img src="{% if user.cover_photo_id %}{{user.get_profile_pic(user.cover_photo_id, user.firebase_uid, user.idToken)}}{% else %}{{ url_for('static', filename='icons/card.jpg')}}{% endif %}" class="card-img-top img-responsive">
 	<div class="card-block">
 		<img src="{% if user.profile_pic_id %}{{user.get_profile_pic(user.profile_pic_id, user.firebase_uid,user.idToken)}}{% else %}{{ user.gravator()}}{% endif %}" class="card-img">
 		
@@ -13,7 +13,7 @@
 			<a href="http://maps.google.com/?q={{ current_user.location }}"><small>{{ user.location }}</small></a>
 		</h4>
 
-		<p class="card-text">{{ current_user.about_me}}</p>
+		<p class="card-text">{{ user.about_me}}</p>
 		{% if current_user.can(Permission.FOLLOW) and user != current_user %}
 			{% if not current_user.is_following(user)%}
 				<a href="{{ url_for('main.follow', username = user.username)}}" class="btn btn-primary">Follow</a>

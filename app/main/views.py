@@ -206,6 +206,7 @@ def edit_profile_admin(id):
 		user.about_me = form.about_me.data
 
 		db.session.add(user)
+		user.update(user)
 
 		flash('The profile have been updated')
 

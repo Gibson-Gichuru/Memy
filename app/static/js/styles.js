@@ -1,10 +1,16 @@
 $(document).ready( function(){
 
-	$('#sign-btn').on('click', function(e) {
+	var $charCount, maxCharCount;
 
-		$(e.currentTarget).closest('ul').hide();
+	$charCount = $('#post-modal .char-counter');
+	maxCharCount = parseInt($charCount.data('max'), 10);
 
-		$('form#sign').fadeIn('fast');
+	$('#post-modal textarea').on('keyup', function(e) {
+
+		var postLength = $(e.currentTarget).val().length;
+
+		$charCount.html(maxCharCount - postLength);
+
 	});
-
 });
+
