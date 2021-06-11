@@ -37,6 +37,7 @@
 					{{form.name( class = "form-control")}}
 				</div>
 				<span aria-hidden="true"></span>
+				
 				<div class="form-group personal-info">
 					{{form.location.label()}}
 					{{form.location( class = "form-control")}}
@@ -92,7 +93,25 @@
 	</form>
 {% endblock %}
 
-{% block page_right_content %}
-{% endblock %}
+{% block who_follow %}
 
+	<ul class="list-group">
+		<li class="list-group-item list-group-item-info">
+			User stats
+		</li>
+		<li class="list-group-item">
+			Number of posts
+			<span class="label label-success">{{current_user.posts.count()}}</span>
+		</li>
+		<li class="list-group-item">
+			Post rooms joined
+			<span class="label label-danger">3</span>
+		</li>
+		<li class="list-group-item">
+			Post rooms Created
+			<span class="label label-default">4</span>
+		</li>
+	</ul>
+
+{% endblock %}
 

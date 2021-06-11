@@ -163,7 +163,7 @@
         								{% else %}
 	        								<li>       							
 	        									<div class="media">
-	        										<a href="{url_for('main.user', username = comment.author.username)}">
+	        										<a href="{{url_for('main.user', username = comment.author.username)}}">
 	        											  <img src="{% if comment.author.profile_pic_id %}{{comment.author.get_profile_pic(comment.author.profile_pic_id, comment.author.firebase_uid, comment.author.idToken)}}{% else %}{{ comment.author.gravator()}}{% endif %}" class="mr-3 img-circle" >
 
 		        									</a>

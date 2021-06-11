@@ -684,7 +684,7 @@ div#who-follow li .info .glyphicon {
 #user-info span {
 
 	display: inline-block;
-	padding: 0 5%;
+	padding: 0 3%;
 }
 
 
@@ -698,7 +698,7 @@ div#who-follow li .info .glyphicon {
 #account-info span {
 
 	display: inline-block;
-	padding: 0 5%;
+	padding: 0 3.6%;
 }
 
 #save-changes {
@@ -780,6 +780,14 @@ div#who-follow li .info .glyphicon {
 }
 
 
+#right-content .list-group .label {
+
+	padding: 0.3rem 0.6rem;
+}
+
+
+
+
 
 
 /* Media Queries*/
@@ -838,6 +846,11 @@ div#who-follow li .info .glyphicon {
 
 		width: 20%;
 		margin-left: 1.2em;
+	}
+
+	.btn-outline-success {
+
+		margin: 1.2em 1.3em 0.2em 4.3em;
 	}
 
 }
