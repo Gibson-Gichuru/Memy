@@ -29,6 +29,8 @@
 
 		<hr>
 
+		{% block user_information %}
+
 		<div id="user-info" class="card">
 			<div class="card-header">
 				<h5 class="card-title">
@@ -39,18 +41,30 @@
 			<div class="card-block">
 				<div class="form-group personal-info">
 					{{form.name.label()}}
-					{{form.name( class = "form-control")}}
+					{{form.name( 
+
+						class = "form-control",
+
+						placeholder = current_user.name
+
+					)}}
 				</div>
 				<span aria-hidden="true"></span>
 				
 				<div class="form-group personal-info">
 					{{form.location.label()}}
-					{{form.location( class = "form-control")}}
+					{{form.location( class = "form-control",
+
+						placeholder = current_user.location,
+					)}}
 				</div>
 
 				<div class="form-group">
 					{{form.about_me.label()}}
-					{{form.about_me( class = "form-control")}}
+					{{form.about_me( class = "form-control",
+
+						placeholder = current_user.about_me
+					)}}
 				</div>
 
 			</div>
@@ -68,7 +82,7 @@
 			<div class="card-block">
 				<div class="form-group ">
 					{{form.email.label()}}
-					{{form.email( class = "form-control")}}
+					{{form.email( class = "form-control", placeholder = current_user.email)}}
 				</div>
 				
 				<div class="form-group password-field">
@@ -87,6 +101,8 @@
 
 			</div>
 		</div>
+
+		{% endblock %}
 
 		<div id="save-changes" class="card">
 			<div class="card-block">

@@ -79,9 +79,9 @@ def admin_firebase_async_file_upload(full_path, file_to_upload, app):
 
 	with app.app_context():
 
-		storage = storage()
+		file_storage = storage()
 
-		storage.child(full_path).put(file_to_upload)
+		file_storage.child(full_path).put(file_to_upload)
 
 		os.remove(file_to_upload)
 

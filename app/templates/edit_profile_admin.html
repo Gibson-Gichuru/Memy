@@ -77,21 +77,144 @@
 
 {% endblock%}
 
-{% block user_display%}
+{% block main_page_content %}
 
-	<img src="{% if user.profile_pic_id %}{{user.get_profile_pic(user.profile_pic_id, user.firebase_uid, user.idToken)}}{% else %}{{ user.gravator()}}{% endif %}" class="img-circle">
+	<form id="user-profile" method="POST" enctype="multipart/form-data" class="form-horizontal" action="{{ url_for('main.edit_profile_admin', id = user.id)}}">
+		{{ form.csrf_token }}
+		<div id="user-dp" class="card">
+			<div class="card-header">
+				<h5 class="card-title">
+					Display Picture
+				</h5>
+			</div>
 
-{% endblock%}
-{% block admin_control %}
+			
+			<div class="card-block ">
+				{% block user_display%}
+					<img src="{% if user.profile_pic_id %}{{user.get_profile_pic(user.profile_pic_id, user.firebase_uid, user.idToken)}}{% else %}{{ user.gravator()}}{% endif %}" class="img-circle">
+				{% endblock %}
 
-	<div class="form-group password-field">
-		{{form.username.label()}}
-		{{form.username( class = "form-control")}}
-	</div>
-	<span aria-hidden="true"></span>
-	<div class="form-group password-field">
-		{{form.role.label()}}
-		{{form.role( class = "form-control")}}
-	</div>
+				{{ form.profile_pic.label(class="btn btn-outline-primary upload-btn", for="upload-pic")}}
+				{{ form.profile_pic(id="upload-pic", class="hidden")}}
 
-{% endblock%}
+				{{ form.cover_pic.label(class="btn btn-outline-success", for="cover-pic")}}
+				{{ form.cover_pic(id ="cover-pic", class="hidden")}}
+			</div>
+
+		</div>
+
+		<hr>
+
+		{% block user_information %}
+
+		<div id="user-info" class="card">
+			<div class="card-header">
+				<h5 class="card-title">
+					Basic Information
+				</h5>
+			</div>
+
+			<div class="card-block">
+				<div class="form-group personal-info">
+					{{form.name.label()}}
+					{{form.name( 
+
+						class = "form-control",
+
+						placeholder = user.name
+
+					)}}
+				</div>
+				<span aria-hidden="true"></span>
+				
+				<div class="form-group personal-info">
+					{{form.location.label()}}
+					{{form.location( class = "form-control",
+
+						placeholder = user.location,
+					)}}
+				</div>
+
+				<div class="form-group">
+					{{form.about_me.label()}}
+					{{form.about_me( class = "form-control",
+
+						placeholder =user.about_me
+					)}}
+				</div>
+
+			</div>
+		</div>
+
+		<hr>
+
+		<div id="account-info" class="card">
+			<div class="card-header">
+				<h5 class="card-title">
+					Account Information
+				</h5>
+			</div>
+
+			<div class="card-block">
+				<div class="form-group ">
+					{{form.email.label()}}
+					{{form.email( class = "form-control", placeholder = user.email)}}
+				</div>
+				
+				<div class="form-group password-field">
+					{{form.password.label()}}
+					{{form.password( class = "form-control")}}
+				</div>
+				<span aria-hidden="true"></span>
+				<div class="form-group password-field">
+					{{form.password2.label()}}
+					{{form.password2( class = "form-control")}}
+				</div>
+
+				<div class="form-group password-field">
+					{{form.username.label()}}
+					{{form.username( class = "form-control")}}
+				</div>
+				<span aria-hidden="true"></span>
+				<div class="form-group password-field">
+					{{form.role.label()}}
+					{{form.role( class = "form-control")}}
+				</div>
+
+			</div>
+		</div>
+
+		{% endblock %}
+
+		<div id="save-changes" class="card">
+			<div class="card-block">
+				<div class="form-group">
+					{{form.submit(class="btn btn-success")}}
+				</div>
+			</div>
+		</div>
+	</form>
+{% endblock %}
+
+{% block who_follow %}
+
+	<ul class="list-group">
+		<li class="list-group-item list-group-item-info">
+			User stats
+		</li>
+		<li class="list-group-item">
+			Number of posts
+			<span class="label label-success">{{user.posts.count()}}</span>
+		</li>
+		<li class="list-group-item">
+			Post rooms joined
+			<span class="label label-danger">3</span>
+		</li>
+		<li class="list-group-item">
+			Post rooms Created
+			<span class="label label-default">4</span>
+		</li>
+	</ul>
+
+{% endblock %}
+

@@ -21,9 +21,6 @@ from ..uploads import firebase_upload_file, rename_file, admin_file_upload_to_st
 from ..utils import firebase_login
 
 
-import pdb
-
-
 @main.route('/', methods = ['GET', 'POST'])
 def index():
 
@@ -179,15 +176,10 @@ def edit_profile():
 		flash('Your Profile has been updated')
 		return redirect(url_for('.user', username = current_user.username))
 
-	form.name.data = current_user.name
-	form.location.data = current_user.location
-	form.about_me.data = current_user.about_me
-	form.email.data = current_user.email
-
 	return render_template('edit_profile.html', form = form)
 
 
-@main.route('/edit-profile/<int:id>', methods=['GET', 'POST'])
+@main.route('/edit-admin-profile/<int:id>', methods=['GET', 'POST'])
 @login_required
 @admin_required
 def edit_profile_admin(id):
@@ -199,14 +191,15 @@ def edit_profile_admin(id):
 
 	if form.validate_on_submit():
 
-		pdb.set_trace()
-
 		if form.email.data != user.email:
 
 			user.email = form.email.data 
 			user.confirmed = False
 
-		#user.username = form.username.data
+
+		if form.username != user.username:
+			user.username = form.username.data
+
 		user.confirmed = form.confirmed.data
 		user.role = Role.query.get(form.role.data)
 		user.name = form.name.data
@@ -217,23 +210,32 @@ def edit_profile_admin(id):
 		if form.profile_pic.data is not None:
 
 			cloud_file_name = rename_file(form.profile_pic.data)
-			admin_file_upload_to_storage()
+			admin_file_upload_to_storage(cloud_file_name, 
+				"/data/{}/profile/".format(user.firebase_uid))
+
+			user.profile_pic_id = cloud_file_name.filename
+
+
+		if form.cover_pic.data is not None:
+
+			cloud_file_name = rename_file(form.cover_pic.data)
+			admin_file_upload_to_storage(cloud_file_name, 
+				"/data/{}/profile/".format(user.firebase_uid))
+
+			user.cover_photo_id = cloud_file_name.filename
+
+
 
 		db.session.add(user)
-		user.update(user)
+		user.update()
 
 		flash('The profile have been updated')
 
 		return redirect(url_for('main.user', username = user.username))
 
 
-	form.email.data = user.email
+	form.email.data = user.email 
 	form.username.data = user.username
-	form.confirmed.data = user.confirmed
-	form.role.data = user.role_id
-	form.name.data = user.name
-	form.location.data = user.location
-	form.about_me.data = user.about_me
 
 	return render_template('edit_profile_admin.html', form = form, user = user)
 
