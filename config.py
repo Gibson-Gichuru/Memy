@@ -27,6 +27,7 @@ class Config:
 	    messagingSenderId="737530410440",
 	    appId= "1:737530410440:web:21441705198ae5fd46bcfd",
 	    measurementId="G-0SXPFWWD1G",
+	    serviceAccount = os.path.join(basedir ,'firebase_admin_config.json')
 		)
 
 	FIREBASE_USER_APP_INSTANCE = pyrebase.initialize_app(FIREBASE_CONFIG)
@@ -37,7 +38,7 @@ class Config:
 	def init_app(app):
 
 		cred = credentials.Certificate(os.path.join(basedir, 'firebase_admin_config.json'))
-		firebase_admin.initialize_app(cred)
+		firebase_admin.initialize_app(cred, {'storageBucket':'house-of-memes.appspot.com'})
 
 class DevelopmentConfig(Config):
 	

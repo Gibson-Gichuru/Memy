@@ -75,14 +75,13 @@ def admin_file_upload_to_storage(file_to_upload, cloud_directory):
 	return upload_thread
 
 
-def admin_firebase_async_file_upload(full_path, file_to_upload, app):
+def admin_firebase_async_file_upload(full_path, upload_file, app):
 
 	with app.app_context():
 
-		file_storage = storage()
+		storage = current_app.config['FIREBASE_USER_APP_INSTANCE'].storage()
 
-		file_storage.child(full_path).put(file_to_upload)
+		storage.child(full_path).put(upload_file)
 
-		os.remove(file_to_upload)
-
+		os.remove(upload_file)
 

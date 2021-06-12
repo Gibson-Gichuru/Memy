@@ -236,6 +236,9 @@ def edit_profile_admin(id):
 
 	form.email.data = user.email 
 	form.username.data = user.username
+	form.name.data = user.name
+	form.location.data = user.location 
+	form.about_me.data = user.about_me
 
 	return render_template('edit_profile_admin.html', form = form, user = user)
 

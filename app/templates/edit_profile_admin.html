@@ -117,30 +117,18 @@
 			<div class="card-block">
 				<div class="form-group personal-info">
 					{{form.name.label()}}
-					{{form.name( 
-
-						class = "form-control",
-
-						placeholder = user.name
-
-					)}}
+					{{form.name(class = "form-control")}}
 				</div>
 				<span aria-hidden="true"></span>
 				
 				<div class="form-group personal-info">
 					{{form.location.label()}}
-					{{form.location( class = "form-control",
-
-						placeholder = user.location,
-					)}}
+					{{form.location( class = "form-control")}}
 				</div>
 
 				<div class="form-group">
 					{{form.about_me.label()}}
-					{{form.about_me( class = "form-control",
-
-						placeholder =user.about_me
-					)}}
+					{{form.about_me( class = "form-control")}}
 				</div>
 
 			</div>
@@ -158,7 +146,7 @@
 			<div class="card-block">
 				<div class="form-group ">
 					{{form.email.label()}}
-					{{form.email( class = "form-control", placeholder = user.email)}}
+					{{form.email( class = "form-control")}}
 				</div>
 				
 				<div class="form-group password-field">
