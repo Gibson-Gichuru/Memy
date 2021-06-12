@@ -35,9 +35,9 @@ class EditProfileForm(Form):
 
 class EditProfileAdminForm(Form):
 
-	email = StringField('Email', validators = [DataRequired(), Length(1,64), Email()])
+	email = StringField('Email', validators = [Length(1,64), Email()])
 
-	username = StringField('Username', validators = [DataRequired(), Length(1,64),\
+	username = StringField('Username', validators = [Length(1,64),\
 		Regexp('^[A-Za-z][A-Za-z0-9_.]*$',0,
 			'Usename must consist of letters, numbers, dot or underscore')])
 
@@ -100,6 +100,8 @@ class ContactForm(Form):
 class PostForm(Form):
 
 	body = PageDownField(validators = [DataRequired()])
+
+	file_upload = FileField('', validators=[FileAllowed(['jpg', 'png', 'jpeg','mp4','gif'])])
 
 	submit = SubmitField("Post")
 

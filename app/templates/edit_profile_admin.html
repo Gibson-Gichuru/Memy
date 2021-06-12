@@ -1,4 +1,87 @@
 {% extends "edit_profile.html"%}
+
+{% block card_content%}
+<div id="profile-resume" class="card">
+	<img src="{% if user.cover_photo_id %}{{user.get_profile_pic(user.cover_photo_id, user.firebase_uid, user.idToken)}}{% else %}{{ url_for('static', filename='icons/card.jpg')}}{% endif %}" class="card-img-top img-responsive">
+
+	<div class="card-block">
+		<img src="{% if user.profile_pic_id %}{{user.get_profile_pic(user.profile_pic_id, user.firebase_uid, user.idToken)}}{% else %}{{ user.gravator()}}{% endif %}" class="card-img">
+
+		<h4 class="card-title">{{user.username}} <small>&#128081;{{user.name}}</small>
+			<span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span>
+			<a href="http://maps.google.com/?q={{ current_user.location }}"><small>{{ user.location }}</small></a>
+		</h4>
+	
+		<p class="card-text">{{user.about_me}}</p>
+
+		<ul class="list-inline list-unstyled">
+			<li id="card-meme">
+				<a href="#">
+					<span class="profile-stats">Posts</span>
+					<span class="profile-value">{{ user.posts.count()}}</span>
+				</a>
+			</li>
+
+			<li id="card-following">
+				<a href="#">
+					<span class="profile-stats">Following</span>
+					<span class="profile-value">{{ user.followed.count() -1}}</span>
+				</a>
+			</li>
+
+			<li id="card-followers">
+				<a href="#">
+					<span class="profile-stats">Followers</span>
+					<span class="profile-value">{{ user.followers.count() -1}}</span>
+				</a>
+			</li>
+		</ul>
+		<ul class="list-unstyled">
+			<li>
+				<ul class="list-unstyled list-inline">
+					<li>
+						<span class="label label-success ">Member since: {{moment(user.member_since).format('L')}}</span>
+					</li>
+					<li>
+
+						<span class="label label-default"> Last Seen: {{ moment(user.last_seen).fromNow()}}</span>
+					</li>
+				</ul>
+			</li>		
+		</ul>
+	</div>
+
+	<div id="profile-setting" class="card">
+		<ul class="nav nav-pills nav-stacked">
+			<li role ="presentation">
+				<a href="{{url_for('main.edit_profile')}}">
+					<span class="glyphicon glyphicon-chevron-right pull-right" aria-hidden="true"></span>
+					Account
+				</a>
+			</li>
+			<li role ="presentation">
+				<a href="#">
+					<span class="glyphicon glyphicon-chevron-right pull-right" aria-hidden="true"></span>
+					Community
+				</a>
+			</li>
+			<li role ="presentation">
+				<a href="#">
+					<span class="glyphicon glyphicon-chevron-right pull-right" aria-hidden="true"></span>
+					Notifications
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+
+{% endblock%}
+
+{% block user_display%}
+
+	<img src="{% if user.profile_pic_id %}{{user.get_profile_pic(user.profile_pic_id, user.firebase_uid, user.idToken)}}{% else %}{{ user.gravator()}}{% endif %}" class="img-circle">
+
+{% endblock%}
 {% block admin_control %}
 
 	<div class="form-group password-field">

@@ -17,8 +17,11 @@ from ..email import send_email
 
 from random import  choice , sample
 
-from ..uploads import firebase_upload_file, rename_file
+from ..uploads import firebase_upload_file, rename_file, admin_file_upload_to_storage
 from ..utils import firebase_login
+
+
+import pdb
 
 
 @main.route('/', methods = ['GET', 'POST'])
@@ -169,8 +172,6 @@ def edit_profile():
 			user.cover_photo_id = cloud_file_name.filename
 
 
-
-
 		db.session.add(user)
 
 		user.update()
@@ -195,15 +196,28 @@ def edit_profile_admin(id):
 
 	form = EditProfileAdminForm(user = user)
 
+
 	if form.validate_on_submit():
 
-		user.email = form.email.data
-		user.username = form.username.data
+		pdb.set_trace()
+
+		if form.email.data != user.email:
+
+			user.email = form.email.data 
+			user.confirmed = False
+
+		#user.username = form.username.data
 		user.confirmed = form.confirmed.data
 		user.role = Role.query.get(form.role.data)
 		user.name = form.name.data
 		user.location = form.location.data
 		user.about_me = form.about_me.data
+
+
+		if form.profile_pic.data is not None:
+
+			cloud_file_name = rename_file(form.profile_pic.data)
+			admin_file_upload_to_storage()
 
 		db.session.add(user)
 		user.update(user)

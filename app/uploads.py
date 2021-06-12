@@ -1,4 +1,5 @@
 from flask import request, current_app, url_for
+from firebase_admin import storage
 from threading import Thread
 
 import hashlib
@@ -46,3 +47,42 @@ def async_file_upload_to_firebase(full_path, file_to_upload, app, idToken):
 		storage.child(full_path).put(file_to_upload, idToken)
 
 		os.remove(file_to_upload)
+
+
+
+def delete_files_from_storage():
+
+	pass
+
+
+
+def admin_file_upload_to_storage(file_to_upload, cloud_directory):
+
+	app = current_app._get_current_object()
+
+	file_to_upload.save(os.path.join(current_app.config["UPLOAD_PATH"], file_to_upload.filename)) 
+
+	full_path = cloud_directory + "{}".format(file_to_upload.filename)
+
+
+	upload_file = os.path.join(current_app.config["UPLOAD_PATH"], file_to_upload.filename)
+
+	upload_thread = Thread(target=admin_firebase_async_file_upload, 
+		args=[full_path, upload_file, app])
+
+	upload_thread.start()
+
+	return upload_thread
+
+
+def admin_firebase_async_file_upload(full_path, file_to_upload, app):
+
+	with app.app_context():
+
+		storage = storage()
+
+		storage.child(full_path).put(file_to_upload)
+
+		os.remove(file_to_upload)
+
+

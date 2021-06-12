@@ -2,6 +2,7 @@
 {% block title %}Account : {{current_user.username}}{% endblock %}
 
 {% block main_page_content %}
+
 	<form id="user-profile" method="POST" enctype="multipart/form-data" class="form-horizontal" action="{{ url_for('main.edit_profile')}}">
 		{{ form.csrf_token }}
 		<div id="user-dp" class="card">
@@ -10,16 +11,20 @@
 					Display Picture
 				</h5>
 			</div>
-			<div class="card-block ">
 
-				<img src="{% if current_user.profile_pic_id %}{{current_user.get_profile_pic(current_user.profile_pic_id, current_user.firebase_uid, current_user.idToken)}}{% else %}{{ current_user.gravator()}}{% endif %}" class="img-circle">
-				
+			
+			<div class="card-block ">
+				{% block user_display%}
+					<img src="{% if current_user.profile_pic_id %}{{current_user.get_profile_pic(current_user.profile_pic_id, current_user.firebase_uid, current_user.idToken)}}{% else %}{{ current_user.gravator()}}{% endif %}" class="img-circle">
+				{% endblock %}
+
 				{{ form.profile_pic.label(class="btn btn-outline-primary upload-btn", for="upload-pic")}}
 				{{ form.profile_pic(id="upload-pic", class="hidden")}}
 
 				{{ form.cover_pic.label(class="btn btn-outline-success", for="cover-pic")}}
 				{{ form.cover_pic(id ="cover-pic", class="hidden")}}
 			</div>
+
 		</div>
 
 		<hr>

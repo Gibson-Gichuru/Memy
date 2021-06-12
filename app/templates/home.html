@@ -99,11 +99,13 @@
 						</div>
 
 						<div class="form-group">
-							<span class="glyphicon glyphicon-picture"></span>
+							{{form.file_upload.label(class="glyphicon glyphicon-picture", for="file_upload")}}
+							{{form.file_upload(id="file_upload", class="hidden")}}
 						</div>
 					</div>
 
 					<div class="modal-footer">
+
 						<span class="char-counter pull-left" data-max="150">150</span>
 
 						<div class="form-group pull-right">
