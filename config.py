@@ -31,7 +31,7 @@ class Config:
 		)
 
 	FIREBASE_USER_APP_INSTANCE = pyrebase.initialize_app(FIREBASE_CONFIG)
-	MAX_CONTENT_LENGTH = 1024 * 1024 * 5
+	MAX_CONTENT_LENGTH = 1024 * 1024 * 10
 	UPLOAD_PATH = os.path.join(basedir, "uploads")
 
 	@staticmethod

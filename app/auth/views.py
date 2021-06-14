@@ -7,6 +7,8 @@ from .forms import  RegistrationForm, ForgotPasswordForm, ResetPasswordForm, Log
 
 from . import auth
 
+from .. import db
+
 from ..utils import firebase_login, user_uid
 
 import pdb

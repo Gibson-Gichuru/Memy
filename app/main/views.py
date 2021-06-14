@@ -20,6 +20,8 @@ from random import  choice , sample
 from ..uploads import firebase_upload_file, rename_file, admin_file_upload_to_storage
 from ..utils import firebase_login
 
+import pdb
+
 
 @main.route('/', methods = ['GET', 'POST'])
 def index():
@@ -68,6 +70,18 @@ def home():
 	if current_user.can(Permission.WRITE_ARTICLES) and form .validate_on_submit():
 
 		post = Post(body = form.body.data, author = current_user._get_current_object())
+
+		if form.file_upload is not None:
+
+			login_to_to_firebase = firebase_login(current_user.firebase_custom_token)
+
+			pdb.set_trace()
+
+			cloud_file_name = rename_file(form.file_upload.data)
+			firebase_upload_file(cloud_file_name,
+			 "/data/{}/posts/".format(current_user.firebase_uid), login_to_to_firebase['idToken'])
+
+			post.cloud_file_name = cloud_file_name.filename
 
 		db.session.add(post)
 
@@ -193,14 +207,12 @@ def edit_profile_admin(id):
 
 		if form.email.data != user.email:
 
-			user.email = form.email.data 
+			user.email = form.email.data
 			user.confirmed = False
-
 
 		if form.username != user.username:
 			user.username = form.username.data
 
-		user.confirmed = form.confirmed.data
 		user.role = Role.query.get(form.role.data)
 		user.name = form.name.data
 		user.location = form.location.data
@@ -239,6 +251,7 @@ def edit_profile_admin(id):
 	form.name.data = user.name
 	form.location.data = user.location 
 	form.about_me.data = user.about_me
+	form.role.data = user.role.id
 
 	return render_template('edit_profile_admin.html', form = form, user = user)
 
@@ -267,6 +280,8 @@ def edit(id):
 
 		post.body = form.body.data
 		post.update()
+
+
 		flash('Post have been updated')
 		return redirect(url_for('main.post', id = post.id))
 

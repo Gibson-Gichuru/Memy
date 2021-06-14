@@ -160,6 +160,15 @@ class Post(db.Model, DataManipulation):
             db.session.add(post)
             db.session.commit()
 
+    @staticmethod
+    def get_post_file(file_id, author_uid,author_token):
+
+        storage = current_app.config['FIREBASE_USER_APP_INSTANCE'].storage()
+
+        profile_path = "/data/{}/profile/{}".format(author_uid, file_id)
+
+        return storage.child(profile_path).get_url(author_token)
+
 
     def to_json(self):
 

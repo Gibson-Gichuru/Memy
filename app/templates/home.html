@@ -91,7 +91,7 @@
 					</h4>
 				</div>
 
-				<form method="POST">
+				<form method="POST" enctype="multipart/form-data">
 					{{ form.csrf_token }}
 					<div class="modal-body">
 						<div class="form-group">
@@ -100,6 +100,7 @@
 
 						<div class="form-group">
 							{{form.file_upload.label(class="glyphicon glyphicon-picture", for="file_upload")}}
+
 							{{form.file_upload(id="file_upload", class="hidden")}}
 						</div>
 					</div>
