@@ -17,7 +17,7 @@ from ..email import send_email
 
 from random import  choice , sample
 
-from ..uploads import firebase_upload_file, rename_file, admin_file_upload_to_storage
+from ..uploads import (firebase_upload_file, rename_file, admin_file_upload_to_storage, delete_uploaded_files)
 from ..utils import firebase_login
 
 import pdb
@@ -74,8 +74,6 @@ def home():
 		if form.file_upload is not None:
 
 			login_to_to_firebase = firebase_login(current_user.firebase_custom_token)
-
-			pdb.set_trace()
 
 			cloud_file_name = rename_file(form.file_upload.data)
 			firebase_upload_file(cloud_file_name,
@@ -347,8 +345,10 @@ def delete_post(id):
 
 		abort(403)
 
-	post.delete(post)
 
+	post.delete(post)
+	owner = firebase_login(post.author.firebase_uid)
+	delete_uploaded_files('data/{}/posts/{}'.format(current_user.firebase_uid, post.cloud_file_name))
 
 	return redirect(url_for('main.home'))
 

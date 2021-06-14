@@ -165,7 +165,7 @@ class Post(db.Model, DataManipulation):
 
         storage = current_app.config['FIREBASE_USER_APP_INSTANCE'].storage()
 
-        profile_path = "/data/{}/profile/{}".format(author_uid, file_id)
+        profile_path = "/data/{}/posts/{}".format(author_uid, file_id)
 
         return storage.child(profile_path).get_url(author_token)
 

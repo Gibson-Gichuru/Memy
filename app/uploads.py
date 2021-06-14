@@ -86,3 +86,30 @@ def admin_firebase_async_file_upload(full_path, upload_file, app):
 		os.remove(upload_file)
 
 
+def delete_uploaded_files(file_path):
+
+	app = current_app._get_current_object()
+
+	delete_file_thread = Thread(target = async_file_delete, args = [file_path, app])
+
+	delete_file_thread.start()
+
+	return delete_file_thread 
+
+def async_file_delete(file_path, app):
+
+	with app.app_context():
+
+		storage = current_app.config['FIREBASE_USER_APP_INSTANCE'].storage()
+
+		try:
+
+			storage.delete(file_path)
+
+		except:
+
+			pass
+
+
+
+
