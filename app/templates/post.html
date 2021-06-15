@@ -4,12 +4,12 @@
 
 {% block card_content %}
 <div id="profile-resume" class="card">
-	<img src="{{ url_for('static', filename='icons/card.jpg')}}" class="card-img-top img-responsive">
+	<img src="{% if posts[0].author.cover_photo_id %}{{ posts[0].author.get_profile_pic( posts[0].author.cover_photo_id,  posts[0].author.firebase_uid,  posts[0].author.idToken)}}{% else %}{{ url_for('static', filename='icons/card.jpg')}}{% endif %}" class="card-img-top img-responsive">
 	<div class="card-block">
 
 		<img src="{% if posts[0].author.profile_pic_id %}{{posts[0].author.get_profile_pic(posts[0].author.profile_pic_id, posts[0].author.firebase_uid, posts[0].author.idToken)}}{% else %}{{ posts[0].author.gravator()}}{% endif %}" class="card-img">
 
-		<h4 class="card-title">{{ posts[0].author.username}} &#128081;<small>{{posts[0].author.name}}</small></h4>
+		<h4 class="card-title">{{ posts[0].author.username}} <small>&#128081;{{posts[0].author.name}}</small></h4>
 		<h4 class="card-title">
 			<span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span>
 			<a href="http://maps.google.com/?q={{ posts[0].author.location }}"><small>{{ posts[0].author.location }}</small></a>
@@ -23,21 +23,21 @@
 			<li id="card-meme">
 				<a href="#">
 					<span class="profile-stats">Posts</span>
-					<span class="profile-value">{{ current_user.posts.count()}}</span>
+					<span class="profile-value">{{ posts[0].author.posts.count()}}</span>
 				</a>
 			</li>
 
 			<li id="card-following">
 				<a href="#">
 					<span class="profile-stats">Following</span>
-					<span class="profile-value">10</span>
+					<span class="profile-value">{{ posts[0].author.followed.count()-1}}</span>
 				</a>
 			</li>
 
 			<li id="card-followers">
 				<a href="#">
 					<span class="profile-stats">Followers</span>
-					<span class="profile-value">10</span>
+					<span class="profile-value">{{ posts[0].author.followers.count()-1}}</span>
 				</a>
 			</li>
 		</ul>
@@ -134,8 +134,16 @@
                 </div>
 		        <div id="media-content" class="card-block">
 		            <!--Put the media post from the user here-->
-		            <!--image act like the media holder-->
-		            <img src="{{ url_for('static', filename='icons/card.jpg')}}" class="img-responsive">
+		           {% if post.cloud_file_name %}
+
+                        {% if post.cloud_file_name.endswith('png') or post.cloud_file_name.endswith('jpeg') or post.cloud_file_name.endswith('jpg')%}
+                            <img src="{{post.get_post_file(post.cloud_file_name, 
+                            post.author.firebase_uid, post.author.idToken)}}" class="img-responsive">
+                        {% else%}
+                            <iframe width="100%" height="281" src="{{post.get_post_file(post.cloud_file_name, 
+                            post.author.firebase_uid, post.author.idToken)}}" frameborder="0" allowfullscreen=""></iframe>
+                        {% endif %}
+                    {% endif %}
 		        </div>
 
 		        <div class="card-footer">
