@@ -12,7 +12,7 @@ class Config:
 
 	SQLALCHEMY_COMMITON_TEARDOWN = True
 	SQLALCHEMY_TRACK_MODIFICATIONS = True
-	FLASK_MAIL_SUBJECT_PREFIX = '[Flasky]'
+	FLASK_MAIL_SUBJECT_PREFIX = '[Me.My]'
 	FLASK_MAIL_SENDER = 'Flask Admin {}'.format(os.environ.get('MAIL_USERNAME'))
 	FLASK_ADMIN = os.environ.get('FLASK_ADMIN')
 	FLASKY_POSTS_PER_PAGE = 5
@@ -72,6 +72,45 @@ class ProductionConfig(Config):
 
 	SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or \
 	'sqlite:///' + os.path.join(basedir, 'data.sqlte')
+
+
+	@classmethod
+	def init_app(cls, app):
+
+		Config.init_app(app)
+
+		#email errors to the administrator
+
+		import logging
+		from logging.handler import SMTPHandler
+
+		credentials = None 
+
+		secure = None 
+
+		if getattr(cls,  "MAIL_USERNAME", None) is not None:
+
+			credentials = (cls,'MAIL_USERNAME', cls.MAIL_PASSWORD)
+
+			if getattr(cls, 'MAIL_USE_TLS', None):
+
+				secure = () 
+
+		mail_handler = SMTPHandler(
+
+				mailhost = (cls.MAIL_SERVER, cls.MAIL_PORT),
+				fromaddr = cls.FLASK_MAIL_SENDER,
+				toaddr = cls.FLASK_ADMIN,
+
+				subject = cls.FLASK_MAIL_SUBJECT_PREFIX + 'Application Error',
+				credentials = credentials,
+				secure = secure
+			)
+
+		mail_handler.setLevel(logging.ERROR)
+
+		app.logger.addHandler(mail_handler)
+
 
 
 
