@@ -84,7 +84,7 @@ class ProductionConfig(Config):
 		#email errors to the administrator
 
 		import logging
-		from logging.handler import SMTPHandler
+		from logging.handlers import SMTPHandler
 
 		credentials = None 
 
