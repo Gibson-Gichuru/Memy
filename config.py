@@ -72,6 +72,12 @@ class TestingConfig(Config):
 
 class ProductionConfig(Config):
 
+	MAIL_SERVER = 'smtp.googlemail.com'
+	MAIL_PORT = 587
+	MAIL_USE_TLS = True
+	MAIL_USERNAME = os.environ.get('MAIL_USERNAME')
+	MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD')
+
 	SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or \
 	'sqlite:///' + os.path.join(basedir, 'data.sqlte')
 
@@ -102,7 +108,7 @@ class ProductionConfig(Config):
 
 				mailhost = (cls.MAIL_SERVER, cls.MAIL_PORT),
 				fromaddr = cls.FLASK_MAIL_SENDER,
-				toaddr = cls.FLASK_ADMIN,
+				toaddrs=[cls.FLASK_ADMIN],
 
 				subject = cls.FLASK_MAIL_SUBJECT_PREFIX + 'Application Error',
 				credentials = credentials,
@@ -134,7 +140,7 @@ class HerokuConfig(ProductionConfig):
 
 		#handle proxy server headers
 
-		from werkzeug.contrib.fixers import ProxyFix
+		from werkzeug.middleware.proxy_fix import ProxyFix
 		app.wsgi_app = ProxyFix(app.wsgi_app)
 
 	SSL_DISABLE = bool(os.environ.get('SSL_DISABLE'))
