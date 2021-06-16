@@ -98,7 +98,7 @@ class ProductionConfig(Config):
 
 		if getattr(cls,  "MAIL_USERNAME", None) is not None:
 
-			credentials = (cls,'MAIL_USERNAME', cls.MAIL_PASSWORD)
+			credentials = (cls.MAIL_USERNAME, cls.MAIL_PASSWORD)
 
 			if getattr(cls, 'MAIL_USE_TLS', None):
 
@@ -109,7 +109,6 @@ class ProductionConfig(Config):
 				mailhost = (cls.MAIL_SERVER, cls.MAIL_PORT),
 				fromaddr = cls.FLASK_MAIL_SENDER,
 				toaddrs=[cls.FLASK_ADMIN],
-
 				subject = cls.FLASK_MAIL_SUBJECT_PREFIX + 'Application Error',
 				credentials = credentials,
 				secure = secure
