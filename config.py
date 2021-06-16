@@ -34,6 +34,8 @@ class Config:
 	MAX_CONTENT_LENGTH = 1024 * 1024 * 10
 	UPLOAD_PATH = os.path.join(basedir, "uploads")
 
+	SSL_DISABLE = True
+
 	@staticmethod
 	def init_app(app):
 
@@ -129,6 +131,13 @@ class HerokuConfig(ProductionConfig):
 		file_handler.setLevel(logging.WARNING)
 
 		app.logger.addHandler(file_handler)
+
+		#handle proxy server headers
+
+		from werkzeug.contrib.fixers import ProxyFix
+		app.wsgi_app = ProxyFix(app.wsgi_app)
+
+	SSL_DISABLE = bool(os.environ.get('SSL_DISABLE'))
 
 
 
