@@ -112,9 +112,31 @@ class ProductionConfig(Config):
 		app.logger.addHandler(mail_handler)
 
 
+class HerokuConfig(ProductionConfig):
+
+	@classmethod
+	def init_app(cls,app):
+
+		ProductionConfig.init_app(app)
+
+		#logging to stderr
+
+		import logging
+
+		from logging import StreamHandler
+
+		file_handler = StreamHandler()
+		file_handler.setLevel(logging.WARNING)
+
+		app.logger.addHandler(file_handler)
+
+
+
+
 
 
 config = dict(developent = DevelopmentConfig, 
 	testing = TestingConfig, 
 	production = ProductionConfig, 
-	default = DevelopmentConfig)
+	default = DevelopmentConfig,
+	heroku = HerokuConfig)
