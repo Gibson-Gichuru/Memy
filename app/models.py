@@ -227,7 +227,7 @@ class User(db.Model, DataManipulation, UserMixin):
     profile_pic_id = db.Column(db.String(120), default = None)
     cover_photo_id = db.Column(db.String(120), default = None)
     firebase_user_uid = db.Column(db.String(120), default = None)
-    user_uid_token = db.Column(db.String(200), default = None)
+    uid_token = db.Column(db.String(1000), default = None)
 
     # relationships
     posts = db.relationship('Post', backref ='author', lazy = 'dynamic')
@@ -371,12 +371,12 @@ class User(db.Model, DataManipulation, UserMixin):
     @property
     def idToken(self):
 
-        return self.user_uid_token
+        return self.uid_token
 
     @idToken.setter
     def idToken(self, uid):
 
-        self.user_uid_token = uid
+        self.uid_token = uid
 
     def verify_password(self, password):
 
