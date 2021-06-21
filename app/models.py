@@ -167,7 +167,13 @@ class Post(db.Model, DataManipulation):
 
         profile_path = "/data/{}/posts/{}".format(author_uid, file_id)
 
-        return storage.child(profile_path).get_url(author_token)
+        response = storage.child(profile_path).get_url(author_token)
+
+        if response.status_code == 404:
+
+            return None
+
+        return response
 
 
     def to_json(self):
@@ -336,7 +342,13 @@ class User(db.Model, DataManipulation, UserMixin):
 
         profile_path = "/data/{}/profile/{}".format(user_id, file_id)
 
-        return storage.child(profile_path).get_url(user_token)
+        response = storage.child(profile_path).get_url(user_token)
+
+        if response.status_code == 404:
+
+            return None
+
+        return response 
 
     def can(self, permissions):
 
@@ -560,7 +572,7 @@ class User(db.Model, DataManipulation, UserMixin):
     @staticmethod
     def login_users_to_firebase():
 
-        for user in User.query.all():
+        for user in User.query.filter_by(firebase_user_uid = None ).all():
 
             user_login = firebase_login(user.firebase_custom_token)
 

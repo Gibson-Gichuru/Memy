@@ -3,9 +3,20 @@
 
 {% block card_content %}
 <div id="profile-resume" class="card">
-	<img src="{% if user.cover_photo_id %}{{user.get_profile_pic(user.cover_photo_id, user.firebase_uid, user.idToken)}}{% else %}{{ url_for('static', filename='icons/card.jpg')}}{% endif %}" class="card-img-top img-responsive">
+	<img src=
+	"{% if user.cover_photo_id  and user.get_profile_pic(user.cover_photo_id, user.firebase_uid, user.idToken)%}
+
+		{{user.get_profile_pic(user.cover_photo_id, user.firebase_uid, user.idToken)}}
+
+	{% else %}
+		{{ url_for('static', filename='icons/card.jpg')}}
+	{% endif %}" class="card-img-top img-responsive">
 	<div class="card-block">
-		<img src="{% if user.profile_pic_id %}{{user.get_profile_pic(user.profile_pic_id, user.firebase_uid,user.idToken)}}{% else %}{{ user.gravator()}}{% endif %}" class="card-img">
+		<img src="{% if user.profile_pic_id and user.get_profile_pic(user.profile_pic_id, user.firebase_uid,user.idToken %}
+			{{user.get_profile_pic(user.profile_pic_id, user.firebase_uid,user.idToken)}}
+		{% else %}
+			{{ user.gravator()}}
+		{% endif %}" class="card-img">
 		
 		<h4 class="card-title">{{ user.username}} <small>&#128081; {{user.name}}</small>
 			<span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span>
@@ -102,7 +113,12 @@
 						<li>
 							<a href="{{ url_for('main.user', username = follower.username)}}" class="thumbnail">
 
-								<img src="{% if follower.profile_pic_id %}{{follower.get_profile_pic(follower.profile_pic_id, follower.firebase_uid, follower.idToken)}}{% else %}{{ follower.gravator()}}{% endif %}" class="img-responsive">
+								<img src=
+								"{% if follower.profile_pic_id and  follower.get_profile_pic(follower.profile_pic_id, follower.firebase_uid, follower.idToken) %}
+									{{follower.get_profile_pic(follower.profile_pic_id, follower.firebase_uid, follower.idToken)}}
+								{% else %}
+									{{ follower.gravator()}}
+								{% endif %}" class="img-responsive">
 							</a>
 						</li>
 					{% endif %}
@@ -139,7 +155,12 @@
 				{% for followed in user.user_following.all()[:4] %}
 					{% if followed != current_user %}
 						<li>
-							<img src="{% if followed.profile_pic_id %}{{followed.get_profile_pic(followed.profile_pic_id, followed.firebase_uid, followed.idToken)}}{% else %}{{ followed.gravator()}}{% endif %}" class="img-responsive">
+							<img src=
+							"{% if followed.profile_pic_id and followed.get_profile_pic(followed.profile_pic_id, followed.firebase_uid, followed.idToken %}
+									{{followed.get_profile_pic(followed.profile_pic_id, followed.firebase_uid, followed.idToken)}}
+								{% else %}
+									{{ followed.gravator()}}
+								{% endif %}" class="img-responsive">
 							<div class="info">
 								<strong>{{ followed.username }}</strong>
 								{% if user == current_user and current_user.is_following(followed)%}

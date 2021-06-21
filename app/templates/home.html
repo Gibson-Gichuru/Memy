@@ -3,10 +3,28 @@
 
 {% block card_content %}
 <div id="profile-resume" class="card">
-	<img src="{% if current_user.cover_photo_id %}{{current_user.get_profile_pic(current_user.cover_photo_id, current_user.firebase_uid, current_user.idToken)}}{% else %}{{ url_for('static', filename='icons/card.jpg')}}{% endif %}" class="card-img-top img-responsive">
+	<img src=
+	"{% if current_user.cover_photo_id and current_user.get_profile_pic(current_user.cover_photo_id, current_user.firebase_uid, current_user.idToken)%}
+
+		{{current_user.get_profile_pic(current_user.cover_photo_id, current_user.firebase_uid, current_user.idToken)}}
+
+	{% else %}
+
+		{{ url_for('static', filename='icons/card.jpg')}}
+
+	{% endif %}" class="card-img-top img-responsive">
 
 	<div class="card-block">
-		<img src="{% if current_user.profile_pic_id %}{{current_user.get_profile_pic(current_user.profile_pic_id, current_user.firebase_uid, current_user.idToken)}}{% else %}{{ current_user.gravator()}}{% endif %}" class="card-img">
+		<img src=
+		"{% if current_user.profile_pic_id and current_user.get_profile_pic(current_user.profile_pic_id, current_user.firebase_uid, current_user.idToken)%}
+
+			{{current_user.get_profile_pic(current_user.profile_pic_id, current_user.firebase_uid, current_user.idToken)}}
+
+		{% else %}	
+
+			{{ current_user.gravator()}}
+
+		{% endif %}" class="card-img">
 
 		<h4 class="card-title">{{ current_user.username}} <small>&#128081;{{current_user.name}}</small>
 			<span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span>
@@ -143,7 +161,12 @@
 				{% for followed in users_to_follow %}
 					{% if followed != current_user %}
 						<li>
-							<img src="{% if followed.profile_pic_id %}{{followed.get_profile_pic(followed.profile_pic_id, followed.firebase_uid, followed.idToken)}}{% else %}{{ followed.gravator()}}{% endif %}" class="img-responsive">
+							<img src="
+							{% if followed.profile_pic_id and followed.get_profile_pic(followed.profile_pic_id, followed.firebase_uid, followed.idToken) %}
+								{{followed.get_profile_pic(followed.profile_pic_id, followed.firebase_uid, followed.idToken)}}
+							{% else %}
+								{{ followed.gravator()}}
+							{% endif %}" class="img-responsive">
 
 							<div class="info">
 								<strong>{{ followed.username }}</strong>

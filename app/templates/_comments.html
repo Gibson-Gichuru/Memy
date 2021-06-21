@@ -18,7 +18,15 @@
                     {% endif %}
 
                     <a href="{{ url_for('main.user', username=post.author.username) }}" id="display-pic">
-                        <img src="{% if post.author.profile_pic_id %}{{post.author.get_profile_pic(post.author.profile_pic_id, post.author.firebase_uid, post.author.idToken)}}{% else %}{{ post.author.gravator()}}{% endif %}" class="post-avator img-circle">
+                        <img src=
+                            "{% if post.author.profile_pic_id  and post.author.get_profile_pic(post.author.profile_pic_id, post.author.firebase_uid, post.author.idToken)%}
+                                {{post.author.get_profile_pic(post.author.profile_pic_id, post.author.firebase_uid, post.author.idToken)}}
+
+                            {% else %}
+
+                                {{ post.author.gravator()}}
+
+                            {% endif %}" class="post-avator img-circle">
                          
                     </a>
 
@@ -77,7 +85,11 @@
                                         <div class="card-header">
                                             <a href="{{ url_for('main.user', username=post.comments.first().author.username) }}">
 
-                                                <img src="{% if post.comments.first().author.profile_pic_id %}{{post.comments.first().author.get_profile_pic(post.comments.first().author.profile_pic_id, post.comments.first().author.firebase_uid, post.comments.first().author.idToken)}}{% else %}{{ post.comments.first().author.gravator() }}
+                                                <img src=
+                                                "{% if post.comments.first().author.profile_pic_id  and post.comments.first().author.get_profile_pic(post.comments.first().author.profile_pic_id,post.comments.first().author.firebase_uid, post.comments.first().author.idToken) %}
+                                                {{post.comments.first().author.get_profile_pic(post.comments.first().author.profile_pic_id,post.comments.first().author.firebase_uid, post.comments.first().author.idToken)}}
+                                                {% else %}
+                                                    {{ post.comments.first().author.gravator() }}
                                                 {% endif %}" class="comment-avator img-circle">
                                             </a>
                                             <h5 class="card-title ">{{post.comments.first().author.username}}<small>-{{moment(post.comments.first().timestamp).fromNow()}}</small></h5>
