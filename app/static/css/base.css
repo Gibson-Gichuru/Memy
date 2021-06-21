@@ -792,6 +792,8 @@ div#who-follow li .info .glyphicon {
 
 /* Media Queries*/
 
+.offcanvas-header{ display:none; }
+
 @media(max-width: 34em){
 
 	#main-column {
