@@ -6,6 +6,6 @@ data-dev.sqlite-journal
 bootstrap.js
 jquery-3.6.0.min.js
 bootstrap.css
-
+firebase_admin_config.json
 fonts/
 tmp/
