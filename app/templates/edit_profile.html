@@ -14,7 +14,8 @@
 
 			
 			<div class="card-block ">
-				{% block user_displ<img src=
+				{% block user_display %}
+					<img src=
 					"{% if current_user.cover_photo_id and current_user.get_profile_pic(current_user.cover_photo_id, current_user.firebase_uid, current_user.idToken)%}
 
 						{{current_user.get_profile_pic(current_user.cover_photo_id, current_user.firebase_uid, current_user.idToken)}}
@@ -23,7 +24,8 @@
 
 						{{ url_for('static', filename='icons/card.jpg')}}
 
-					{% endif %}" class="card-img-top img-responsive">
+					{% endif %}" 
+					class="card-img-top img-responsive">
 				{% endblock %}
 
 				{{ form.profile_pic.label(class="btn btn-outline-primary upload-btn", for="upload-pic")}}

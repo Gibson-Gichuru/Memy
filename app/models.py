@@ -167,13 +167,15 @@ class Post(db.Model, DataManipulation):
 
         profile_path = "/data/{}/posts/{}".format(author_uid, file_id)
 
-        response = storage.child(profile_path).get_url(author_token)
+        url = storage.child(profile_path).get_url(author_token)
+
+        response = request.get(url)
 
         if response.status_code == 404:
 
             return None
 
-        return response
+        return url
 
 
     def to_json(self):
@@ -342,13 +344,15 @@ class User(db.Model, DataManipulation, UserMixin):
 
         profile_path = "/data/{}/profile/{}".format(user_id, file_id)
 
-        response = storage.child(profile_path).get_url(user_token)
+        url = storage.child(profile_path).get_url(user_token)
+
+        response = request.get(url)
 
         if response.status_code == 404:
 
             return None
 
-        return response 
+        return url 
 
     def can(self, permissions):
 
