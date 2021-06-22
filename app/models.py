@@ -11,6 +11,8 @@ from datetime import datetime
 
 import hashlib
 
+import requests
+
 from markdown import markdown
 
 import bleach
@@ -169,7 +171,7 @@ class Post(db.Model, DataManipulation):
 
         url = storage.child(profile_path).get_url(author_token)
 
-        response = request.get(url)
+        response = requests.get(url)
 
         if response.status_code == 404:
 
@@ -346,7 +348,7 @@ class User(db.Model, DataManipulation, UserMixin):
 
         url = storage.child(profile_path).get_url(user_token)
 
-        response = request.get(url)
+        response = requests.get(url)
 
         if response.status_code == 404:
 
