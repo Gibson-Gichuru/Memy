@@ -355,6 +355,11 @@ div#media-content {
 	background-color: #fff;
 }
 
+.content-player {
+
+	width: 100%;
+}
+
 #post-card .post-card-header {
 	border-radius: 0.4rem 0.4rem 0 0;
 	background-color: #fff;

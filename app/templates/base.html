@@ -1,13 +1,11 @@
 {% extends "bootstrap/base.html" %}
 {% block head %}
 {{ super() }}
-	<link rel="shortcut icon" href="{{ url_for('static', filename = 'icons/icon1.png') }}"
-	type="image/x-icon">
-	<link rel="icon" href="{{ url_for('static', filename = 'icons/icon1.png') }}"
-	type="image/x-icon">
-
+	<link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename = 'icons/logo.svg')}}">
 	<!---->
 	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename = 'css/base.css')}}">
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename = 'css/login.css')}}">
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename = 'css/signup.css')}}">
 {% endblock %}
 {% block title %}Me.my{% endblock %}
 {% block navbar %}
@@ -146,4 +144,8 @@
 	{{ pagedown.include_pagedown() }}
 
 	<script src="{{url_for('static', filename='js/styles.js')}}"></script>
+	<script src="{{ url_for('static', filename = 'js/main.js')}}"></script>
+	<script src="{{ url_for('static', filename = 'js/login.js')}}"></script>
+	<script src="{{ url_for('static', filename = 'js/forgot.js')}}"></script>
+
 {% endblock %}

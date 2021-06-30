@@ -36,9 +36,9 @@ def login():
             return redirect(next)
 
         else:
-            flash("Invalid username or password")
+            flash("Invalid Email or password")
 
-    return redirect(url_for('main.index'))
+    return render_template('auth/login.html', form = form)
 
 
 @auth.route("/register", methods=["GET", "POST"])
@@ -69,7 +69,7 @@ def register():
 
         return redirect(url_for("auth.login"))
 
-    return redirect(url_for("main.index"))
+    return render_template('auth/register.html', form = form)
 
 
 @auth.route("/confirm/<token>")

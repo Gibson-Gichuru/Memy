@@ -26,18 +26,7 @@ import pdb
 @main.route('/', methods = ['GET', 'POST'])
 def index():
 
-	form = LoginForm()
-
-	reg_form = RegistrationForm()
-
-	page = request.args.get('page', 1, type = int)
-	pagination = Post.query.order_by(Post.timestamp.desc()).paginate(page, 
-		current_app.config['FLASKY_POSTS_PER_PAGE'], error_out = False)
-
-	posts = pagination.items
-
-	return render_template('index.html',posts = posts, pagination = pagination, form = form,
-		reg_form = reg_form)
+	return redirect(url_for('auth.login'))
 
 
 @main.route('/contacts', methods =["GET","POST"])

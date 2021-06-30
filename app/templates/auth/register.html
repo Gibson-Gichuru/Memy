@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+{% block title%}| Signup{% endblock %}
+
+{% block navbar %}
+{% endblock %}
+
+{% block head %}
+{{ super() }}
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename = 'icons/logo.svg')}}">
+    <!---->
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename = 'css/signup.css')}}">
+{% endblock %}
+
+{% block content %}
+{% block page_content %}
+
+<div class="wrapper">
+        <section class="main-image">
+            <header>ME.ME</header>
+            <img src="images/monitor.svg" alt="monitor image" class="image">
+        </section>
+        <section class="signup">
+            <small>Already Have An Account?<a href="login.html" class="login">Login</a></small>
+            <h1 class="create-account">CREATE AN ACCOUNT</h1>
+            <form>
+                <div class="input">
+                    <label for="username">Username</label>
+                    <img src="images/icon-error.svg" alt="" class="error-icon">
+                    <input type="text" id="username">
+                    <span class="error-msg"></span> 
+                </div>
+                <div class="input">
+                    <label for="email">Email</label>
+                    <img src="images/icon-error.svg" alt="" class="error-icon">
+                    <input type="text" id="email">
+                    <span class="error-msg"></span>   
+                </div>
+                <div class="input">
+                    <label for="password">Password</label>
+                    <img src="images/icon-error.svg" alt="" class="error-icon">
+                    <input type="password" id="password">
+                    <span class="error-msg"></span>
+                </div>
+                <div class="input">
+                    <label for="confirm-password">Confirm Password</label>
+                    <img src="images/icon-error.svg" alt="" class="error-icon">
+                    <input type="password" id="confirm-password">
+                    <span class="error-msg"></span>
+                </div>
+                <div class="terms">
+                    <input type="checkbox" class="checkbox">
+                    <p>
+                        By creating an account, you agree to the terms of service and conditions, and privacy policy.
+                    </p>
+                </div>
+                <button>CREATE ACCOUNT</button>
+            </form>
+        </section>
+    </div>
+
+{% endblock %}
+
+{% block modals %}
+{% endblock%}
+
+{% endblock %}

@@ -12,7 +12,7 @@
 		{{ url_for('static', filename='icons/card.jpg')}}
 	{% endif %}" class="card-img-top img-responsive">
 	<div class="card-block">
-		<img src="{% if user.profile_pic_id and user.get_profile_pic(user.profile_pic_id, user.firebase_uid,user.idToken %}
+		<img src="{% if user.profile_pic_id and user.get_profile_pic(user.profile_pic_id, user.firebase_uid,user.idToken) %}
 			{{user.get_profile_pic(user.profile_pic_id, user.firebase_uid,user.idToken)}}
 		{% else %}
 			{{ user.gravator()}}
@@ -156,7 +156,7 @@
 					{% if followed != current_user %}
 						<li>
 							<img src=
-							"{% if followed.profile_pic_id and followed.get_profile_pic(followed.profile_pic_id, followed.firebase_uid, followed.idToken %}
+							"{% if followed.profile_pic_id and followed.get_profile_pic(followed.profile_pic_id, followed.firebase_uid, followed.idToken) %}
 									{{followed.get_profile_pic(followed.profile_pic_id, followed.firebase_uid, followed.idToken)}}
 								{% else %}
 									{{ followed.gravator()}}
