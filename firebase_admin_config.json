@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "house-of-memes",
+  "private_key_id": "097dd6f4f368b980f1db976046e924965ef1cdcb",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQCd7OaPm3MiHxFw\n8CtGuLkxiDZkd73+vnyJXvu6Nfc3nbQ4BRyDkbq9+Uz5ibuA0FM2qRXSaIUzvBWB\ncFYS1riQxV/JryFPcqz9BxV8fLdUXEvS1o0+BPqmjP9oAJAzm6a7eXP81NK6hGna\n9izH7WyBA1k88P09SZEgvwe5rqCP57HNjjzGYONJ8RalmhGwncX+qgJ7nb5HquC1\ntUUu8tdgC+BXNDLUfKEB2QmJdm5M7fqPEXY7VLrEl2LiOEKTyhfASobYQLTurJfq\nXrdccu0Ya2O294unffy9SrsTiok2xoetsXRpUMo9Np6U9mHtujHVwhZEPNO06gi+\ndGL2BoH1AgMBAAECggEAAfBJCkVBvg78k1LXbShSWanO5R/VLL3g4HzSgUAtVzjv\n3+osJe9RiAh56exHaXblNpwPwQP4cqCh8PNUkymgnWJW4S5trcB+ICMIn/0V8Qqr\nAZ0RocvE2euMLRYorwF/o/iDNHzWU2TRudbgyNmAxfqpC0b4DNsM1YaSzTQ4E1wj\nUkt8mJznp2rcSdrm0SGF2EhvbZZGnQerWca3wUA3quumG23UJXI/YhFNdN8z6SGa\neM9JEvPT2erDZKo472Xgof2Sx59L+XMMsf5rArilrZ2aDu3slzb9Ugzt3ysXzlnV\nPgMmAV0Zqirx6e2NEwr1GKhPOVfboYOCBwZYn3y2ZwKBgQDLQtyh1jIyo1Br1dfU\nvl5+aLQZnmlC6o2QmJpV34ohMvXSYzBYaT4IcBR8wae0SilcnZnGPEvLXsyqJEni\n2neN8DuLHp9g7o27/wQKuQTXv/e/sq98XYbe4rxI8ZITbHRU8tOTeHXw8okGWOLk\nOgVLPbZlqYF4dvRNrijJIFsrawKBgQDG5revlxVOst/EMyOOPRPaBjMZENlo+Cbl\nsJLj3Vbq9IDOIJW6gqquvmrOmC82pJLIxSeJGVGMrLdfB49bOw16GnQ/SFKzESMb\n3aKWozh/OdCAr3vr7GLRye4XuuG3XARdvM+NuZyhM5KuEo+XmzHBAjLeD1Rsd1pF\nojwe5kTAHwKBgQC/klzwCzl0kIgTmpC5alMVQQm9u5fqAbc7ORj9JprBf45ApEvE\niCx3N2uXyc2OFve02rU8KUgmfUrYcStSLCXSGUGFdW8xpKThMxFUKd1umveeLYNH\n675aA8kB1uyecfGSvuq6ayZ92Zlb6hqukCC9MYTffEsShsrrC+JU7bH/0QKBgCJG\n1FTgNn3PeZx4K6JxiCBEfT3Ol4jtataebVHzbO0koaXkG6l+pydiDUn5E/nYtqr+\nvudzg4g4o4ku5leUf6gRMwNM1WOiimhc843+JthWAEaM91Aa9pSstelE/Wz54I6+\n4Q3NdN6a4qY48KHxzssyM83s2mGu19G0OaQhjquFAoGBAMsfMIdmUgSovcJSNEBh\ns/9er02dVVwF+s80OHw8ghPBpi/BvH8FnbcGpnG5r5fsOtdZa9Vg59Wcsw0peUXi\nnpRgX5EdKCBjLn0ItHmcwANJAupXRHVjqAE0nWhsPTAkUTO9Pm7H2e48gy0MGmg6\nQXWY6pchz9d1qiqHU47Bhlel\n-----END PRIVATE KEY-----\n",
+  "client_email": "firebase-adminsdk-qinz4@house-of-memes.iam.gserviceaccount.com",
+  "client_id": "113858108371501007337",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-qinz4%40house-of-memes.iam.gserviceaccount.com"
+}
