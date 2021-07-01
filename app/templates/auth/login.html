@@ -1,5 +1,10 @@
 {% extends "base.html" %}
-
+{% block head %}
+{{ super() }}
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename = 'icons/logo.svg')}}">
+    <!---->
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename = 'css/login.css')}}">
+{% endblock %}
 {% block title%}| Login{% endblock %}
 
 {% block navbar %}
@@ -11,19 +16,15 @@
 <div class="wrapper">
     <section class="main-image">
         <header>ME.MY</header>
-        <img src="{{ url_for('static', filename = 'icons/monitor.svg')}}" alt="monitor image">
+       <img src="{{ url_for('static', filename = 'icons/monitor.svg')}}" alt="monitor image">
     </section>
     <section class="login">
-        <small>Don't have an account?<a href="{{url_for('auth.register')}}" class="signup">Signup</a></small>
+        <small>Don't have an account?<a href="{{ url_for('auth.register')}}" class="signup">Signup</a></small>
         <h1 class="create-account">LOGIN</h1>
-        {% for message in get_flashed_messages() %}
-            <p style="color:red;">{{ message }}</p>
-        {% endfor %}
         <form method="POST" action="{{ url_for('auth.login')}}">
             {{ form.csrf_token }}
-
             <div class="input">
-                <label for="username">Email</label>
+                <label for="username">Username</label>
                 {{ form.email( id = "username")}}
                 <span class="error-msg"></span>
                 <img src="{{ url_for('static', filename='icons/icon-error.svg')}}" alt="" class="error-icon">
@@ -34,9 +35,15 @@
                 <span class="error-msg"></span>
                 <img src="{{ url_for('static', filename='icons/icon-error.svg')}}" alt="" class="error-icon">
             </div>
-            <a href="{{ url_for('auth.forgot_password')}}" class="forgot">Forgot Password?</a>
-
-            <button type="submit">LOGIN</button>
+            <aside>
+                <div>
+                    {{ form.remember_me( id = "checkbox")}}
+                    <label for="checkbox">Remember me</label>
+                </div>
+                <a href="{{ url_for('auth.forgot_password')}}" class="forgot">Forgot Password?</a>
+            </aside>
+            
+            <button>LOGIN</button>
         </form>
     </section>
 </div>
@@ -47,3 +54,4 @@
 {% endblock%}
 
 {% endblock %}
+

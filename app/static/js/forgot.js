@@ -13,6 +13,8 @@ forgotForm.addEventListener('submit',(e)=>{
     }
     else{
         success('email')
+
+        forgotForm.submit()
     }
 
 })

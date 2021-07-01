@@ -36,6 +36,7 @@ def login():
             return redirect(next)
 
         else:
+            
             flash("Invalid Email or password")
 
     return render_template('auth/login.html', form = form)

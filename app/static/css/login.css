@@ -102,20 +102,13 @@ input{
     outline: none;
     width: 100%;  
 }
-.input.error input{
-    border: 2px solid var(--errorMsg);
-    color: var(--errorMsg);
-}
-.input.error img{
-    opacity: 1;
-}
 .error-icon{
     position: absolute;
     top:60%;
     left: 90%;
     height: 15px;
     width: 15px;
-    opacity: 0;
+    display: none;
 }
 .error-msg{
     color: var(--errorMsg);
@@ -123,11 +116,13 @@ input{
     font-size: 10px;
     font-style: italic;
     position: absolute;
-    left: 70%;
+    left: 50%;
     top: 80%;
+    display: none;
 }
+
 .forgot{
-    margin: 30px 0;
+    margin: 20px 0;
 }
 button{ 
     background: var(--button);
@@ -165,4 +160,5 @@ button:hover{
         height: 86.2vh;
         padding:  90px 30px;
     }
+  
 }

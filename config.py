@@ -78,8 +78,8 @@ class ProductionConfig(Config):
 	MAIL_USERNAME = os.environ.get('MAIL_USERNAME')
 	MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD')
 
-	SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL').replace("://", "ql://", 1) or \
-	'sqlite:///' + os.path.join(basedir, 'data.sqlte')
+	#SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL').replace("://", "ql://", 1) or \
+	#'sqlite:///' + os.path.join(basedir, 'data.sqlte')
 
 
 	@classmethod
