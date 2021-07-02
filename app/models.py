@@ -26,6 +26,11 @@ from app.exceptions import ValidationError
 from .utils import firebase_login, user_uid
 
 
+import rq
+
+import redis
+
+
 
 
 # call back function
@@ -254,6 +259,11 @@ class User(db.Model, DataManipulation, UserMixin):
     comment = db.relationship('Comment', backref='author', lazy = 'dynamic')
 
     like = db.relationship('Like', backref='liked', lazy = 'dynamic')
+
+
+    # monitor each task a user is taking on the application
+
+    task = db.relationship('Task', backref = 'user', lazy = 'dynamic')
 
 
     # return all the posts whose author's are the followed users by the current user instances
@@ -601,6 +611,42 @@ class User(db.Model, DataManipulation, UserMixin):
             db.session.add(user)
 
             user.update()
+
+
+class Task(db.Model):
+
+    id = db.Column(db.String(38), primary_key = True)
+    name = db.Column(db.String(128), index = True)
+    description = db.Column(db.String(128))
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    complete = db.Column(db.Boolean, default = True)
+
+
+
+    """
+
+    Get a job from the qr server queue"""
+
+
+    def get_rq_job(self):
+
+        try:
+
+            rq_job = rq.job.Job.Fetch(self.id, connection = current_app.redis) 
+
+        except (redis.exceptions.RedisError, rq.exceptions.NoSuchJobError):
+
+            return None
+
+
+        return rq_job
+
+
+    def get_progress(self):
+
+        job = self.get_rq_job()
+
+        return job.meta.get('progress', 0) if job is not None else 100
 
 
 
