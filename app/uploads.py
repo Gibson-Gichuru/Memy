@@ -42,17 +42,11 @@ def async_file_upload_to_firebase(full_path, file_to_upload, app, idToken):
 
 	with app.app_context():
 
-		storage = current_app.config['FIREBASE_USER_APP_INSTANCE'].storage()
+		storage = current_app.firebase_user_instance.storage()
 
 		storage.child(full_path).put(file_to_upload, idToken)
 
 		os.remove(file_to_upload)
-
-
-
-def delete_files_from_storage():
-
-	pass
 
 
 
@@ -79,7 +73,7 @@ def admin_firebase_async_file_upload(full_path, upload_file, app):
 
 	with app.app_context():
 
-		storage = current_app.config['FIREBASE_USER_APP_INSTANCE'].storage()
+		storage = current_app.firebase_admin_instance.storage()
 
 		storage.child(full_path).put(upload_file)
 
@@ -100,7 +94,7 @@ def async_file_delete(file_path, app):
 
 	with app.app_context():
 
-		storage = current_app.config['FIREBASE_USER_APP_INSTANCE'].storage()
+		storage = current_app.firebase_user_instance.storage()
 
 		try:
 

@@ -5,9 +5,20 @@ from flask_moment import Moment
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 
+
+from redis import Redis
+
+import rq
+
 from flask_pagedown import PageDown
 
 from config import config
+
+import pyrebase
+import firebase_admin
+from firebase_admin import credentials
+
+from ..config import basedir
 
 bootstrap = Bootstrap()
 mail = Mail()
@@ -18,12 +29,29 @@ login_manager = LoginManager()
 login_manager.session_protection = 'strong'
 login_manager.login_view = 'auth.login'
 
+cred = credentials.Certificate(os.path.join(basedir, 'firebase_admin_config.json'))
 
 def create_app(config_name):
 
 	app = Flask(__name__)
 	app.config.from_object(config[config_name])
 	config[config_name].init_app(app)
+
+	#make a redis conncetion variable
+	app.redis = Redis.from_url(app.config['REDIS_URL'])
+
+	#initiate a redis Queue
+	app.task_queue = rq.Queue('memy-tasks', connection=app.redis)
+
+
+	#Initialize firebase User instance application
+
+	app.firebase_user_instance = pyrebase.initialize_app(app.config['FIREBASE_CONFIG'])
+
+
+	#Initialize firebase Admin instance application
+
+	app.firebase_admin_instance = firebase_admin.initialize_app(cred, {'storageBucket':'house-of-memes.appspot.com'})
 
 
 	if not app.debug and not app.testing and not app.config['SSL_DISABLE']:

@@ -30,17 +30,17 @@ class Config:
 	    serviceAccount = os.path.join(basedir ,'firebase_admin_config.json')
 		)
 
-	FIREBASE_USER_APP_INSTANCE = pyrebase.initialize_app(FIREBASE_CONFIG)
 	MAX_CONTENT_LENGTH = 1024 * 1024 * 10
 	UPLOAD_PATH = os.path.join(basedir, "uploads")
 
 	SSL_DISABLE = True
+	REDIS_URL = os.environ.get('REDIS_URL') or 'redis://'
+
 
 	@staticmethod
 	def init_app(app):
 
-		cred = credentials.Certificate(os.path.join(basedir, 'firebase_admin_config.json'))
-		firebase_admin.initialize_app(cred, {'storageBucket':'house-of-memes.appspot.com'})
+		pass
 
 class DevelopmentConfig(Config):
 	
@@ -78,8 +78,8 @@ class ProductionConfig(Config):
 	MAIL_USERNAME = os.environ.get('MAIL_USERNAME')
 	MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD')
 
-	SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL').replace("://", "ql://", 1) or \
-	'sqlite:///' + os.path.join(basedir, 'data.sqlte')
+	#SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL').replace("://", "ql://", 1) or \
+	#'sqlite:///' + os.path.join(basedir, 'data.sqlte')
 
 
 	@classmethod

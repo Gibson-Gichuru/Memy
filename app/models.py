@@ -613,6 +613,26 @@ class User(db.Model, DataManipulation, UserMixin):
             user.update()
 
 
+    def launch_task(self, name, description, *args, **kwargs):
+
+        rq_job = current_app.task_queue.enqueue('app.tasks' + name, self.id, *args, **kwargs)
+
+        task = Task(id = rq_job.get_id(), name = name, description = description, user = self)
+
+        db.session.add(task)
+
+        return task
+
+
+    def get_tasks_in_progress(self):
+
+        return Task.query.filter_by(user = self, complete = False).all()
+
+    def get_task_in_progress(self,name):
+
+        return Task.query.filter_by(name = name, user = self, complete = False).first()
+
+
 class Task(db.Model):
 
     id = db.Column(db.String(38), primary_key = True)
