@@ -170,7 +170,7 @@ class Post(db.Model, DataManipulation):
     @staticmethod
     def get_post_file(file_id, author_uid,author_token):
 
-        storage = current_app.config['FIREBASE_USER_APP_INSTANCE'].storage()
+        storage = current_app.firebase_user_instance.storage()
 
         profile_path = "/data/{}/posts/{}".format(author_uid, file_id)
 
@@ -638,7 +638,7 @@ class Task(db.Model):
     id = db.Column(db.String(38), primary_key = True)
     name = db.Column(db.String(128), index = True)
     description = db.Column(db.String(128))
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     complete = db.Column(db.Boolean, default = True)
 
 
