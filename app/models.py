@@ -58,12 +58,59 @@ class DataManipulation:
         return db.session.commit()
 
 
+###USER CURRENT ENABLED ROLES: The combination of this roles produces the unique type of user
+
 class Permission:
     FOLLOW = 0x01
     COMMENT = 0x02
     WRITE_ARTICLES = 0x04
     MODERATE_COMMENTS = 0x08
     ADMINISTER = 0x80
+
+
+### Surported File functionality the file uploaded to the application can only server the bellow outlined functionality
+class FilePurpose:
+
+    PROFILE_PICTURE = 0x01
+    PROFILE_COVER_PHOTO = 0x02
+    STATUS_UPDATE = 0x04
+    POST_UPLOAD = 0x08
+
+
+class FileRole(db.Model):
+
+    __tablename__ = 'fileroles'
+
+    id = db.Column(db.Integer, primary_key = True)
+
+    name = db.Column(db.String(64), unique = True)
+
+    file = db.relationship("Files", backref = 'filerole', lazy = 'dynamic')
+
+    @staticmethod
+    def insert_file_roles():
+
+        file_roles = {"profile_pic": (FilePurpose.PROFILE_PICTURE), 
+        "profile_cover":(FilePurpose.PROFILE_COVER_PHOTO), 
+        "status_updates":(FilePurpose.STATUS_UPDATE),
+        "post_upload":(FilePurpose.POST_UPLOAD)}
+
+        for r in file_roles:
+
+            role = FileRole.query.filter_by(name = r).first()
+
+            if role is None:
+
+                role = FileRole(name= r)
+
+            db.session.add(role)
+
+        db.session.commit()
+
+    def __repr__(self):
+
+        return f"<FileRole>{self.name}"
+
 
 
 class Role(db.Model, DataManipulation):
@@ -132,6 +179,8 @@ class Post(db.Model, DataManipulation):
 
     like = db.relationship('Like', backref='likes', lazy = 'dynamic')
 
+    file = db.relationship('File', backref = 'post', lazy = 'dynamic')
+
     @staticmethod 
     def on_changed_body(target, value, oldvalue, initiator):
 
@@ -167,22 +216,10 @@ class Post(db.Model, DataManipulation):
             db.session.add(post)
             db.session.commit()
 
-    @staticmethod
-    def get_post_file(file_id, author_uid,author_token):
+    @property 
+    def post_file(self):
 
-        storage = current_app.firebase_user_instance.storage()
-
-        profile_path = "/data/{}/posts/{}".format(author_uid, file_id)
-
-        url = storage.child(profile_path).get_url(author_token)
-
-        response = requests.get(url)
-
-        if response.status_code == 404:
-
-            return None
-
-        return url
+        return File.query.join(PostFile, PostFile.post_id = self.id).filter_by(PostFile.post_id = self.id).first()
 
 
     def to_json(self):
@@ -239,8 +276,6 @@ class User(db.Model, DataManipulation, UserMixin):
     about_me = db.Column(db.Text())
     member_since = db.Column(db.DateTime(), default = datetime.utcnow)
     last_seen = db.Column(db.DateTime(), default = datetime.utcnow)
-    profile_pic_id = db.Column(db.String(120), default = None)
-    cover_photo_id = db.Column(db.String(120), default = None)
     firebase_user_uid = db.Column(db.String(120), default = None)
     uid_token = db.Column(db.String(1000), default = None)
 
@@ -264,6 +299,9 @@ class User(db.Model, DataManipulation, UserMixin):
     # monitor each task a user is taking on the application
 
     task = db.relationship('Task', backref = 'user', lazy = 'dynamic')
+
+    ### user account files relationship in that whenever a user account is deleted all the related files to the account also get deleted
+    file = db.relationship('Files', backref = 'files', lazy = 'dynamic', cascade = 'all. delete-orphan')
 
 
     # return all the posts whose author's are the followed users by the current user instances
@@ -349,22 +387,25 @@ class User(db.Model, DataManipulation, UserMixin):
         self.profile_pic_id = profile_pic_id
 
 
-    @staticmethod
-    def get_profile_pic(file_id, user_id,user_token):
+    @property 
+    def profile_pic(self):
 
-        storage = current_app.config['FIREBASE_USER_APP_INSTANCE'].storage()
+        return File.query.join(UserAccountFiles, UserAccountFiles.user_id = self.id).filter_by(UserAccountFiles.user_id = self.id, 
+            UserAccountFiles.file_role = FilePurpose.PROFILE_PICTURE).order_by(UserAccountFiles.timestamp.desc()).first()
 
-        profile_path = "/data/{}/profile/{}".format(user_id, file_id)
 
-        url = storage.child(profile_path).get_url(user_token)
+    @property 
+    def profile_cover_photo(self):
 
-        response = requests.get(url)
+        return File.query.join(UserAccountFiles, UserAccountFiles.user_id = self.id).filter_by(UserAccountFiles.user_id = self.id, 
+            UserAccountFiles.file_role = FilePurpose.PROFILE_COVER_PHOTO).order_by(UserAccountFiles.timestamp.desc()).first()
 
-        if response.status_code == 404:
 
-            return None
+    @property 
+    def status_updates(self):
 
-        return url 
+        return File.query.join(UserAccountFiles, UserAccountFiles.user_id = self.id).filter_by(UserAccountFiles.user_id = self.id, 
+            UserAccountFiles.file_role = FilePurpose.STATUS_UPDATE).order_by(UserAccountFiles.timestamp, 'desc').all()
 
     def can(self, permissions):
 
@@ -631,6 +672,55 @@ class User(db.Model, DataManipulation, UserMixin):
     def get_task_in_progress(self,name):
 
         return Task.query.filter_by(name = name, user = self, complete = False).first()
+
+
+class UserAccountFiles(db.Model):
+
+    id = db.Column(db.Integer, primary_key = True)
+
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+
+    file_id = db.Column(db.Integer, db.ForeignKey('files.id'))
+
+    file_role = db.Column(db.Integer, nullable = False)
+
+    timestamp = db.Column(db.DateTime, index = True, default = datetime.utcnow)
+
+
+
+class PostFile(db.Model):
+
+    __tablename__ = "postfiles"
+
+    id = db.Column(db.Integer, primary_key = True)
+
+    post_id = db.Column(db.Integer, db.ForeignKey('posts.id'))
+
+    file_id = db.Column(db.Integer, db.ForeignKey('files.id'))
+
+class File(db.Model):
+
+    __tablename__ = 'files'
+
+
+    id = db.Column(db.Integer, primary_key = True)
+
+    role = db.Column(db.Integer, db.ForeignKey('fileroles.id'))
+
+    file_name = db.Column(db.String(200), index = True, default= None)
+
+    file_url = db.Column(db.String(1000), default = None)
+
+    user = db.relationship('User', backref='user', lazy = 'dynamic')
+
+    post = db.relationship('Post', backref='post', lazy = 'dynamic')
+
+
+    def __repr__(self):
+
+        return f"<File:{self.name}>"
+
+
 
 
 class Task(db.Model):
