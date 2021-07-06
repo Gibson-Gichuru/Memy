@@ -19,15 +19,15 @@ class Config:
 	FLASKY_FOLLOWERS_PER_PAGE = 10
 	FIREBASE_CONFIG = dict(
 
-		apiKey="AIzaSyDjODHfV_kxeoXgalnfaCyiyd38_EuBBds",
-	    authDomain= "house-of-memes.firebaseapp.com",
-	    projectId="house-of-memes",
-	    storageBucket="house-of-memes.appspot.com",
+		apiKey="AIzaSyD9UiEknF7GgnalTygFTJXKrU1OZoadEkg",
+	    authDomain= "testing-261cc.firebaseapp.com",
+	    projectId="testing-261cc",
+	    storageBucket="testing-261cc.appspot.com",
 	    databaseURL="https://house-of-memes-default-rtdb.firebaseio.com/",
-	    messagingSenderId="737530410440",
-	    appId= "1:737530410440:web:21441705198ae5fd46bcfd",
-	    measurementId="G-0SXPFWWD1G",
-	    serviceAccount = os.path.join(basedir ,'firebase_admin_config.json')
+	    messagingSenderId="6501155910",
+	    appId= "1:6501155910:web:d91e7d00a3a566c74eb647",
+	    measurementId="G-PFWZ95RLLF",
+	    serviceAccount = os.path.join(basedir ,'testing_firebase_admin_config.json')
 		)
 
 	MAX_CONTENT_LENGTH = 1024 * 1024 * 10
@@ -71,6 +71,19 @@ class TestingConfig(Config):
 		pass
 
 class ProductionConfig(Config):
+
+	FIREBASE_CONFIG = dict(
+
+		apiKey="AIzaSyDjODHfV_kxeoXgalnfaCyiyd38_EuBBds",
+	    authDomain= "house-of-memes.firebaseapp.com",
+	    projectId="house-of-memes",
+	    storageBucket="house-of-memes.appspot.com",
+	    databaseURL="https://house-of-memes-default-rtdb.firebaseio.com/",
+	    messagingSenderId="737530410440",
+	    appId= "1:737530410440:web:21441705198ae5fd46bcfd",
+	    measurementId="G-0SXPFWWD1G",
+	    serviceAccount = os.path.join(basedir ,'firebase_admin_config.json')
+		)
 
 	MAIL_SERVER = 'smtp.googlemail.com'
 	MAIL_PORT = 587
