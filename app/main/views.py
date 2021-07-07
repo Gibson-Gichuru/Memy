@@ -29,22 +29,6 @@ def index():
 	return redirect(url_for('auth.login'))
 
 
-@main.route('/contacts', methods =["GET","POST"])
-def contacts():
-
-	form = ContactForm()
-
-	if form.validate_on_submit():
-
-		# send an email to the addmin
-		send_email(current_app.config['FLASK_ADIM'],
-		 "Message from a {}".format(form.name.data),
-			"contacts/message", form = form )
-		return redirect(url_for('main.index'))
-	return render_template('contact.html', form = form)
-
-
-
 
 @main.route('/home', methods = ['GET', 'POST'])
 @login_required
@@ -71,8 +55,6 @@ def home():
 			post.cloud_file_name = cloud_file_name.filename
 
 		db.session.add(post)
-
-		post.add(post)
 
 		return redirect(url_for('main.home'))
 
@@ -172,8 +154,6 @@ def edit_profile():
 
 		db.session.add(user)
 
-		user.update()
-
 		flash('Your Profile has been updated')
 		return redirect(url_for('.user', username = current_user.username))
 
@@ -226,7 +206,6 @@ def edit_profile_admin(id):
 
 
 		db.session.add(user)
-		user.update()
 
 		flash('The profile have been updated')
 
@@ -266,8 +245,6 @@ def edit(id):
 	if form.validate_on_submit():
 
 		post.body = form.body.data
-		post.update()
-
 
 		flash('Post have been updated')
 		return redirect(url_for('main.post', id = post.id))

@@ -40,23 +40,6 @@ def load_user(user_id):
     return User.query.get(int(user_id))
 
 
-class DataManipulation:
-    def add(self, resource):
-
-        db.session.add(resource)
-
-        return db.session.commit()
-
-    def delete(self, resource):
-
-        db.session.delete(resource)
-
-        return db.session.commit()
-
-    def update(self):
-
-        return db.session.commit()
-
 
 ###USER CURRENT ENABLED ROLES: The combination of this roles produces the unique type of user
 
@@ -85,7 +68,7 @@ class FileRole(db.Model):
 
     name = db.Column(db.String(64), unique = True)
 
-    file = db.relationship("Files", backref = 'filerole', lazy = 'dynamic')
+    file = db.relationship("File", backref = 'filerole', lazy = 'dynamic')
 
     @staticmethod
     def insert_file_roles():
@@ -113,7 +96,7 @@ class FileRole(db.Model):
 
 
 
-class Role(db.Model, DataManipulation):
+class Role(db.Model):
 
     __tablename__ = "roles"
 
@@ -161,7 +144,7 @@ class Role(db.Model, DataManipulation):
         return "<Role {}>".format(self.name)
 
 
-class Post(db.Model, DataManipulation):
+class Post(db.Model):
 
     __tablename__ = "posts"
 
@@ -170,8 +153,6 @@ class Post(db.Model, DataManipulation):
     timestamp = db.Column(db.DateTime, index = True, default = datetime.utcnow)
     author_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     body_html = db.Column(db.Text)
-    cloud_file_name = db.Column(db.String(56), default = None)
-
 
     # relationships
 
@@ -219,7 +200,9 @@ class Post(db.Model, DataManipulation):
     @property 
     def post_file(self):
 
-        return File.query.join(PostFile, PostFile.post_id == self.id).filter_by(PostFile.post_id == self.id).first()
+
+        ##return the file database objects
+        return file.query()
 
 
     def to_json(self):
@@ -261,7 +244,7 @@ class Follow(db.Model):
     timestamp = db.Column(db.DateTime(), default = datetime.utcnow)
 
 
-class User(db.Model, DataManipulation, UserMixin):
+class User(db.Model, UserMixin):
 
     __tablename__ = "users"
 
@@ -301,7 +284,7 @@ class User(db.Model, DataManipulation, UserMixin):
     task = db.relationship('Task', backref = 'user', lazy = 'dynamic')
 
     ### user account files relationship in that whenever a user account is deleted all the related files to the account also get deleted
-    file = db.relationship('Files', backref = 'files', lazy = 'dynamic', cascade = 'all, delete-orphan')
+    file = db.relationship('File', backref = 'owner', lazy = 'dynamic', cascade = 'all, delete-orphan')
 
 
     # return all the posts whose author's are the followed users by the current user instances
@@ -379,7 +362,7 @@ class User(db.Model, DataManipulation, UserMixin):
         # we want the current user to view posts from the users they are following together with their own post so
         # the current user have to follow themselves
 
-        self.follow(self)
+        #self.follow(self)
 
 
     def set_profile_pic(profile_pic_id):
@@ -390,22 +373,21 @@ class User(db.Model, DataManipulation, UserMixin):
     @property 
     def profile_pic(self):
 
-        return File.query.join(UserAccountFiles, UserAccountFiles.user_id == self.id).filter_by(UserAccountFiles.user_id == self.id, 
-            UserAccountFiles.file_role == FilePurpose.PROFILE_PICTURE).order_by(UserAccountFiles.timestamp.desc()).first()
+        ## return the file database object 
+
+        return file.query.filter_by(file.role == FilePurpose.PROFILE_PICTURE).order_by(file.timestamp.desc()).first()
 
 
     @property 
     def profile_cover_photo(self):
 
-        return File.query.join(UserAccountFiles, UserAccountFiles.user_id == self.id).filter_by(UserAccountFiles.user_id == self.id, 
-            UserAccountFiles.file_role == FilePurpose.PROFILE_COVER_PHOTO).order_by(UserAccountFiles.timestamp.desc()).first()
+        return file.query.filter_by(file.role == FilePurpose.PROFILE_COVER_PHOTO).order_by(file.timestamp.desc()).first()
 
 
     @property 
     def status_updates(self):
 
-        return File.query.join(UserAccountFiles, UserAccountFiles.user_id == self.id).filter_by(UserAccountFiles.user_id == self.id, 
-            UserAccountFiles.file_role == FilePurpose.STATUS_UPDATE).order_by(UserAccountFiles.timestamp, 'desc').all()
+        return file.query.filter_by(file.role == FilePurpose.STATUS_UPDATE).order_by(file.timestamp.desc()).all()
 
     def can(self, permissions):
 
@@ -599,6 +581,8 @@ class User(db.Model, DataManipulation, UserMixin):
 
             db.session.add(u)
 
+            u.follow(u)
+
             try:
 
                 db.session.commit()
@@ -674,29 +658,8 @@ class User(db.Model, DataManipulation, UserMixin):
         return Task.query.filter_by(name = name, user = self, complete = False).first()
 
 
-class UserAccountFiles(db.Model):
-
-    id = db.Column(db.Integer, primary_key = True)
-
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-
-    file_id = db.Column(db.Integer, db.ForeignKey('files.id'))
-
-    file_role = db.Column(db.Integer, nullable = False)
-
-    timestamp = db.Column(db.DateTime, index = True, default = datetime.utcnow)
 
 
-
-class PostFile(db.Model):
-
-    __tablename__ = "postfiles"
-
-    id = db.Column(db.Integer, primary_key = True)
-
-    post_id = db.Column(db.Integer, db.ForeignKey('posts.id'))
-
-    file_id = db.Column(db.Integer, db.ForeignKey('files.id'))
 
 class File(db.Model):
 
@@ -711,9 +674,13 @@ class File(db.Model):
 
     file_url = db.Column(db.String(1000), default = None)
 
-    user = db.relationship('User', backref='user', lazy = 'dynamic')
+    owner_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 
-    post = db.relationship('Post', backref='post', lazy = 'dynamic')
+    post_belong = db.Column(db.Integer, db.ForeignKey('posts.id'))
+
+
+    timestamp = db.Column(db.DateTime, default = datetime.utcnow)
+
 
 
     def __repr__(self):

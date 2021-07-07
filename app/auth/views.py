@@ -55,8 +55,8 @@ def register():
             password=form.password.data,
         )
 
-        user.add(user)
-
+        db.session.add(user)
+        user.follow(user)
         token = user.generate_confirmation_token()
         send_email(
             user.email,
@@ -90,8 +90,6 @@ def confirm(token):
         current_user.idToken = user_login_to_firebase['idToken']
 
         db.session.add(current_user)
-
-        current_user.update()
 
         flash("You have confired your account. Thanks!")
 
