@@ -219,7 +219,7 @@ class Post(db.Model, DataManipulation):
     @property 
     def post_file(self):
 
-        return File.query.join(PostFile, PostFile.post_id = self.id).filter_by(PostFile.post_id = self.id).first()
+        return File.query.join(PostFile, PostFile.post_id == self.id).filter_by(PostFile.post_id == self.id).first()
 
 
     def to_json(self):
@@ -301,7 +301,7 @@ class User(db.Model, DataManipulation, UserMixin):
     task = db.relationship('Task', backref = 'user', lazy = 'dynamic')
 
     ### user account files relationship in that whenever a user account is deleted all the related files to the account also get deleted
-    file = db.relationship('Files', backref = 'files', lazy = 'dynamic', cascade = 'all. delete-orphan')
+    file = db.relationship('Files', backref = 'files', lazy = 'dynamic', cascade = 'all, delete-orphan')
 
 
     # return all the posts whose author's are the followed users by the current user instances
@@ -390,22 +390,22 @@ class User(db.Model, DataManipulation, UserMixin):
     @property 
     def profile_pic(self):
 
-        return File.query.join(UserAccountFiles, UserAccountFiles.user_id = self.id).filter_by(UserAccountFiles.user_id = self.id, 
-            UserAccountFiles.file_role = FilePurpose.PROFILE_PICTURE).order_by(UserAccountFiles.timestamp.desc()).first()
+        return File.query.join(UserAccountFiles, UserAccountFiles.user_id == self.id).filter_by(UserAccountFiles.user_id == self.id, 
+            UserAccountFiles.file_role == FilePurpose.PROFILE_PICTURE).order_by(UserAccountFiles.timestamp.desc()).first()
 
 
     @property 
     def profile_cover_photo(self):
 
-        return File.query.join(UserAccountFiles, UserAccountFiles.user_id = self.id).filter_by(UserAccountFiles.user_id = self.id, 
-            UserAccountFiles.file_role = FilePurpose.PROFILE_COVER_PHOTO).order_by(UserAccountFiles.timestamp.desc()).first()
+        return File.query.join(UserAccountFiles, UserAccountFiles.user_id == self.id).filter_by(UserAccountFiles.user_id == self.id, 
+            UserAccountFiles.file_role == FilePurpose.PROFILE_COVER_PHOTO).order_by(UserAccountFiles.timestamp.desc()).first()
 
 
     @property 
     def status_updates(self):
 
-        return File.query.join(UserAccountFiles, UserAccountFiles.user_id = self.id).filter_by(UserAccountFiles.user_id = self.id, 
-            UserAccountFiles.file_role = FilePurpose.STATUS_UPDATE).order_by(UserAccountFiles.timestamp, 'desc').all()
+        return File.query.join(UserAccountFiles, UserAccountFiles.user_id == self.id).filter_by(UserAccountFiles.user_id == self.id, 
+            UserAccountFiles.file_role == FilePurpose.STATUS_UPDATE).order_by(UserAccountFiles.timestamp, 'desc').all()
 
     def can(self, permissions):
 
