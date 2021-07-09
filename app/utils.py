@@ -34,13 +34,13 @@ def async_login_to_firebase(login_token, app):
 
 		try:
 
-			user_auth = current_app.config["FIREBASE_USER_APP_INSTANCE"].auth()
+			user_auth = current_app.config['FIREBASE_USER_APP_INSTANCE'].auth()
 
 			return user_auth.sign_in_with_custom_token(login_token.decode('utf-8'))
 
 		except:
 
-			return False		
+			return None		
 			
 
 
@@ -74,17 +74,3 @@ def get_user_uid(idToken, app):
 		except:
 
 			return None
-
-
-
-
-		
-
-
-
-
-
-
-
-
-

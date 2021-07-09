@@ -46,13 +46,19 @@ def home():
 
 		if form.file_upload is not None:
 
-			login_to_to_firebase = firebase_login(current_user.firebase_custom_token)
 
-			cloud_file_name = rename_file(form.file_upload.data)
-			firebase_upload_file(cloud_file_name,
-			 "/data/{}/posts/".format(current_user.firebase_uid), login_to_to_firebase['idToken'])
+			post.author.launch_task('app.tasks.upload_file_to_cloud', "Post File Upload", form.file_upload.data(), post)
+			### current_user.launch('upload_file_to_cloud', file_object post_object)
 
-			post.cloud_file_name = cloud_file_name.filename
+			#login_to_to_firebase = firebase_login(current_user.firebase_custom_token)
+
+			#cloud_file_name = rename_file(form.file_upload.data)
+			#firebase_upload_file(cloud_file_name,
+			# "/data/{}/posts/".format(current_user.firebase_uid), login_to_to_firebase['idToken'])
+
+			#post.cloud_file_name = cloud_file_name.filename
+
+		
 
 		db.session.add(post)
 

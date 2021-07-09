@@ -19,8 +19,8 @@
 
                     <a href="{{ url_for('main.user', username=post.author.username) }}" id="display-pic">
                         <img src="
-                        {% if post.author.profile_pic_id and post.author.get_profile_pic(post.author.profile_pic_id, post.author.firebase_uid, post.author.idToken )%}
-                        `{{post.author.get_profile_pic(post.author.profile_pic_id, post.author.firebase_uid, post.author.idToken)}}
+                        {% if post.author.profile_pic %}
+                        `{{post.author.profile_pic.url}}
                         {% else %}
                             {{ post.author.gravator()}}
                         {% endif %}" class="post-avator img-circle">

@@ -18,11 +18,12 @@ from config import config
 
 from config import basedir
 
-##Firebase dependecies importation
 
-import pyrebase
+##Firebase import statements
+
 import firebase_admin
 from firebase_admin import credentials
+
 
 ##Standard dependecies importation
 import os    
@@ -37,7 +38,9 @@ login_manager = LoginManager()
 login_manager.session_protection = 'strong'
 login_manager.login_view = 'auth.login'
 
+
 cred = credentials.Certificate(os.path.join(basedir, 'firebase_admin_config.json'))
+firebase_admin.initialize_app(cred, {'storageBucket':'house-of-memes.appspot.com'})
 
 def create_app(config_name):
 
@@ -48,19 +51,17 @@ def create_app(config_name):
 	#make a redis conncetion variable
 	app.redis = Redis.from_url(app.config['REDIS_URL'])
 
+	## firebase admin app
+	try:
+
+		app.firebase_admin_app = firebase_admin.get_app()
+
+	except ValueError as e:	
+
+		firebase_admin.initialize_app(cred)
+
 	#initiate a redis Queue
 	app.task_queue = rq.Queue('memy-tasks', connection=app.redis)
-
-
-	#Initialize firebase User instance application
-
-	app.firebase_user_instance = pyrebase.initialize_app(app.config['FIREBASE_CONFIG'])
-
-
-	#Initialize firebase Admin instance application
-
-	app.firebase_admin_instance = firebase_admin.initialize_app(cred, {'storageBucket':'house-of-memes.appspot.com'})
-
 
 	if not app.debug and not app.testing and not app.config['SSL_DISABLE']:
 

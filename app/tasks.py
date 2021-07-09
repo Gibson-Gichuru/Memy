@@ -1,12 +1,23 @@
+import  os
+
+import pyrebase
+import firebase_admin
+
+
 from rq import get_current_job
 from app import create_app
 
-app = create_app()
+app = create_app(os.environ.get('FLASK_CONFIG') or 'default')
 app.app_context().push()
 
 from app import db 
 
 from app.models import Task
+
+from . utils import firebase_login
+
+from . uploads import firebase_upload_file
+
 
 
 def _set_job_progress(progress):
@@ -42,19 +53,33 @@ def _set_job_progress(progress):
 
 
 
-def upload_file_to_cloud():
+def upload_file_to_cloud(file_object, post_object):
 
 	try:
 
 		## login the given user to firebase
 
+		cloud_login = firebase_login(post_object.author.firebase_custom_token)
+
+
+		print(cloud_login)
+
+
 		## upload the given file
 
-	except :
+	except  Exception as e:
+
+
+		print(e)
+
+
 
 		## handle unexcected errors
 
 
 	finally:
+
+
+		print("finished Task")
 
 		## clean up the file from the local file system-storage

@@ -3,8 +3,7 @@ import os
 basedir = os.path.abspath(os.path.dirname(__file__))
 
 import pyrebase
-import firebase_admin
-from firebase_admin import credentials
+
 
 class Config:
 	
@@ -19,17 +18,18 @@ class Config:
 	FLASKY_FOLLOWERS_PER_PAGE = 10
 	FIREBASE_CONFIG = dict(
 
-		apiKey="AIzaSyD9UiEknF7GgnalTygFTJXKrU1OZoadEkg",
-	    authDomain= "testing-261cc.firebaseapp.com",
-	    projectId="testing-261cc",
-	    storageBucket="testing-261cc.appspot.com",
+		apiKey="AIzaSyDjODHfV_kxeoXgalnfaCyiyd38_EuBBds",
+	    authDomain= "house-of-memes.firebaseapp.com",
+	    projectId="house-of-memes",
+	    storageBucket="house-of-memes.appspot.com",
 	    databaseURL="https://house-of-memes-default-rtdb.firebaseio.com/",
-	    messagingSenderId="6501155910",
-	    appId= "1:6501155910:web:d91e7d00a3a566c74eb647",
-	    measurementId="G-PFWZ95RLLF",
-	    serviceAccount = os.path.join(basedir ,'testing_firebase_admin_config.json')
+	    messagingSenderId="737530410440",
+	    appId= "1:737530410440:web:21441705198ae5fd46bcfd",
+	    measurementId="G-0SXPFWWD1G",
+	    serviceAccount = os.path.join(basedir ,'firebase_admin_config.json')
 		)
 
+	FIREBASE_USER_APP_INSTANCE = pyrebase.initialize_app(FIREBASE_CONFIG)
 	MAX_CONTENT_LENGTH = 1024 * 1024 * 10
 	UPLOAD_PATH = os.path.join(basedir, "uploads")
 
@@ -39,6 +39,8 @@ class Config:
 
 	@staticmethod
 	def init_app(app):
+
+		
 
 		pass
 
@@ -72,27 +74,14 @@ class TestingConfig(Config):
 
 class ProductionConfig(Config):
 
-	FIREBASE_CONFIG = dict(
-
-		apiKey="AIzaSyDjODHfV_kxeoXgalnfaCyiyd38_EuBBds",
-	    authDomain= "house-of-memes.firebaseapp.com",
-	    projectId="house-of-memes",
-	    storageBucket="house-of-memes.appspot.com",
-	    databaseURL="https://house-of-memes-default-rtdb.firebaseio.com/",
-	    messagingSenderId="737530410440",
-	    appId= "1:737530410440:web:21441705198ae5fd46bcfd",
-	    measurementId="G-0SXPFWWD1G",
-	    serviceAccount = os.path.join(basedir ,'firebase_admin_config.json')
-		)
-
 	MAIL_SERVER = 'smtp.googlemail.com'
 	MAIL_PORT = 587
 	MAIL_USE_TLS = True
 	MAIL_USERNAME = os.environ.get('MAIL_USERNAME')
 	MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD')
 
-	#SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL').replace("://", "ql://", 1) or \
-	#'sqlite:///' + os.path.join(basedir, 'data.sqlte')
+	SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL').replace("://", "ql://", 1) or \
+	'sqlite:///' + os.path.join(basedir, 'data.sqlte')
 
 
 	@classmethod
