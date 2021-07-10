@@ -6,7 +6,7 @@ from .forms import NameForm, EditProfileForm, EditProfileAdminForm, ContactForm,
 
 from ..auth.forms import LoginForm, RegistrationForm
 
-from ..models import User, Permission, Role, Post, Comment
+from ..models import User, Permission, Role, Post, Comment, File, FilePurpose
 
 from flask_login import login_required, current_user
 
@@ -46,19 +46,20 @@ def home():
 
 		if form.file_upload is not None:
 
+			file_role = FileRole.query.filter_by(name = 'post_upload')
 
-			post.author.launch_task('app.tasks.upload_file_to_cloud', "Post File Upload", form.file_upload.data(), post)
-			### current_user.launch('upload_file_to_cloud', file_object post_object)
 
-			#login_to_to_firebase = firebase_login(current_user.firebase_custom_token)
+			file = File(file_name =rename_file(form.file_upload.data()), 
+				file_url = f'/data/{post.author.firebase_custom_token}/posts/{file_name}')
 
-			#cloud_file_name = rename_file(form.file_upload.data)
-			#firebase_upload_file(cloud_file_name,
-			# "/data/{}/posts/".format(current_user.firebase_uid), login_to_to_firebase['idToken'])
+			file.filerole = file_role
 
-			#post.cloud_file_name = cloud_file_name.filename
+			file.post = post
 
-		
+			db.session.add(file)
+
+			post.author.launch_task('upload_file_to_cloud', "Post File Upload", 
+				form.file_upload.data(),file.id)
 
 		db.session.add(post)
 

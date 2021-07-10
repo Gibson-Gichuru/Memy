@@ -56,7 +56,7 @@ class DevelopmentConfig(Config):
 	MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD')
 
 	SQLALCHEMY_DATABASE_URI = os.environ.get('DEV_DATABASE_URL') or \
-	'sqlite:///' + os.path.join(basedir, 'data-dev.sqlite')
+	"mysql+pymysql://{}:{}@localhost/{}".format(os.environ.get("DATABASE_USERNAME"),os.environ.get("DATABASE_PASSWORD"),os.environ.get("DATABASE_NAME"))
 
 class TestingConfig(Config):
 
@@ -80,8 +80,8 @@ class ProductionConfig(Config):
 	MAIL_USERNAME = os.environ.get('MAIL_USERNAME')
 	MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD')
 
-	SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL').replace("://", "ql://", 1) or \
-	'sqlite:///' + os.path.join(basedir, 'data.sqlte')
+	#SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL').replace("://", "ql://", 1) or \
+	#'sqlite:///' + os.path.join(basedir, 'data.sqlte')
 
 
 	@classmethod

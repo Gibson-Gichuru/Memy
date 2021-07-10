@@ -92,7 +92,7 @@ class FileRole(db.Model):
 
     def __repr__(self):
 
-        return f"<FileRole>{self.name}"
+        return f"<FileRole:{self.name}>"
 
 
 
@@ -200,9 +200,9 @@ class Post(db.Model):
     @property 
     def post_file(self):
 
-
         ##return the file database objects
-        return file.query()
+        return file.query.all()
+
 
 
     def to_json(self):
@@ -283,8 +283,8 @@ class User(db.Model, UserMixin):
 
     task = db.relationship('Task', backref = 'user', lazy = 'dynamic')
 
-    ### user account files relationship in that whenever a user account is deleted all the related files to the account also get deleted
-    file = db.relationship('File', backref = 'owner', lazy = 'dynamic', cascade = 'all, delete-orphan')
+
+    file = db.relationship('File', backref = 'user', lazy = "dynamic")
 
 
     # return all the posts whose author's are the followed users by the current user instances
@@ -674,18 +674,17 @@ class File(db.Model):
 
     file_url = db.Column(db.String(1000), default = None)
 
-    owner_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-
-    post_belong = db.Column(db.Integer, db.ForeignKey('posts.id'))
-
-
     timestamp = db.Column(db.DateTime, default = datetime.utcnow)
+
+    post_id = db.Column(db.Integer, db.ForeignKey("posts.id"))
+
+    owner_id = db.Column(db.Integer, db.ForeignKey("users.id"))
 
 
 
     def __repr__(self):
 
-        return f"<File:{self.name}>"
+        return f"<File:{self.file_name}>"
 
 
 
