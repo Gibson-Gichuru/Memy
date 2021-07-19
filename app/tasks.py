@@ -26,7 +26,7 @@ import time
 
 def _set_job_progress(progress):
 
-	## geth the current job the worker is handling
+	## get the current job the worker is handling
 
 	job = get_current_job()
 
@@ -45,7 +45,7 @@ def _set_job_progress(progress):
 		task.user.add_notification('upload_progress', {'task_id': job.get_id(), 'progress':progress})"""
 
 
-		### incase the progress key:value exceeds 100 it means the job was handled and completed
+		### in case the progress key:value exceeds 100 it means the job was handled and completed
 
 		if progress >= 100:
 
@@ -65,7 +65,7 @@ def upload_file_to_cloud(file_object,file_object_id):
 
 		file = File.query.get(file_object_id)
 
-		## login the given user to firebase
+		## login the given user to Firebase
 
 		if file is not None:
 
@@ -73,17 +73,17 @@ def upload_file_to_cloud(file_object,file_object_id):
 
 			## upload the given file
 
-			firebase_upload_file(file_object, file[0].file_url, cloud_login['idToken'])
+			firebase_upload_file(file_object, file.file_url, cloud_login['idToken'])
 
 	except  Exception as e:
 
 		app.logger.error('Unhandled exception', exc_info=sys.exc_info())
-		## handle unexcected errors
+		## handle unexpected errors
 
 
 	finally:
 
-		## get the file url from the cloud and update the file url to database
+		## get the file URL from the cloud and update the file URL to database
 
 		storage = app.config['FIREBASE_USER_APP_INSTANCE'].storage()
 
