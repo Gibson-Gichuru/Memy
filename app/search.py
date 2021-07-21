@@ -42,16 +42,16 @@ def query_index(index, query, page, per_page):
     search = current_app.elasticsearch.search(
         index=index,
         body={
-            "query": {"multi_match": {"query": query, fields: "[*]"}},
-            "from": (page - 1) * per_page,
-            "size": per_page,
+            'query': {'multi_match': {'query': query, 'fields': ['*']}},
+            'from': (page - 1) * per_page,
+            'size': per_page,
         },
     )
 
     # get all the unique ids from the indexed objects
 
-    ids = [int(hit['_id'] for hit in search['hits']['hits'])]
+    ids = [int(hit['_id']) for hit in search['hits']['hits']]
 
     ## return a list of these ids and the total number of indexed items
 
-    return ids, search['hits']['total']
+    return ids, search['hits']['total']['value']

@@ -356,7 +356,6 @@ class User(db.Model, UserMixin, SearchableMixin):
 
     __searchable__ = ['username']
 
-
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(64), unique=True, index=True)
     username = db.Column(db.String(64), unique=True, index=True)
@@ -371,7 +370,6 @@ class User(db.Model, UserMixin, SearchableMixin):
     firebase_user_uid = db.Column(db.String(120), default=None)
     uid_token = db.Column(db.String(1000), default=None)
 
-    
     # relationships
     posts = db.relationship('Post', backref='author', lazy='dynamic')
 
