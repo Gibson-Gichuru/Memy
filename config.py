@@ -38,6 +38,9 @@ class Config:
 
     ELASTICSEARCH_URL = os.environ.get("ELASTICSEARCH_URL")
 
+    ELASTICSEARCH_USERNAME = os.environ.get("ELASTICSEARCH_USERNAME")
+    ELASTICSEARCH_PASSWORD = os.environ.get('ELASTICSEARCH_PASSWORD')
+
     @staticmethod
     def init_app(app):
 

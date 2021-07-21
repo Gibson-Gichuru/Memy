@@ -57,7 +57,13 @@ def create_app(config_name):
 
     # Configure a class attribute to point to an elastic class instance
     app.elasticsearch = (
-        Elasticsearch([app.config['ELASTICSEARCH_URL']])
+        Elasticsearch(
+            [app.config['ELASTICSEARCH_URL']],
+            http_auth=(
+                app.config['ELASTICSEARCH_USERNAME'],
+                app.config['ELASTICSEARCH_PASSWORD'],
+            ),
+        )
         if app.config["ELASTICSEARCH_URL"]
         else None
     )
