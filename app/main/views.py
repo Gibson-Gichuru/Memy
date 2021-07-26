@@ -1,8 +1,28 @@
 from datetime import datetime
-from flask import render_template, session, redirect, url_for, abort, flash, current_app, request, g
+from flask import (
+    render_template,
+    session,
+    redirect,
+    url_for,
+    abort,
+    flash,
+    current_app,
+    request,
+    g,
+    jsonify,
+    request,
+)
 from flask_login import login_user
 from . import main
-from .forms import NameForm, EditProfileForm, EditProfileAdminForm, ContactForm, PostForm, SearchForm, CommentForm
+from .forms import (
+    NameForm,
+    EditProfileForm,
+    EditProfileAdminForm,
+    ContactForm,
+    PostForm,
+    SearchForm,
+    CommentForm,
+)
 
 from ..auth.forms import LoginForm, RegistrationForm
 
@@ -15,156 +35,181 @@ from ..decorators import admin_required, permission_required
 from .. import db
 from ..email import send_email
 
-from random import  choice , sample
+from random import choice, sample
 
-from ..uploads import (firebase_upload_file, rename_file, admin_file_upload_to_storage, delete_uploaded_files)
+from ..uploads import (
+    firebase_upload_file,
+    rename_file,
+    admin_file_upload_to_storage,
+    delete_uploaded_files,
+)
 from ..utils import firebase_login
 
 import pdb
 
 
-@main.route('/', methods = ['GET', 'POST'])
+@main.route('/', methods=['GET', 'POST'])
 def index():
 
-	return redirect(url_for('auth.login'))
+    return redirect(url_for('auth.login'))
 
 
-
-@main.route('/home', methods = ['GET', 'POST'])
+@main.route('/home', methods=['GET', 'POST'])
 @login_required
 def home():
 
-	form = PostForm()
+    form = PostForm()
 
-	comment_form = CommentForm()
+    comment_form = CommentForm()
 
-	page = request.args.get('page', 1, type = int)
+    page = request.args.get('page', 1, type=int)
 
-	if current_user.can(Permission.WRITE_ARTICLES) and form .validate_on_submit():
+    if current_user.can(Permission.WRITE_ARTICLES) and form.validate_on_submit():
 
-		post = Post(body = form.body.data, author = current_user._get_current_object())
+        post = Post(body=form.body.data, author=current_user._get_current_object())
 
-		if form.file_upload is not None:
+        if form.file_upload is not None:
 
-			file_role = FileRole.query.filter_by(name = 'post_upload')
+            file_role = FileRole.query.filter_by(name='post_upload')
 
+            file = File(
+                file_name=rename_file(form.file_upload.data()),
+                file_url=f'/data/{post.author.firebase_custom_token}/posts/{file_name}',
+            )
 
-			file = File(file_name =rename_file(form.file_upload.data()), 
-				file_url = f'/data/{post.author.firebase_custom_token}/posts/{file_name}')
+            file.filerole = file_role
 
-			file.filerole = file_role
+            file.post = post
 
-			file.post = post
+            db.session.add(file)
 
-			db.session.add(file)
+            post.author.launch_task(
+                'upload_file_to_cloud',
+                "Post File Upload",
+                form.file_upload.data(),
+                file.id,
+            )
 
-			post.author.launch_task('upload_file_to_cloud', "Post File Upload", 
-				form.file_upload.data(),file.id)
+        db.session.add(post)
 
-		db.session.add(post)
+        return redirect(url_for('main.home'))
 
-		return redirect(url_for('main.home'))
+    # show current user posts made by users they are following
 
+    pagination = current_user.followed_posts.order_by(Post.timestamp.desc()).paginate(
+        page, current_app.config['FLASKY_POSTS_PER_PAGE'], error_out=False
+    )
 
-	# show current user posts made by users they are following
+    posts = pagination.items
 
-	pagination = current_user.followed_posts.order_by(Post.timestamp.desc()).paginate(page,
-		current_app.config['FLASKY_POSTS_PER_PAGE'], error_out = False)
+    if current_user.user_following.count() == 0:
 
-	posts = pagination.items
+        users_to_follow = []
 
-	if current_user.user_following.count() == 0:
+    else:
+        random_follower = choice(current_user.user_following.all())
 
-		users_to_follow = []
+        if random_follower.user_following.count() >= 4:
 
-	else:
-		random_follower = choice(current_user.user_following.all())
+            users_to_follow = sample(random_follower.user_following.all(), 4)
 
-		if random_follower.user_following.count() >= 4:
+        else:
+            users_to_follow = random_follower.user_following.all()
 
-			users_to_follow = sample(random_follower.user_following.all(),4)
+    return render_template(
+        'home.html',
+        form=form,
+        posts=posts,
+        permission=Permission,
+        pagination=pagination,
+        users_to_follow=users_to_follow,
+        comment_form=comment_form,
+    )
 
-		else:
-			users_to_follow = random_follower.user_following.all()
-
-
-	return render_template('home.html', form = form, 
-		posts = posts, permission = Permission, 
-		pagination = pagination, users_to_follow = users_to_follow, comment_form = comment_form)
 
 @main.route('/user/<username>')
 def user(username):
 
+    page = request.args.get('page', 1, type=int)
 
-	page = request.args.get('page', 1, type=int)
+    user = User.query.filter_by(username=username).first()
 
-	user = User.query.filter_by(username = username).first()
+    if user is None:
 
-	if user is None:
+        abort(404)
 
-		abort(404)
+    pagination = user.posts.order_by(Post.timestamp.desc()).paginate(
+        page, current_app.config['FLASKY_POSTS_PER_PAGE'], error_out=False
+    )
 
-	pagination = user.posts.order_by(Post.timestamp.desc()).paginate(page, 
-		current_app.config['FLASKY_POSTS_PER_PAGE'], error_out = False)
+    posts = pagination.items
 
-	posts = pagination.items
+    return render_template(
+        'user.html',
+        user=user,
+        posts=posts,
+        pagination=pagination,
+        Permission=Permission,
+    )
 
-	return render_template('user.html', user = user, posts = posts, 
-		pagination = pagination, Permission = Permission)
 
-@main.route('/edit-profile/', methods = ['GET', 'POST'])
+@main.route('/edit-profile/', methods=['GET', 'POST'])
 @login_required
 def edit_profile():
 
-	form = EditProfileForm()
+    form = EditProfileForm()
 
-	if form.validate_on_submit():
+    if form.validate_on_submit():
 
-		user = User.query.filter_by(username = current_user.username).first()
+        user = User.query.filter_by(username=current_user.username).first()
 
-		user.name = form.name.data
-		user.location = form.location.data
-		user.about_me = form.about_me.data
+        user.name = form.name.data
+        user.location = form.location.data
+        user.about_me = form.about_me.data
 
-		if form.password.data != "":
+        if form.password.data != "":
 
-			user.password = form.password.data
+            user.password = form.password.data
 
-		if form.email.data != user.email:
+        if form.email.data != user.email:
 
-			user.email = form.email.data
-			user.confirmed = False
+            user.email = form.email.data
+            user.confirmed = False
 
+        if form.profile_pic.data is not None:
 
-		if form.profile_pic.data is not None:
+            login_to_to_firebase = firebase_login(user.firebase_custom_token)
 
-			login_to_to_firebase = firebase_login(user.firebase_custom_token)
+            cloud_file_name = rename_file(form.profile_pic.data)
 
-			cloud_file_name = rename_file(form.profile_pic.data)
+            firebase_upload_file(
+                cloud_file_name,
+                "/data/{}/profile/".format(user.firebase_uid),
+                login_to_to_firebase['idToken'],
+            )
 
-			firebase_upload_file(cloud_file_name,
-			 "/data/{}/profile/".format(user.firebase_uid), login_to_to_firebase['idToken'])
+            user.profile_pic_id = cloud_file_name.filename
 
-			user.profile_pic_id = cloud_file_name.filename
+        if form.cover_pic.data is not None:
 
-		if form.cover_pic.data is not None:
+            login_to_to_firebase = firebase_login(user.firebase_custom_token)
 
-			login_to_to_firebase = firebase_login(user.firebase_custom_token)
+            cloud_file_name = rename_file(form.cover_pic.data)
 
-			cloud_file_name = rename_file(form.cover_pic.data)
+            firebase_upload_file(
+                cloud_file_name,
+                "/data/{}/profile/".format(user.firebase_uid),
+                login_to_to_firebase['idToken'],
+            )
 
-			firebase_upload_file(cloud_file_name,
-			 "/data/{}/profile/".format(user.firebase_uid), login_to_to_firebase['idToken'])
+            user.cover_photo_id = cloud_file_name.filename
 
-			user.cover_photo_id = cloud_file_name.filename
+        db.session.add(user)
 
+        flash('Your Profile has been updated')
+        return redirect(url_for('.user', username=current_user.username))
 
-		db.session.add(user)
-
-		flash('Your Profile has been updated')
-		return redirect(url_for('.user', username = current_user.username))
-
-	return render_template('edit_profile.html', form = form)
+    return render_template('edit_profile.html', form=form)
 
 
 @main.route('/edit-admin-profile/<int:id>', methods=['GET', 'POST'])
@@ -172,116 +217,115 @@ def edit_profile():
 @admin_required
 def edit_profile_admin(id):
 
-	user = User.query.get_or_404(id)
+    user = User.query.get_or_404(id)
 
-	form = EditProfileAdminForm(user = user)
+    form = EditProfileAdminForm(user=user)
 
+    if form.validate_on_submit():
 
-	if form.validate_on_submit():
+        if form.email.data != user.email:
 
-		if form.email.data != user.email:
+            user.email = form.email.data
+            user.confirmed = False
 
-			user.email = form.email.data
-			user.confirmed = False
+        if form.username != user.username:
+            user.username = form.username.data
 
-		if form.username != user.username:
-			user.username = form.username.data
+        user.role = Role.query.get(form.role.data)
+        user.name = form.name.data
+        user.location = form.location.data
+        user.about_me = form.about_me.data
 
-		user.role = Role.query.get(form.role.data)
-		user.name = form.name.data
-		user.location = form.location.data
-		user.about_me = form.about_me.data
+        if form.profile_pic.data is not None:
 
+            cloud_file_name = rename_file(form.profile_pic.data)
+            admin_file_upload_to_storage(
+                cloud_file_name, "/data/{}/profile/".format(user.firebase_uid)
+            )
 
-		if form.profile_pic.data is not None:
+            user.profile_pic_id = cloud_file_name.filename
 
-			cloud_file_name = rename_file(form.profile_pic.data)
-			admin_file_upload_to_storage(cloud_file_name, 
-				"/data/{}/profile/".format(user.firebase_uid))
+        if form.cover_pic.data is not None:
 
-			user.profile_pic_id = cloud_file_name.filename
+            cloud_file_name = rename_file(form.cover_pic.data)
+            admin_file_upload_to_storage(
+                cloud_file_name, "/data/{}/profile/".format(user.firebase_uid)
+            )
 
+            user.cover_photo_id = cloud_file_name.filename
 
-		if form.cover_pic.data is not None:
+        db.session.add(user)
 
-			cloud_file_name = rename_file(form.cover_pic.data)
-			admin_file_upload_to_storage(cloud_file_name, 
-				"/data/{}/profile/".format(user.firebase_uid))
+        flash('The profile have been updated')
 
-			user.cover_photo_id = cloud_file_name.filename
+        return redirect(url_for('main.user', username=user.username))
 
+    form.email.data = user.email
+    form.username.data = user.username
+    form.name.data = user.name
+    form.location.data = user.location
+    form.about_me.data = user.about_me
+    form.role.data = user.role.id
 
-
-		db.session.add(user)
-
-		flash('The profile have been updated')
-
-		return redirect(url_for('main.user', username = user.username))
-
-
-	form.email.data = user.email 
-	form.username.data = user.username
-	form.name.data = user.name
-	form.location.data = user.location 
-	form.about_me.data = user.about_me
-	form.role.data = user.role.id
-
-	return render_template('edit_profile_admin.html', form = form, user = user)
+    return render_template('edit_profile_admin.html', form=form, user=user)
 
 
 @main.route('/post/<int:id>')
 def post(id):
 
-	post = Post.query.get_or_404(id)
+    post = Post.query.get_or_404(id)
 
-	comment_form = CommentForm()
+    comment_form = CommentForm()
 
-	return render_template('post.html', posts = [post], comment_form = comment_form, Permission = Permission)
+    return render_template(
+        'post.html', posts=[post], comment_form=comment_form, Permission=Permission
+    )
 
 
-@main.route('/edit/<int:id>', methods = ['GET', 'POST'])
+@main.route('/edit/<int:id>', methods=['GET', 'POST'])
 def edit(id):
 
-	post = Post.query.get_or_404(id)
+    post = Post.query.get_or_404(id)
 
-	if current_user != post.author and not current_user.can(Permission.ADMINISTER):
-		abort(403)
+    if current_user != post.author and not current_user.can(Permission.ADMINISTER):
+        abort(403)
 
-	form = PostForm()
+    form = PostForm()
 
-	if form.validate_on_submit():
+    if form.validate_on_submit():
 
-		post.body = form.body.data
+        post.body = form.body.data
 
-		flash('Post have been updated')
-		return redirect(url_for('main.post', id = post.id))
+        flash('Post have been updated')
+        return redirect(url_for('main.post', id=post.id))
 
-	form.body.data = post.body 
+    form.body.data = post.body
 
-	return render_template('edit_post.html', form = form)
+    return render_template('edit_post.html', form=form)
 
 
-@main.route('/comment/<int:id>', methods = ['GET', 'POST'])
+@main.route('/comment/<int:id>', methods=['GET', 'POST'])
 @login_required
 def comment(id):
 
-	post = Post.query.get_or_404(id)
+    post = Post.query.get_or_404(id)
 
-	form = CommentForm()
+    form = CommentForm()
 
-	if form.validate_on_submit():
+    if form.validate_on_submit():
 
-		comment = Comment(body = form.body.data, post = post, 
-			author = current_user._get_current_object())
+        comment = Comment(
+            body=form.body.data, post=post, author=current_user._get_current_object()
+        )
 
-		db.session.add(comment)
-		db.session.commit()
+        db.session.add(comment)
+        db.session.commit()
 
-		flash("your view in the post have been published")
+        flash("your view in the post have been published")
 
-		return redirect(url_for('main.home'))
+        return redirect(url_for('main.home'))
 
-	return redirect(url_for('main.home'))
+    return redirect(url_for('main.home'))
 
 
 @main.route('/moderate/enable/<int:id>')
@@ -289,12 +333,12 @@ def comment(id):
 @permission_required(Permission.MODERATE_COMMENTS)
 def comment_enabled(id):
 
-	comment = Comment.query.get_or_404(id)
-	comment.disabled = False
-	db.session.add(comment)
-	db.session.commit()
+    comment = Comment.query.get_or_404(id)
+    comment.disabled = False
+    db.session.add(comment)
+    db.session.commit()
 
-	return redirect(url_for('main.post', id = comment.post_id))
+    return redirect(url_for('main.post', id=comment.post_id))
 
 
 @main.route('/moderate/disable/<int:id>')
@@ -302,132 +346,166 @@ def comment_enabled(id):
 @permission_required(Permission.MODERATE_COMMENTS)
 def comment_disabled(id):
 
-	comment = Comment.query.get_or_404(id)
-	comment.disabled = True
-	db.session.add(comment)
-	db.session.commit()
+    comment = Comment.query.get_or_404(id)
+    comment.disabled = True
+    db.session.add(comment)
+    db.session.commit()
 
-	return redirect(url_for('main.post', id = comment.post_id))
+    return redirect(url_for('main.post', id=comment.post_id))
+
 
 @main.route('/delete/<int:id>')
 def delete_post(id):
 
-	post = Post.query.get_or_404(id)
+    post = Post.query.get_or_404(id)
 
-	if current_user !=post.author and not current_user.can(Permission.ADMINISTER):
+    if current_user != post.author and not current_user.can(Permission.ADMINISTER):
 
-		abort(403)
+        abort(403)
 
+    post.delete(post)
+    owner = firebase_login(post.author.firebase_uid)
+    delete_uploaded_files(
+        'data/{}/posts/{}'.format(current_user.firebase_uid, post.cloud_file_name)
+    )
 
-	post.delete(post)
-	owner = firebase_login(post.author.firebase_uid)
-	delete_uploaded_files('data/{}/posts/{}'.format(current_user.firebase_uid, post.cloud_file_name))
-
-	return redirect(url_for('main.home'))
+    return redirect(url_for('main.home'))
 
 
 @main.route('/follow/<username>')
 @login_required
 @permission_required(Permission.FOLLOW)
 def follow(username):
-	user = User.query.filter_by(username = username).first()
+    user = User.query.filter_by(username=username).first()
 
-	if user is None:
+    if user is None:
 
-		flash("Invalid User")
-		return redirect(url_for('main.home'))
+        flash("Invalid User")
+        return redirect(url_for('main.home'))
 
-	if current_user.is_following(user):
+    if current_user.is_following(user):
 
-		flash("You are already following {}".format(username))
+        flash("You are already following {}".format(username))
 
-		return redirect(url_for('main.user', username = username))
+        return redirect(url_for('main.user', username=username))
 
-	current_user.follow(user)
-	flash("You are now following {}".format(username))
+    current_user.follow(user)
+    flash("You are now following {}".format(username))
 
-	return redirect(url_for('main.user', username = username))
+    return redirect(url_for('main.user', username=username))
 
 
 @main.route('/followers/<username>')
 def followers(username):
 
-	user = User.query.filter_by(username = username).first()
+    user = User.query.filter_by(username=username).first()
 
-	if user is None:
+    if user is None:
 
-		flash('Invalid User')
+        flash('Invalid User')
 
-		if current_user.is_authenticated:
+        if current_user.is_authenticated:
 
-			return redirect(url_for('main.home'))
+            return redirect(url_for('main.home'))
 
-		return redirect(url_for('main.index'))
+        return redirect(url_for('main.index'))
 
-	page = requets.args.get('page', 1 , type=int)
+    page = requets.args.get('page', 1, type=int)
 
-	pagination = user.followers.paginate(page, per_page = current_app.config['FLASKY_FOLLOWERS_PER_PAGE'], error_out = False)
+    pagination = user.followers.paginate(
+        page, per_page=current_app.config['FLASKY_FOLLOWERS_PER_PAGE'], error_out=False
+    )
 
-	follows =  [{'user':item.follower, 'timestamp':item.timestamp} for item in pagination.items]
+    follows = [
+        {'user': item.follower, 'timestamp': item.timestamp}
+        for item in pagination.items
+    ]
 
-	return render_template('follower.html', user = user, title = "Followers of", endpoint = 'main.followers',
-		pagination = pagination, follows = follows)
+    return render_template(
+        'follower.html',
+        user=user,
+        title="Followers of",
+        endpoint='main.followers',
+        pagination=pagination,
+        follows=follows,
+    )
+
 
 @main.route('/following/<username>')
 def following(username):
 
-	user = User.query.filter_by(username = username).first()
+    user = User.query.filter_by(username=username).first()
 
-	if user is None:
+    if user is None:
 
-		flash('Invalid User')
+        flash('Invalid User')
 
-		if current_user.is_authenticated:
+        if current_user.is_authenticated:
 
-			return redirect(url_for('main.home'))
+            return redirect(url_for('main.home'))
 
-		return redirect(url_for('main.index'))
+        return redirect(url_for('main.index'))
 
-	page = requets.args.get('page', 1 , type=int)
+    page = requets.args.get('page', 1, type=int)
 
-	pagination = user.followers.paginate(page, per_page = current_app.config['FLASKY_FOLLOWERS_PER_PAGE'], error_out = False)
+    pagination = user.followers.paginate(
+        page, per_page=current_app.config['FLASKY_FOLLOWERS_PER_PAGE'], error_out=False
+    )
 
-	following =  [{'user':item.followed, 'timestamp':item.timestamp} for item in pagination.items]
+    following = [
+        {'user': item.followed, 'timestamp': item.timestamp}
+        for item in pagination.items
+    ]
 
-	return render_template('follower.html', user = user, title = "Followers of", endpoint = 'main.following',
-		pagination = pagination, following = following)
+    return render_template(
+        'follower.html',
+        user=user,
+        title="Followers of",
+        endpoint='main.following',
+        pagination=pagination,
+        following=following,
+    )
 
 
 @main.route('/unfollow/<username>')
 @login_required
 def unfollow(username):
 
-	user = User.query.filter_by(username = username).first()
+    user = User.query.filter_by(username=username).first()
+
+    if user is not None and current_user.is_following(user):
+
+        current_user.unfollow(user)
+
+        return redirect(url_for('main.user', username=username))
+
+    return redirect(url_for('main.home'))
 
 
-	if user is not None and current_user.is_following(user):
-
-		current_user.unfollow(user)
-
-		return redirect(url_for('main.user', username = username))
-
-	return redirect(url_for('main.home'))
-
-
-
-@main.route("/admin")
+@main.route('/search')
 @login_required
-@admin_required
-def for_admins_only():
+def search():
 
-	return "for administrator only"
+    if not g.search_form.validate():
 
+        return redirect(url_for("main.home"))
 
-@main.route("/moderator")
-@login_required
-@permission_required(Permission.MODERATE_COMMENTS)
-def for_moderators_only():
+    page = request.args.get('page', 1, type=int)
 
-	return "for moderators only"
+    users, total = User.search(
+        g.search_form.q.data, page, current_app.config['FLASKY_POSTS_PER_PAGE']
+    )
 
+    next_url = (
+        url_for('main.search', q=g.search_form.q.data, page=page + 1)
+        if total > page * current_app.config['FLASKY_POSTS_PER_PAGE']
+        else None
+    )
 
+    prev_url = (
+        url_for('main.search', q=g.search_form.q.data, page=page - 1)
+        if page > 1
+        else None
+    )
+
+    return jsonify({'users': users, 'count': total, 'next': next_url, 'prev': prev_url})
