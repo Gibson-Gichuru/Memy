@@ -1,4 +1,3 @@
-
 ##flask dependecies importtation
 from flask import Flask, render_template
 from flask_bootstrap import Bootstrap
@@ -24,9 +23,13 @@ from config import basedir
 import firebase_admin
 from firebase_admin import credentials
 
+##elasticsearch import statements
+
+from elasticsearch import Elasticsearch
+
 
 ##Standard dependecies importation
-import os    
+import os
 
 
 bootstrap = Bootstrap()
@@ -40,50 +43,64 @@ login_manager.login_view = 'auth.login'
 
 
 cred = credentials.Certificate(os.path.join(basedir, 'firebase_admin_config.json'))
-firebase_admin.initialize_app(cred, {'storageBucket':'house-of-memes.appspot.com'})
+firebase_admin.initialize_app(cred, {'storageBucket': 'house-of-memes.appspot.com'})
+
 
 def create_app(config_name):
 
-	app = Flask(__name__)
-	app.config.from_object(config[config_name])
-	config[config_name].init_app(app)
+    app = Flask(__name__)
+    app.config.from_object(config[config_name])
+    config[config_name].init_app(app)
 
-	#make a redis conncetion variable
-	app.redis = Redis.from_url(app.config['REDIS_URL'])
+    # make a redis conncetion variable
+    app.redis = Redis.from_url(app.config['REDIS_URL'])
 
-	## firebase admin app
-	try:
+    # Configure a class attribute to point to an elastic class instance
+    app.elasticsearch = (
+        Elasticsearch(
+            [app.config['ELASTICSEARCH_URL']],
+            http_auth=(
+                app.config['ELASTICSEARCH_USERNAME'],
+                app.config['ELASTICSEARCH_PASSWORD'],
+            ),
+        )
+        if app.config["ELASTICSEARCH_URL"]
+        else None
+    )
 
-		app.firebase_admin_app = firebase_admin.get_app()
+    ## firebase admin app
+    try:
 
-	except ValueError as e:	
+        app.firebase_admin_app = firebase_admin.get_app()
 
-		firebase_admin.initialize_app(cred)
+    except ValueError as e:
 
-	#initiate a redis Queue
-	app.task_queue = rq.Queue('memy-tasks', connection=app.redis)
+        firebase_admin.initialize_app(cred)
 
-	if not app.debug and not app.testing and not app.config['SSL_DISABLE']:
+    # initiate a redis Queue
+    app.task_queue = rq.Queue('memy-tasks', connection=app.redis)
 
-		from flask_sslify import SSLify
+    if not app.debug and not app.testing and not app.config['SSL_DISABLE']:
 
-		sslify = SSLify(app)
+        from flask_sslify import SSLify
 
-	bootstrap.init_app(app)
-	moment.init_app(app)
-	mail.init_app(app)
-	db.init_app(app)
-	login_manager.init_app(app)
-	pagedown.init_app(app)
+        sslify = SSLify(app)
 
+    bootstrap.init_app(app)
+    moment.init_app(app)
+    mail.init_app(app)
+    db.init_app(app)
+    login_manager.init_app(app)
+    pagedown.init_app(app)
 
-	from .main import main as main_blueprint
-	from .auth import auth as auth_blueprint
+    from .main import main as main_blueprint
+    from .auth import auth as auth_blueprint
 
-	app.register_blueprint(main_blueprint)
-	app.register_blueprint(auth_blueprint, url_prefix = '/auth')
+    app.register_blueprint(main_blueprint)
+    app.register_blueprint(auth_blueprint, url_prefix='/auth')
 
-	from .api_0_1 import api as api_blueprint
-	app.register_blueprint(api_blueprint, url_prefix="/api/v1.0")
+    from .api_0_1 import api as api_blueprint
 
-	return app
+    app.register_blueprint(api_blueprint, url_prefix="/api/v1.0")
+
+    return app

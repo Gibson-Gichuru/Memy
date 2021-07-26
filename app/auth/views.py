@@ -3,7 +3,7 @@ from flask_login import login_user, login_required, logout_user, current_user
 from . import auth
 from ..models import User
 from ..email import send_email
-from .forms import  RegistrationForm, ForgotPasswordForm, ResetPasswordForm, LoginForm
+from .forms import RegistrationForm, ForgotPasswordForm, ResetPasswordForm, LoginForm
 
 from . import auth
 
@@ -11,7 +11,8 @@ from .. import db
 
 from ..utils import firebase_login, user_uid
 
-import pdb
+from app.main.forms import SearchForm
+
 
 @auth.route('/login', methods=['GET', 'POST'])
 def login():
@@ -27,19 +28,19 @@ def login():
             login_user(user, form.remember_me.data)
 
             user_login_to_firebase = firebase_login(user.firebase_custom_token)
-            
+
             next = request.args.get('next')
 
             if next is None or not next.startswith('/'):
-                
+
                 next = url_for('main.home')
             return redirect(next)
 
         else:
-            
+
             flash("Invalid Email or password")
 
-    return render_template('auth/login.html', form = form)
+    return render_template('auth/login.html', form=form)
 
 
 @auth.route("/register", methods=["GET", "POST"])
@@ -70,7 +71,7 @@ def register():
 
         return redirect(url_for("auth.login"))
 
-    return render_template('auth/register.html', form = form)
+    return render_template('auth/register.html', form=form)
 
 
 @auth.route("/confirm/<token>")
@@ -86,7 +87,7 @@ def confirm(token):
         user_login_to_firebase = firebase_login(current_user.firebase_custom_token)
 
         current_user.firebase_uid = user_uid(user_login_to_firebase['idToken'])
-        
+
         current_user.idToken = user_login_to_firebase['idToken']
 
         db.session.add(current_user)
@@ -105,6 +106,9 @@ def before_request():
 
     if current_user.is_authenticated:
         current_user.ping()
+
+        # make the search form visible in any authetication required route within our application
+        g.search_form = SearchForm()
 
     if (
         current_user.is_authenticated
@@ -143,7 +147,7 @@ def resend_confirmation():
     return redirect(url_for("auth.login"))
 
 
-@auth.route("/forgot_password/", methods = ['GET', 'POST'])
+@auth.route("/forgot_password/", methods=['GET', 'POST'])
 def forgot_password():
 
     form = ForgotPasswordForm()
@@ -154,7 +158,13 @@ def forgot_password():
 
         token = user.generate_reset_token()
 
-        send_email(form.email.data, "Reset password", "auth/email/reset_password", user=user, token=token)
+        send_email(
+            form.email.data,
+            "Reset password",
+            "auth/email/reset_password",
+            user=user,
+            token=token,
+        )
 
         flash("a password reset link have been sent to you by email")
 
@@ -163,7 +173,7 @@ def forgot_password():
     return render_template("auth/forgot_password.html", form=form)
 
 
-@auth.route("/confirm_reset/<token>", methods = ['GET', 'POST'])
+@auth.route("/confirm_reset/<token>", methods=['GET', 'POST'])
 def confirm_reset(token):
 
     if not current_user.is_anonymous:
